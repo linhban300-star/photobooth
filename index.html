@@ -304,13 +304,41 @@ function renderLoop(){
 function capturePhoto(){
   const W=previewCanvas.width||640,H=previewCanvas.height||853;
   mainCanvas.width=W;mainCanvas.height=H;
+
+  /* 1. draw filtered video frame */
   ctx.drawImage(previewCanvas,0,0,W,H);
+
+  /* 2. bake frame overlay gradient/vignette */
+  const frameVignettes={
+    stars: ()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.28,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(5,2,30,.45)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
+    whale: ()=>{const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(.55,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,40,100,.38)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
+    floral:()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(255,180,200,.22)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
+    pink:  ()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(255,160,190,.18)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
+    lavender:()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(180,130,220,.16)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
+    mint:  ()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(80,180,140,.14)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
+  };
+  if(frameVignettes[currentFrame])frameVignettes[currentFrame]();
+
+  /* 3. bake frame emoji decos onto photo */
+  const decos=FRAME_DECOS[currentFrame]||[];
+  if(decos.length){
+    ctx.save();ctx.textBaseline='top';ctx.textAlign='left';
+    decos.forEach(d=>{
+      const fs=Math.round(W*d.s*1.05);
+      ctx.font=`${fs}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Segoe UI Symbol",serif`;
+      ctx.fillText(d.char,d.x*W,d.y*H);
+    });
+    ctx.restore();
+  }
+
+  /* 4. bake stickers */
   stickerLayer.querySelectorAll('.placed-sticker').forEach(s=>{
     const xp=parseFloat(s.dataset.xp)/100,yp=parseFloat(s.dataset.yp)/100;
     const fs=Math.round(W*CFRAC[s.dataset.sz||'md']);
     ctx.font=`${fs}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",serif`;
     ctx.textBaseline='top';ctx.fillText(s.textContent,xp*W,yp*H);
   });
+
   return mainCanvas.toDataURL('image/jpeg',0.97);
 }
 
@@ -574,9 +602,7 @@ function buildStripImage(){
           sctx.fillText('0'+(i+1),x+fW-10,y+fH-12);
         });
       }
-      /* DRAW FRAME DECOS — crisp at 800px width */
-      drawDecos(sctx,W,H,currentFrame);
-      /* date */
+      /* photos already have decos baked — just draw date */
       sctx.save();sctx.globalAlpha=.54;sctx.fillStyle=cfg.dateColor;
       sctx.font='italic 26px "Playfair Display",Georgia,serif';
       sctx.textAlign='center';sctx.textBaseline='alphabetic';
