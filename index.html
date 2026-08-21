@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Học HTML &amp; CSS - Luyện thi THPT 2026</title>
+    <title>Học HTML &amp; CSS - Luyện thi THPT 2026 (Nâng cao)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         /* ===== RESET & VARIABLES ===== */
@@ -217,6 +217,18 @@
         .badge-primary {
             background: rgba(108, 99, 255, 0.15);
             color: var(--primary);
+        }
+        .badge-easy {
+            background: rgba(0, 210, 160, 0.15);
+            color: var(--success);
+        }
+        .badge-medium {
+            background: rgba(255, 179, 71, 0.15);
+            color: var(--warning);
+        }
+        .badge-hard {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--danger);
         }
 
         /* ===== TOAST ===== */
@@ -564,6 +576,10 @@
             font-size: 14px;
             margin: 6px 0;
         }
+        .roadmap-item .stats {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
 
         /* ===== DASHBOARD ===== */
         .stats-grid {
@@ -629,6 +645,12 @@
             margin-bottom: 12px;
             font-size: 22px;
         }
+        .lesson-content h3 {
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-size: 18px;
+            color: var(--primary);
+        }
         .lesson-content ul,
         .lesson-content ol {
             padding-left: 24px;
@@ -660,6 +682,24 @@
         }
         .code-block .str {
             color: var(--success);
+        }
+
+        /* ===== SUB-LESSON ===== */
+        .sub-lesson {
+            background: var(--bg);
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            margin: 12px 0;
+            border-left: 4px solid var(--primary);
+        }
+        .sub-lesson .title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .sub-lesson .desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
         }
 
         /* ===== PRACTICE ===== */
@@ -837,14 +877,6 @@
         }
         .auth-box .field input:focus {
             border-color: var(--primary);
-        }
-        .auth-box .field .hint {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        .auth-box .field .hint.error {
-            color: var(--danger);
         }
         .auth-box .divider {
             display: flex;
@@ -1110,57 +1142,6 @@
             }
         }
 
-        /* ===== PRINT ===== */
-        @media print {
-            .header,
-            .sidebar,
-            .toast-container,
-            .modal-overlay {
-                display: none !important;
-            }
-            .main {
-                margin: 0 !important;
-                padding: 20px !important;
-            }
-            .page {
-                display: block !important;
-            }
-            .page:not(.active) {
-                display: none !important;
-            }
-            .btn {
-                display: none !important;
-            }
-            .code-block {
-                background: #f5f5f5 !important;
-                border: 1px solid #ddd !important;
-            }
-            .lesson-content {
-                border: none !important;
-                box-shadow: none !important;
-            }
-            .card-section {
-                border: 1px solid #ddd !important;
-                box-shadow: none !important;
-                break-inside: avoid;
-            }
-        }
-
-        /* ===== LOADING SHIMMER ===== */
-        .shimmer {
-            background: linear-gradient(90deg, var(--bg) 25%, var(--border) 50%, var(--bg) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
-            100% {
-                background-position: 200% 0;
-            }
-        }
-
         /* ===== BACK TO TOP ===== */
         .back-top {
             position: fixed;
@@ -1187,7 +1168,7 @@
             display: flex;
         }
 
-        /* ===== KEYBOARD SHORTCUT HINT ===== */
+        /* ===== SHORTCUT HINT ===== */
         .shortcut-hint {
             font-size: 12px;
             color: var(--text-secondary);
@@ -1207,6 +1188,38 @@
             font-weight: 600;
             font-family: inherit;
         }
+
+        /* ===== PRACTICE LIST ===== */
+        .practice-item {
+            background: var(--bg);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin: 8px 0;
+            border-left: 3px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .practice-item .level {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+        .level-easy {
+            background: rgba(0, 210, 160, 0.15);
+            color: var(--success);
+        }
+        .level-medium {
+            background: rgba(255, 179, 71, 0.15);
+            color: var(--warning);
+        }
+        .level-hard {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--danger);
+        }
     </style>
 </head>
 <body>
@@ -1225,7 +1238,7 @@
             <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
             <div class="header-brand">
                 <i class="fas fa-code"></i>
-                <span>Học HTML+CSS</span>
+                <span>Học HTML+CSS Pro</span>
             </div>
         </div>
         <div class="header-actions">
@@ -1274,7 +1287,7 @@
         <!-- HOME -->
         <section class="page active" id="page-home">
             <div class="hero">
-                <h1>🏆 Học HTML + CSS Cho Kỳ Thi THPT 2026</h1>
+                <h1>🏆 Học HTML + CSS Pro - Luyện thi THPT 2026</h1>
                 <p>Nắm vững kiến thức nền tảng, luyện tập thực hành và sẵn sàng cho kỳ thi tốt nghiệp với lộ trình 10 ngày</p>
                 <div class="btn-group">
                     <button class="btn btn-primary" onclick="handleStart()"><i class="fas fa-rocket"></i> Bắt đầu học</button>
@@ -1357,6 +1370,7 @@
         <!-- PRACTICE -->
         <section class="page" id="page-practice">
             <div class="page-header"><h1>💻 Thực hành code</h1><p id="practiceTitle">Viết HTML và CSS trực tiếp</p></div>
+            <div id="practiceExercises" style="margin-bottom:16px;"></div>
             <div class="practice-grid">
                 <div>
                     <div class="editor-box">
@@ -1417,7 +1431,7 @@
 
         <!-- ADMIN -->
         <section class="page" id="page-admin">
-            <div class="page-header"><h1>🛡️ Admin Dashboard</h1><p>Quản lý hệ thống và học viên (chỉ hiển thị dữ liệu trên trình duyệt này)</p></div>
+            <div class="page-header"><h1>🛡️ Admin Dashboard</h1><p>Quản lý hệ thống và học viên</p></div>
             <div class="admin-stats" id="adminStats">
                 <div class="admin-stat"><div class="num" id="adminTotalStudents">0</div><div style="color:var(--text-secondary);">Học viên</div></div>
                 <div class="admin-stat"><div class="num">10</div><div style="color:var(--text-secondary);">Bài học</div></div>
@@ -1471,288 +1485,1265 @@
         }
 
         const RESERVED_ADMIN_EMAIL = 'admin@example.com';
-        const STORAGE_VERSION = '2.0';
+        const STORAGE_VERSION = '3.0';
 
         // ============================================================
-        // DATA
+        // EXPANDED DATA - 10 NGÀY VỚI NHIỀU NỘI DUNG HƠN
         // ============================================================
+
+        // Mỗi ngày có: nhiều bài học con, nhiều câu hỏi, nhiều bài thực hành
         const LESSONS = [{
             day: 1,
             title: 'HTML là gì? Cấu trúc HTML',
-            objectives: ['Hiểu HTML là gì', 'Nắm cấu trúc HTML cơ bản'],
+            objectives: ['Hiểu HTML là gì', 'Nắm cấu trúc HTML cơ bản', 'Biết các thẻ cơ bản'],
+            subLessons: [
+                { title: '1.1 HTML là gì?', desc: 'HTML (HyperText Markup Language) là ngôn ngữ đánh dấu dùng để tạo cấu trúc cho trang web.' },
+                { title: '1.2 Cấu trúc cơ bản', desc: 'Mọi trang HTML đều có cấu trúc: DOCTYPE, html, head, body.' },
+                { title: '1.3 Thẻ heading', desc: 'h1 đến h6 dùng để tạo tiêu đề, h1 quan trọng nhất.' },
+                { title: '1.4 Thẻ paragraph', desc: 'p dùng để tạo đoạn văn bản.' },
+                { title: '1.5 Comment trong HTML', desc: '<!-- comment --> dùng để ghi chú, không hiển thị trên trình duyệt.' }
+            ],
             content: `
             <h2>HTML là gì?</h2>
             <p>HTML (HyperText Markup Language) là ngôn ngữ đánh dấu dùng để tạo cấu trúc cho trang web.</p>
-            <p><strong>Cấu trúc cơ bản:</strong></p>
-            <div class="code-block"><span class="comment">&lt;!-- Comment --&gt;</span>
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">1.1 HTML là gì?</div><div class="desc">HTML là ngôn ngữ đánh dấu siêu văn bản. Nó được sử dụng để tạo cấu trúc và nội dung cho các trang web.</div></div>
+            <div class="sub-lesson"><div class="title">1.2 Cấu trúc cơ bản</div><div class="desc">Mọi trang HTML đều có cấu trúc: DOCTYPE, html, head, body. Đây là khung xương của trang web.</div></div>
+            <div class="sub-lesson"><div class="title">1.3 Thẻ heading (h1-h6)</div><div class="desc">Thẻ heading dùng để tạo tiêu đề. h1 là tiêu đề quan trọng nhất, h6 ít quan trọng nhất.</div></div>
+            <div class="sub-lesson"><div class="title">1.4 Thẻ paragraph (p)</div><div class="desc">Thẻ p dùng để tạo đoạn văn bản. Trình duyệt tự động thêm khoảng cách giữa các đoạn.</div></div>
+            <div class="sub-lesson"><div class="title">1.5 Comment</div><div class="desc">Comment dùng để ghi chú trong code. Cú pháp: &lt;!-- nội dung comment --&gt;. Không hiển thị trên trình duyệt.</div></div>
+
+            <h3>🔧 Ví dụ code</h3>
+            <div class="code-block"><span class="comment">&lt;!-- Đây là comment --&gt;</span>
             <span class="tag">&lt;!DOCTYPE html&gt;</span>
             <span class="tag">&lt;html&gt;</span>
             <span class="tag">&lt;head&gt;</span>
             <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span>
-            <span class="tag">&lt;title&gt;</span>Trang web<span class="tag">&lt;/title&gt;</span>
+            <span class="tag">&lt;title&gt;</span>Trang web đầu tiên<span class="tag">&lt;/title&gt;</span>
             <span class="tag">&lt;/head&gt;</span>
             <span class="tag">&lt;body&gt;</span>
-            <span class="tag">&lt;h1&gt;</span>Xin chào!<span class="tag">&lt;/h1&gt;</span>
-            <span class="tag">&lt;p&gt;</span>Đoạn văn bản.<span class="tag">&lt;/p&gt;</span>
+            <span class="tag">&lt;h1&gt;</span>Chào mừng đến với HTML!<span class="tag">&lt;/h1&gt;</span>
+            <span class="tag">&lt;h2&gt;</span>Tiêu đề cấp 2<span class="tag">&lt;/h2&gt;</span>
+            <span class="tag">&lt;p&gt;</span>Đây là đoạn văn bản đầu tiên của tôi.<span class="tag">&lt;/p&gt;</span>
+            <span class="tag">&lt;p&gt;</span>HTML rất dễ học!<span class="tag">&lt;/p&gt;</span>
             <span class="tag">&lt;/body&gt;</span>
             <span class="tag">&lt;/html&gt;</span></div>
+
+            <h3>📝 Giải thích chi tiết</h3>
             <ul>
-              <li><strong>&lt;!DOCTYPE html&gt;</strong>: Khai báo HTML5</li>
-              <li><strong>&lt;html&gt;</strong>: Thẻ gốc</li>
-              <li><strong>&lt;head&gt;</strong>: Metadata, title</li>
-              <li><strong>&lt;body&gt;</strong>: Nội dung hiển thị</li>
-              <li><strong>&lt;h1&gt;</strong> - <strong>&lt;h6&gt;</strong>: Tiêu đề</li>
-              <li><strong>&lt;p&gt;</strong>: Đoạn văn</li>
+              <li><strong>&lt;!DOCTYPE html&gt;</strong>: Khai báo đây là tài liệu HTML5, giúp trình duyệt hiểu đúng cách hiển thị.</li>
+              <li><strong>&lt;html&gt;</strong>: Thẻ gốc bao bọc toàn bộ nội dung trang.</li>
+              <li><strong>&lt;head&gt;</strong>: Chứa metadata, tiêu đề trang, link CSS, và các thông tin không hiển thị.</li>
+              <li><strong>&lt;body&gt;</strong>: Chứa tất cả nội dung hiển thị trên trang.</li>
+              <li><strong>&lt;h1&gt;</strong>: Tiêu đề chính, chỉ nên dùng 1 lần mỗi trang.</li>
+              <li><strong>&lt;h2&gt;</strong> - <strong>&lt;h6&gt;</strong>: Tiêu đề phụ, dùng để phân cấp nội dung.</li>
+              <li><strong>&lt;p&gt;</strong>: Đoạn văn bản, tự động xuống dòng và cách đoạn.</li>
             </ul>
+
+            <h3>🎯 Bài tập vận dụng</h3>
+            <ol>
+              <li>Tạo trang HTML với tiêu đề "Giới thiệu bản thân"</li>
+              <li>Thêm 3 đoạn văn giới thiệu về sở thích của bạn</li>
+              <li>Sử dụng ít nhất 2 cấp heading khác nhau</li>
+              <li>Thêm comment giải thích từng phần</li>
+            </ol>
           `,
-            quiz: [
-                { q: 'Thẻ nào khai báo tài liệu HTML5?', opts: ['&lt;html&gt;', '&lt;!DOCTYPE html&gt;', '&lt;head&gt;',
-                        '&lt;body&gt;'
-                    ], ans: 1 },
-                { q: 'Nội dung nào đặt trong &lt;body&gt;?', opts: ['Tiêu đề trang', 'Nội dung hiển thị', 'Link CSS',
-                        'Meta tags'
-                    ], ans: 1 }
-            ]
+            practices: [
+                { title: 'Tạo trang HTML cơ bản', desc: 'Tạo trang HTML với đầy đủ cấu trúc và ít nhất 3 thẻ heading khác nhau.',
+                    level: 'Dễ' },
+                { title: 'Trang giới thiệu', desc: 'Tạo trang giới thiệu về bản thân với tiêu đề, đoạn văn và comment.',
+                    level: 'Dễ' },
+                { title: 'Trang chủ đơn giản', desc: 'Tạo trang chủ với tiêu đề chính, tiêu đề phụ và ít nhất 4 đoạn văn.',
+                    level: 'Trung bình' }
+            ],
+            quiz: [{
+                q: 'Thẻ nào khai báo tài liệu HTML5?',
+                opts: ['&lt;html&gt;', '&lt;!DOCTYPE html&gt;', '&lt;head&gt;', '&lt;body&gt;'],
+                ans: 1
+            }, {
+                q: 'Nội dung nào đặt trong &lt;body&gt;?',
+                opts: ['Tiêu đề trang', 'Nội dung hiển thị', 'Link CSS', 'Meta tags'],
+                ans: 1
+            }, {
+                q: 'Thẻ heading quan trọng nhất là?',
+                opts: ['&lt;h6&gt;', '&lt;h1&gt;', '&lt;h3&gt;', '&lt;h4&gt;'],
+                ans: 1
+            }, {
+                q: 'Comment trong HTML bắt đầu bằng gì?',
+                opts: ['//', '/*', '&lt;!--', '#'],
+                ans: 2
+            }, {
+                q: 'Thẻ nào dùng để tạo đoạn văn?',
+                opts: ['&lt;div&gt;', '&lt;section&gt;', '&lt;p&gt;', '&lt;span&gt;'],
+                ans: 2
+            }, {
+                q: 'Phần tử nào chứa metadata của trang?',
+                opts: ['&lt;body&gt;', '&lt;head&gt;', '&lt;html&gt;', '&lt;meta&gt;'],
+                ans: 1
+            }, {
+                q: 'Có bao nhiêu cấp heading trong HTML?',
+                opts: ['3', '4', '5', '6'],
+                ans: 3
+            }, {
+                q: 'Thẻ &lt;h1&gt; nên được sử dụng mấy lần trong một trang?',
+                opts: ['Nhiều lần', '1 lần', '2 lần', 'Không giới hạn'],
+                ans: 1
+            }, {
+                q: 'Trình duyệt tự động thêm gì giữa các thẻ &lt;p&gt;?',
+                opts: ['Khoảng cách', 'Đường kẻ', 'Màu nền', 'Viền'],
+                ans: 0
+            }, {
+                q: 'Thẻ &lt;title&gt; nằm trong phần tử nào?',
+                opts: ['&lt;body&gt;', '&lt;head&gt;', '&lt;html&gt;', '&lt;header&gt;'],
+                ans: 1
+            }]
         }, {
             day: 2,
             title: 'Text và Liên kết',
-            objectives: ['Sử dụng thẻ định dạng text', 'Tạo liên kết với a'],
+            objectives: ['Sử dụng thẻ định dạng text', 'Tạo liên kết với a', 'Hiểu đường dẫn'],
+            subLessons: [
+                { title: '2.1 Thẻ định dạng text', desc: 'strong (đậm), em (nghiêng), b, i, mark (highlight).' },
+                { title: '2.2 Xuống dòng và phân cách', desc: 'br (xuống dòng), hr (đường kẻ ngang).' },
+                { title: '2.3 Liên kết với thẻ a', desc: 'href là địa chỉ đích, target="_blank" mở tab mới.' },
+                { title: '2.4 Đường dẫn tương đối và tuyệt đối', desc: 'Đường dẫn tương đối: file cùng thư mục. Tuyệt đối: URL đầy đủ.' }
+            ],
             content: `
             <h2>Text và Liên kết</h2>
-            <p><strong>Thẻ định dạng text:</strong></p>
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">2.1 Thẻ định dạng text</div><div class="desc">strong: in đậm (quan trọng), em: in nghiêng (nhấn mạnh), b: in đậm (không quan trọng), i: in nghiêng (không quan trọng), mark: highlight.</div></div>
+            <div class="sub-lesson"><div class="title">2.2 Xuống dòng và phân cách</div><div class="desc">br: xuống dòng mới, hr: tạo đường kẻ ngang phân cách nội dung.</div></div>
+            <div class="sub-lesson"><div class="title">2.3 Liên kết với thẻ a</div><div class="desc">a (anchor) dùng để tạo liên kết. href là địa chỉ đích. target="_blank" mở link trong tab mới.</div></div>
+            <div class="sub-lesson"><div class="title">2.4 Đường dẫn tương đối và tuyệt đối</div><div class="desc">Đường dẫn tương đối: file trong cùng thư mục (vd: about.html). Đường dẫn tuyệt đối: URL đầy đủ (vd: https://example.com).</div></div>
+
+            <h3>🔧 Ví dụ code</h3>
+            <div class="code-block"><span class="tag">&lt;h1&gt;</span>Văn bản và liên kết<span class="tag">&lt;/h1&gt;</span>
+            <span class="tag">&lt;p&gt;</span>
+              <span class="tag">&lt;strong&gt;</span>Đây là văn bản in đậm<span class="tag">&lt;/strong&gt;</span> và
+              <span class="tag">&lt;em&gt;</span>đây là văn bản in nghiêng<span class="tag">&lt;/em&gt;</span>
+              <span class="tag">&lt;br&gt;</span>
+              <span class="tag">&lt;mark&gt;</span>Văn bản được highlight<span class="tag">&lt;/mark&gt;</span>
+            <span class="tag">&lt;/p&gt;</span>
+            <span class="tag">&lt;hr&gt;</span>
+            <span class="tag">&lt;p&gt;</span>
+              <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"https://google.com"</span> <span class="attr">target</span>=<span class="str">"_blank"</span><span class="tag">&gt;</span>Google<span class="tag">&lt;/a&gt;</span> |
+              <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"about.html"</span><span class="tag">&gt;</span>Trang giới thiệu<span class="tag">&lt;/a&gt;</span>
+            <span class="tag">&lt;/p&gt;</span></div>
+
+            <h3>📝 Giải thích chi tiết</h3>
             <ul>
-              <li><strong>&lt;h1&gt;</strong> - <strong>&lt;h6&gt;</strong>: Tiêu đề</li>
-              <li><strong>&lt;p&gt;</strong>: Đoạn văn</li>
-              <li><strong>&lt;strong&gt;</strong>: In đậm</li>
-              <li><strong>&lt;em&gt;</strong>: In nghiêng</li>
-              <li><strong>&lt;br&gt;</strong>: Xuống dòng</li>
-              <li><strong>&lt;hr&gt;</strong>: Đường kẻ ngang</li>
+              <li><strong>&lt;strong&gt;</strong>: In đậm, mang ý nghĩa quan trọng về mặt ngữ nghĩa (SEO).</li>
+              <li><strong>&lt;em&gt;</strong>: In nghiêng, mang ý nghĩa nhấn mạnh về mặt ngữ nghĩa.</li>
+              <li><strong>&lt;b&gt;</strong>: In đậm, chỉ mang tính chất trình bày.</li>
+              <li><strong>&lt;i&gt;</strong>: In nghiêng, chỉ mang tính chất trình bày.</li>
+              <li><strong>&lt;mark&gt;</strong>: Làm nổi bật văn bản (màu vàng mặc định).</li>
+              <li><strong>&lt;br&gt;</strong>: Xuống dòng mới, không cần thẻ đóng.</li>
+              <li><strong>&lt;hr&gt;</strong>: Đường kẻ ngang, phân cách nội dung.</li>
+              <li><strong>&lt;a&gt;</strong>: Tạo liên kết với các thuộc tính:
+                <ul>
+                  <li><strong>href</strong>: Địa chỉ đích</li>
+                  <li><strong>target="_blank"</strong>: Mở trong tab mới</li>
+                  <li><strong>target="_self"</strong>: Mở trong tab hiện tại (mặc định)</li>
+                </ul>
+              </li>
             </ul>
-            <p><strong>Liên kết:</strong></p>
-            <div class="code-block"><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"https://example.com"</span> <span class="attr">target</span>=<span class="str">"_blank"</span><span class="tag">&gt;</span>Liên kết<span class="tag">&lt;/a&gt;</span></div>
-            <ul>
-              <li><strong>href</strong>: Địa chỉ đích</li>
-              <li><strong>target="_blank"</strong>: Mở tab mới</li>
-            </ul>
+
+            <h3>🎯 Bài tập vận dụng</h3>
+            <ol>
+              <li>Tạo trang web với tiêu đề "Các môn học yêu thích"</li>
+              <li>Sử dụng strong, em, mark để định dạng văn bản</li>
+              <li>Tạo ít nhất 3 liên kết: 1 đến trang ngoài, 2 liên kết nội bộ</li>
+              <li>Sử dụng br và hr để phân cách nội dung</li>
+            </ol>
           `,
-            quiz: [
-                { q: 'Thẻ nào tạo liên kết?', opts: ['&lt;link&gt;', '&lt;a&gt;', '&lt;href&gt;', '&lt;url&gt;'],
-                    ans: 1 },
-                { q: 'Thuộc tính mở link trong tab mới?', opts: ['target="_self"', 'target="_blank"',
-                        'target="_new"', 'target="_top"'
-                    ], ans: 1 }
-            ]
+            practices: [
+                { title: 'Trang văn bản định dạng', desc: 'Tạo trang với các thẻ định dạng văn bản: strong, em, mark, br, hr.',
+                    level: 'Dễ' },
+                { title: 'Trang liên kết', desc: 'Tạo trang với ít nhất 5 liên kết khác nhau, bao gồm cả đường dẫn tương đối và tuyệt đối.',
+                    level: 'Dễ' },
+                { title: 'Trang giới thiệu với liên kết', desc: 'Tạo trang giới thiệu bản thân với các liên kết đến trang khác.',
+                    level: 'Trung bình' },
+                { title: 'Trang chủ với navigation', desc: 'Tạo trang chủ với thanh điều hướng (nav) chứa ít nhất 4 liên kết.',
+                    level: 'Trung bình' }
+            ],
+            quiz: [{
+                q: 'Thẻ nào tạo liên kết?',
+                opts: ['&lt;link&gt;', '&lt;a&gt;', '&lt;href&gt;', '&lt;url&gt;'],
+                ans: 1
+            }, {
+                q: 'Thuộc tính mở link trong tab mới?',
+                opts: ['target="_self"', 'target="_blank"', 'target="_new"', 'target="_top"'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào in đậm với ý nghĩa quan trọng?',
+                opts: ['&lt;b&gt;', '&lt;strong&gt;', '&lt;bold&gt;', '&lt;em&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào tạo đường kẻ ngang?',
+                opts: ['&lt;br&gt;', '&lt;hr&gt;', '&lt;line&gt;', '&lt;divider&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào highlight văn bản?',
+                opts: ['&lt;highlight&gt;', '&lt;mark&gt;', '&lt;hilight&gt;', '&lt;bg&gt;'],
+                ans: 1
+            }, {
+                q: 'Đường dẫn "about.html" là loại gì?',
+                opts: ['Tuyệt đối', 'Tương đối', 'URL', 'Domain'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào xuống dòng?',
+                opts: ['&lt;br&gt;', '&lt;hr&gt;', '&lt;newline&gt;', '&lt;nl&gt;'],
+                ans: 0
+            }, {
+                q: 'Trang mặc định mở link ở đâu?',
+                opts: ['Tab mới', 'Tab hiện tại', 'Cửa sổ mới', 'Trình duyệt khác'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào in nghiêng với ý nghĩa nhấn mạnh?',
+                opts: ['&lt;i&gt;', '&lt;em&gt;', '&lt;italic&gt;', '&lt;emphasis&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ a cần thuộc tính gì bắt buộc?',
+                opts: ['target', 'href', 'src', 'link'],
+                ans: 1
+            }]
         }, {
             day: 3,
             title: 'Hình ảnh và Danh sách',
-            objectives: ['Chèn hình ảnh', 'Tạo danh sách'],
+            objectives: ['Chèn hình ảnh với img', 'Tạo danh sách có thứ tự và không thứ tự', 'Danh sách lồng nhau'],
+            subLessons: [
+                { title: '3.1 Thẻ img', desc: 'src (đường dẫn ảnh), alt (mô tả thay thế), width, height.' },
+                { title: '3.2 Danh sách không thứ tự (ul)', desc: 'ul + li tạo danh sách dạng bullet.' },
+                { title: '3.3 Danh sách có thứ tự (ol)', desc: 'ol + li tạo danh sách đánh số.' },
+                { title: '3.4 Danh sách lồng nhau', desc: 'Đặt ul hoặc ol bên trong li để tạo danh sách cấp con.' }
+            ],
             content: `
-            <h2>Hình ảnh & Danh sách</h2>
-            <p><strong>Thẻ img:</strong></p>
-            <div class="code-block"><span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"image.jpg"</span> <span class="attr">alt</span>=<span class="str">"Mô tả"</span> <span class="attr">width</span>=<span class="str">"200"</span><span class="tag">&gt;</span></div>
-            <ul>
-              <li><strong>src</strong>: Đường dẫn ảnh</li>
-              <li><strong>alt</strong>: Văn bản thay thế (quan trọng)</li>
-            </ul>
-            <p><strong>Danh sách:</strong></p>
-            <div class="code-block"><span class="tag">&lt;ul&gt;</span> <span class="comment">&lt;!-- Không thứ tự --&gt;</span>
-            <span class="tag">&lt;li&gt;</span>Mục 1<span class="tag">&lt;/li&gt;</span>
+            <h2>Hình ảnh và Danh sách</h2>
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">3.1 Thẻ img</div><div class="desc">img dùng để chèn hình ảnh. src là đường dẫn ảnh. alt là văn bản thay thế (quan trọng cho SEO và accessibility). width và height điều chỉnh kích thước.</div></div>
+            <div class="sub-lesson"><div class="title">3.2 Danh sách không thứ tự (ul)</div><div class="desc">ul (unordered list) + li (list item) tạo danh sách với ký hiệu bullet.</div></div>
+            <div class="sub-lesson"><div class="title">3.3 Danh sách có thứ tự (ol)</div><div class="desc">ol (ordered list) + li tạo danh sách được đánh số thứ tự.</div></div>
+            <div class="sub-lesson"><div class="title">3.4 Danh sách lồng nhau</div><div class="desc">Đặt một danh sách (ul hoặc ol) bên trong li của danh sách khác để tạo cấu trúc phân cấp.</div></div>
+
+            <h3>🔧 Ví dụ code</h3>
+            <div class="code-block"><span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"https://picsum.photos/300/200"</span> <span class="attr">alt</span>=<span class="str">"Hình ảnh ngẫu nhiên"</span> <span class="attr">width</span>=<span class="str">"300"</span><span class="tag">&gt;</span>
+
+            <span class="tag">&lt;h2&gt;</span>Danh sách sở thích<span class="tag">&lt;/h2&gt;</span>
+            <span class="tag">&lt;ul&gt;</span>
+              <span class="tag">&lt;li&gt;</span>Đọc sách<span class="tag">&lt;/li&gt;</span>
+              <span class="tag">&lt;li&gt;</span>Lập trình<span class="tag">&lt;/li&gt;</span>
+              <span class="tag">&lt;li&gt;</span>Thể thao<span class="tag">&lt;/li&gt;</span>
             <span class="tag">&lt;/ul&gt;</span>
-            <span class="tag">&lt;ol&gt;</span> <span class="comment">&lt;!-- Có thứ tự --&gt;</span>
-            <span class="tag">&lt;li&gt;</span>Bước 1<span class="tag">&lt;/li&gt;</span>
-            <span class="tag">&lt;/ol&gt;</span></div>
+
+            <span class="tag">&lt;h2&gt;</span>Các bước nấu ăn<span class="tag">&lt;/h2&gt;</span>
+            <span class="tag">&lt;ol&gt;</span>
+              <span class="tag">&lt;li&gt;</span>Chuẩn bị nguyên liệu<span class="tag">&lt;/li&gt;</span>
+              <span class="tag">&lt;li&gt;</span>Sơ chế<span class="tag">&lt;/li&gt;</span>
+              <span class="tag">&lt;li&gt;</span>Nấu<span class="tag">&lt;/li&gt;</span>
+              <span class="tag">&lt;li&gt;</span>Trình bày<span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;/ol&gt;</span>
+
+            <span class="tag">&lt;h2&gt;</span>Danh sách lồng nhau<span class="tag">&lt;/h2&gt;</span>
+            <span class="tag">&lt;ul&gt;</span>
+              <span class="tag">&lt;li&gt;</span>Môn học yêu thích
+                <span class="tag">&lt;ul&gt;</span>
+                  <span class="tag">&lt;li&gt;</span>Toán<span class="tag">&lt;/li&gt;</span>
+                  <span class="tag">&lt;li&gt;</span>Văn<span class="tag">&lt;/li&gt;</span>
+                  <span class="tag">&lt;li&gt;</span>Tin học<span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ul&gt;</span>
+              <span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;/ul&gt;</span></div>
+
+            <h3>📝 Giải thích chi tiết</h3>
+            <ul>
+              <li><strong>&lt;img&gt;</strong>: Chèn hình ảnh
+                <ul>
+                  <li><strong>src</strong>: Đường dẫn ảnh (có thể là URL hoặc đường dẫn nội bộ)</li>
+                  <li><strong>alt</strong>: Văn bản thay thế, hiển thị khi ảnh không tải được. Rất quan trọng cho SEO.</li>
+                  <li><strong>width/height</strong>: Kích thước ảnh (px)</li>
+                </ul>
+              </li>
+              <li><strong>&lt;ul&gt;</strong>: Danh sách không thứ tự, mỗi mục là &lt;li&gt;</li>
+              <li><strong>&lt;ol&gt;</strong>: Danh sách có thứ tự, mỗi mục là &lt;li&gt;</li>
+              <li><strong>Danh sách lồng nhau</strong>: Đặt &lt;ul&gt; hoặc &lt;ol&gt; bên trong &lt;li&gt;</li>
+            </ul>
+
+            <h3>🎯 Bài tập vận dụng</h3>
+            <ol>
+              <li>Tạo trang web với tiêu đề "Sở thích của tôi"</li>
+              <li>Chèn ít nhất 2 hình ảnh (có alt đầy đủ)</li>
+              <li>Tạo danh sách sở thích (ul) và danh sách công việc hằng ngày (ol)</li>
+              <li>Tạo danh sách lồng nhau ít nhất 2 cấp</li>
+            </ol>
           `,
-            quiz: [
-                { q: 'Thuộc tính mô tả hình ảnh?', opts: ['src', 'alt', 'title', 'desc'], ans: 1 },
-                { q: 'Thẻ tạo danh sách có thứ tự?', opts: ['&lt;ul&gt;', '&lt;ol&gt;', '&lt;li&gt;',
-                        '&lt;list&gt;'
-                    ], ans: 1 }
-            ]
+            practices: [
+                { title: 'Trang hình ảnh', desc: 'Tạo trang chèn ít nhất 3 hình ảnh với đầy đủ alt và kích thước.',
+                    level: 'Dễ' },
+                { title: 'Trang danh sách', desc: 'Tạo trang với ul, ol và danh sách lồng nhau ít nhất 2 cấp.', level: 'Dễ' },
+                { title: 'Trang giới thiệu với ảnh và danh sách', desc: 'Kết hợp ảnh và nhiều loại danh sách trong một trang.',
+                    level: 'Trung bình' },
+                { title: 'Trang menu website', desc: 'Tạo menu điều hướng bằng danh sách lồng nhau (ul trong li).',
+                    level: 'Khó' }
+            ],
+            quiz: [{
+                q: 'Thuộc tính mô tả hình ảnh?',
+                opts: ['src', 'alt', 'title', 'desc'],
+                ans: 1
+            }, {
+                q: 'Thẻ tạo danh sách có thứ tự?',
+                opts: ['&lt;ul&gt;', '&lt;ol&gt;', '&lt;li&gt;', '&lt;list&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào dùng để chèn ảnh?',
+                opts: ['&lt;image&gt;', '&lt;img&gt;', '&lt;pic&gt;', '&lt;src&gt;'],
+                ans: 1
+            }, {
+                q: 'Danh sách lồng nhau tạo bằng cách nào?',
+                opts: ['Đặt ul trong li', 'Đặt li trong ul', 'Dùng ol trong ul', 'Tất cả đều sai'],
+                ans: 0
+            }, {
+                q: 'Thuộc tính alt dùng để làm gì?',
+                opts: ['Hiển thị ảnh', 'Mô tả ảnh', 'Đặt kích thước', 'Thay đổi màu'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào tạo mục trong danh sách?',
+                opts: ['&lt;item&gt;', '&lt;li&gt;', '&lt;list&gt;', '&lt;point&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ ul tạo danh sách gì?',
+                opts: ['Có thứ tự', 'Không thứ tự', 'Đánh số', 'Chữ cái'],
+                ans: 1
+            }, {
+                q: 'Khi ảnh không tải được, cái gì hiển thị?',
+                opts: ['Lỗi', 'Văn bản alt', 'Khung trống', 'Hình ảnh mặc định'],
+                ans: 1
+            }, {
+                q: 'Thẻ ol tạo danh sách gì?',
+                opts: ['Không thứ tự', 'Có thứ tự', 'Bullet', 'Không đánh số'],
+                ans: 1
+            }, {
+                q: 'Danh sách có thể lồng được bao nhiêu cấp?',
+                opts: ['1 cấp', '2 cấp', '3 cấp', 'Không giới hạn'],
+                ans: 3
+            }]
         }, {
             day: 4,
             title: 'Bảng và Biểu mẫu',
-            objectives: ['Tạo bảng', 'Tạo biểu mẫu'],
+            objectives: ['Tạo bảng với table', 'Tạo biểu mẫu với form', 'Các loại input cơ bản'],
+            subLessons: [
+                { title: '4.1 Bảng cơ bản', desc: 'table, tr (hàng), th (tiêu đề), td (dữ liệu).' },
+                { title: '4.2 Cấu trúc bảng', desc: 'thead (đầu bảng), tbody (thân bảng), tfoot (cuối bảng).' },
+                { title: '4.3 Biểu mẫu cơ bản', desc: 'form, input, label, textarea, select, option, button.' },
+                { title: '4.4 Các loại input', desc: 'text, email, password, checkbox, radio, submit.' }
+            ],
             content: `
-            <h2>Bảng & Biểu mẫu</h2>
-            <p><strong>Bảng:</strong></p>
-            <div class="code-block"><span class="tag">&lt;table&gt;</span>
-            <span class="tag">&lt;thead&gt;</span><span class="tag">&lt;tr&gt;</span><span class="tag">&lt;th&gt;</span>Tên<span class="tag">&lt;/th&gt;</span><span class="tag">&lt;th&gt;</span>Tuổi<span class="tag">&lt;/th&gt;</span><span class="tag">&lt;/tr&gt;</span><span class="tag">&lt;/thead&gt;</span>
-            <span class="tag">&lt;tbody&gt;</span><span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td&gt;</span>An<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>18<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span><span class="tag">&lt;/tbody&gt;</span>
-            <span class="tag">&lt;/table&gt;</span></div>
-            <p><strong>Biểu mẫu:</strong></p>
-            <div class="code-block"><span class="tag">&lt;form&gt;</span>
-            <span class="tag">&lt;label&gt;</span>Email:<span class="tag">&lt;/label&gt;</span>
-            <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">placeholder</span>=<span class="str">"email@example.com"</span><span class="tag">&gt;</span>
-            <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Gửi<span class="tag">&lt;/button&gt;</span>
+            <h2>Bảng và Biểu mẫu</h2>
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">4.1 Bảng cơ bản</div><div class="desc">table: bảng, tr: hàng, th: tiêu đề (in đậm), td: dữ liệu.</div></div>
+            <div class="sub-lesson"><div class="title">4.2 Cấu trúc bảng</div><div class="desc">thead: nhóm tiêu đề, tbody: nhóm dữ liệu, tfoot: nhóm tổng kết.</div></div>
+            <div class="sub-lesson"><div class="title">4.3 Biểu mẫu cơ bản</div><div class="desc">form: bao bọc các input. label: nhãn cho input. input, textarea, select, option, button.</div></div>
+            <div class="sub-lesson"><div class="title">4.4 Các loại input</div><div class="desc">text: văn bản, email: email, password: mật khẩu, checkbox: chọn nhiều, radio: chọn một.</div></div>
+
+            <h3>🔧 Ví dụ code</h3>
+            <div class="code-block"><span class="tag">&lt;table</span> <span class="attr">border</span>=<span class="str">"1"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;thead&gt;</span>
+                <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;th&gt;</span>STT<span class="tag">&lt;/th&gt;</span><span class="tag">&lt;th&gt;</span>Tên<span class="tag">&lt;/th&gt;</span><span class="tag">&lt;th&gt;</span>Tuổi<span class="tag">&lt;/th&gt;</span><span class="tag">&lt;/tr&gt;</span>
+              <span class="tag">&lt;/thead&gt;</span>
+              <span class="tag">&lt;tbody&gt;</span>
+                <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td&gt;</span>1<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>An<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>18<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span>
+                <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td&gt;</span>2<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>Bình<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>19<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span>
+              <span class="tag">&lt;/tbody&gt;</span>
+            <span class="tag">&lt;/table&gt;</span>
+
+            <span class="tag">&lt;h2&gt;</span>Đăng ký tài khoản<span class="tag">&lt;/h2&gt;</span>
+            <span class="tag">&lt;form&gt;</span>
+              <span class="tag">&lt;div&gt;</span>
+                <span class="tag">&lt;label&gt;</span>Họ tên:<span class="tag">&lt;/label&gt;</span>
+                <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="attr">placeholder</span>=<span class="str">"Nhập họ tên"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;/div&gt;</span>
+              <span class="tag">&lt;div&gt;</span>
+                <span class="tag">&lt;label&gt;</span>Email:<span class="tag">&lt;/label&gt;</span>
+                <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">placeholder</span>=<span class="str">"email@example.com"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;/div&gt;</span>
+              <span class="tag">&lt;div&gt;</span>
+                <span class="tag">&lt;label&gt;</span>Giới tính:<span class="tag">&lt;/label&gt;</span>
+                <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"radio"</span> <span class="attr">name</span>=<span class="str">"gender"</span><span class="tag">&gt;</span> Nam
+                <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"radio"</span> <span class="attr">name</span>=<span class="str">"gender"</span><span class="tag">&gt;</span> Nữ
+              <span class="tag">&lt;/div&gt;</span>
+              <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Đăng ký<span class="tag">&lt;/button&gt;</span>
             <span class="tag">&lt;/form&gt;</span></div>
+
+            <h3>📝 Giải thích chi tiết</h3>
+            <ul>
+              <li><strong>Bảng (table)</strong>:
+                <ul>
+                  <li><strong>&lt;table&gt;</strong>: Khởi tạo bảng</li>
+                  <li><strong>&lt;thead&gt;</strong>: Phần đầu bảng (tiêu đề)</li>
+                  <li><strong>&lt;tbody&gt;</strong>: Phần thân bảng (dữ liệu)</li>
+                  <li><strong>&lt;tfoot&gt;</strong>: Phần cuối bảng (tổng kết)</li>
+                  <li><strong>&lt;tr&gt;</strong>: Một hàng</li>
+                  <li><strong>&lt;th&gt;</strong>: Tiêu đề cột (in đậm, căn giữa)</li>
+                  <li><strong>&lt;td&gt;</strong>: Dữ liệu ô</li>
+                </ul>
+              </li>
+              <li><strong>Biểu mẫu (form)</strong>:
+                <ul>
+                  <li><strong>&lt;form&gt;</strong>: Bao bọc các input</li>
+                  <li><strong>&lt;label&gt;</strong>: Nhãn cho input, tăng accessibility</li>
+                  <li><strong>&lt;input&gt;</strong>: Ô nhập liệu với các type: text, email, password, checkbox, radio, submit</li>
+                  <li><strong>&lt;textarea&gt;</strong>: Vùng nhập văn bản nhiều dòng</li>
+                  <li><strong>&lt;select&gt;</strong> + <strong>&lt;option&gt;</strong>: Dropdown</li>
+                  <li><strong>&lt;button&gt;</strong>: Nút bấm</li>
+                </ul>
+              </li>
+            </ul>
+
+            <h3>🎯 Bài tập vận dụng</h3>
+            <ol>
+              <li>Tạo bảng danh sách học sinh với ít nhất 5 hàng</li>
+              <li>Tạo form đăng ký với các trường: họ tên, email, mật khẩu, giới tính, sở thích (checkbox)</li>
+              <li>Thêm textarea để nhập ghi chú</li>
+              <li>Tạo dropdown chọn lớp học</li>
+            </ol>
           `,
-            quiz: [
-                { q: 'Thẻ tạo hàng trong bảng?', opts: ['&lt;td&gt;', '&lt;tr&gt;', '&lt;th&gt;', '&lt;row&gt;'],
-                    ans: 1 },
-                { q: 'Input type dùng cho email?', opts: ['text', 'email', 'mail', 'input'], ans: 1 }
-            ]
+            practices: [
+                { title: 'Bảng đơn giản', desc: 'Tạo bảng với ít nhất 4 cột và 5 hàng dữ liệu.', level: 'Dễ' },
+                { title: 'Form đăng ký', desc: 'Tạo form với các trường: tên, email, password, giới tính (radio).',
+                    level: 'Dễ' },
+                { title: 'Form đăng ký đầy đủ', desc: 'Tạo form với: tên, email, password, giới tính, sở thích (checkbox), lớp (select), ghi chú (textarea).',
+                    level: 'Trung bình' },
+                { title: 'Trang bảng và form', desc: 'Kết hợp bảng và form trong một trang hoàn chỉnh.', level: 'Trung bình' }
+            ],
+            quiz: [{
+                q: 'Thẻ tạo hàng trong bảng?',
+                opts: ['&lt;td&gt;', '&lt;tr&gt;', '&lt;th&gt;', '&lt;row&gt;'],
+                ans: 1
+            }, {
+                q: 'Input type dùng cho email?',
+                opts: ['text', 'email', 'mail', 'input'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào tạo tiêu đề cột?',
+                opts: ['&lt;td&gt;', '&lt;tr&gt;', '&lt;th&gt;', '&lt;thead&gt;'],
+                ans: 2
+            }, {
+                q: 'Thẻ nào nhập văn bản nhiều dòng?',
+                opts: ['&lt;input&gt;', '&lt;textarea&gt;', '&lt;text&gt;', '&lt;para&gt;'],
+                ans: 1
+            }, {
+                q: 'Input type nào cho phép chọn một?',
+                opts: ['checkbox', 'radio', 'select', 'option'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào tạo danh sách thả xuống?',
+                opts: ['&lt;select&gt;', '&lt;option&gt;', '&lt;dropdown&gt;', '&lt;list&gt;'],
+                ans: 0
+            }, {
+                q: 'Thẻ thead dùng để làm gì?',
+                opts: ['Nhóm dữ liệu', 'Nhóm tiêu đề', 'Nhóm tổng kết', 'Nhóm hàng'],
+                ans: 1
+            }, {
+                q: 'Thẻ label có tác dụng gì?',
+                opts: ['Tạo tiêu đề', 'Gán nhãn cho input', 'Tạo dropdown', 'Tạo bảng'],
+                ans: 1
+            }, {
+                q: 'Input type="password" có tác dụng gì?',
+                opts: ['Hiển thị rõ', 'Ẩn ký tự', 'Màu đỏ', 'Không nhập được'],
+                ans: 1
+            }, {
+                q: 'Thẻ tfoot dùng để?',
+                opts: ['Tiêu đề', 'Dữ liệu', 'Tổng kết', 'Đầu bảng'],
+                ans: 2
+            }]
         }, {
             day: 5,
             title: 'HTML Semantic',
-            objectives: ['Hiểu semantic HTML', 'Cấu trúc trang chuẩn'],
+            objectives: ['Hiểu semantic HTML', 'Cấu trúc trang chuẩn', 'Sử dụng div và span'],
+            subLessons: [
+                { title: '5.1 Semantic là gì?', desc: 'Thẻ semantic mô tả ý nghĩa nội dung, giúp SEO và accessibility.' },
+                { title: '5.2 Các thẻ semantic chính', desc: 'header, nav, main, section, article, aside, footer.' },
+                { title: '5.3 Div và span', desc: 'div: block không ngữ nghĩa, span: inline không ngữ nghĩa.' },
+                { title: '5.4 Cấu trúc trang chuẩn', desc: 'Sử dụng semantic để tạo bố cục trang web chuyên nghiệp.' }
+            ],
             content: `
             <h2>HTML Semantic</h2>
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">5.1 Semantic là gì?</div><div class="desc">Thẻ semantic là các thẻ mang ý nghĩa mô tả nội dung bên trong, giúp trình duyệt và công cụ tìm kiếm hiểu rõ cấu trúc trang.</div></div>
+            <div class="sub-lesson"><div class="title">5.2 Các thẻ semantic chính</div><div class="desc">header: đầu trang, nav: điều hướng, main: nội dung chính, section: phần nội dung, article: bài viết độc lập, aside: nội dung phụ, footer: chân trang.</div></div>
+            <div class="sub-lesson"><div class="title">5.3 Div và span</div><div class="desc">div: block-level, dùng để nhóm nội dung. span: inline, dùng để định dạng một phần văn bản.</div></div>
+            <div class="sub-lesson"><div class="title">5.4 Cấu trúc trang chuẩn</div><div class="desc">Kết hợp các thẻ semantic để tạo bố cục trang web chuyên nghiệp, thân thiện với SEO.</div></div>
+
+            <h3>🔧 Ví dụ code</h3>
+            <div class="code-block"><span class="tag">&lt;header&gt;</span>
+              <span class="tag">&lt;h1&gt;</span>Trang web của tôi<span class="tag">&lt;/h1&gt;</span>
+              <span class="tag">&lt;nav&gt;</span>
+                <span class="tag">&lt;a&gt;</span>Trang chủ<span class="tag">&lt;/a&gt;</span>
+                <span class="tag">&lt;a&gt;</span>Giới thiệu<span class="tag">&lt;/a&gt;</span>
+                <span class="tag">&lt;a&gt;</span>Liên hệ<span class="tag">&lt;/a&gt;</span>
+              <span class="tag">&lt;/nav&gt;</span>
+            <span class="tag">&lt;/header&gt;</span>
+
+            <span class="tag">&lt;main&gt;</span>
+              <span class="tag">&lt;section&gt;</span>
+                <span class="tag">&lt;h2&gt;</span>Bài viết mới nhất<span class="tag">&lt;/h2&gt;</span>
+                <span class="tag">&lt;article&gt;</span>
+                  <span class="tag">&lt;h3&gt;</span>Tiêu đề bài viết<span class="tag">&lt;/h3&gt;</span>
+                  <span class="tag">&lt;p&gt;</span>Nội dung bài viết...<span class="tag">&lt;/p&gt;</span>
+                <span class="tag">&lt;/article&gt;</span>
+              <span class="tag">&lt;/section&gt;</span>
+
+              <span class="tag">&lt;aside&gt;</span>
+                <span class="tag">&lt;h3&gt;</span>Bài viết liên quan<span class="tag">&lt;/h3&gt;</span>
+                <span class="tag">&lt;ul&gt;</span>
+                  <span class="tag">&lt;li&gt;</span>Bài 1<span class="tag">&lt;/li&gt;</span>
+                  <span class="tag">&lt;li&gt;</span>Bài 2<span class="tag">&lt;/li&gt;</span>
+                <span class="tag">&lt;/ul&gt;</span>
+              <span class="tag">&lt;/aside&gt;</span>
+            <span class="tag">&lt;/main&gt;</span>
+
+            <span class="tag">&lt;footer&gt;</span>
+              <span class="tag">&lt;p&gt;</span>© 2026 Bản quyền thuộc về tôi<span class="tag">&lt;/p&gt;</span>
+            <span class="tag">&lt;/footer&gt;</span></div>
+
+            <h3>📝 Giải thích chi tiết</h3>
             <ul>
-              <li><strong>&lt;header&gt;</strong>: Đầu trang</li>
-              <li><strong>&lt;nav&gt;</strong>: Điều hướng</li>
-              <li><strong>&lt;main&gt;</strong>: Nội dung chính</li>
-              <li><strong>&lt;section&gt;</strong>: Phần nội dung</li>
-              <li><strong>&lt;article&gt;</strong>: Bài viết độc lập</li>
-              <li><strong>&lt;aside&gt;</strong>: Nội dung phụ</li>
-              <li><strong>&lt;footer&gt;</strong>: Chân trang</li>
+              <li><strong>&lt;header&gt;</strong>: Đầu trang, chứa logo, tiêu đề, navigation.</li>
+              <li><strong>&lt;nav&gt;</strong>: Khu vực điều hướng, chứa các link chính.</li>
+              <li><strong>&lt;main&gt;</strong>: Nội dung chính của trang, chỉ nên có một.</li>
+              <li><strong>&lt;section&gt;</strong>: Nhóm nội dung có liên quan với nhau.</li>
+              <li><strong>&lt;article&gt;</strong>: Nội dung độc lập (bài viết, tin tức).</li>
+              <li><strong>&lt;aside&gt;</strong>: Nội dung phụ (sidebar, quảng cáo).</li>
+              <li><strong>&lt;footer&gt;</strong>: Chân trang, chứa thông tin bản quyền.</li>
+              <li><strong>&lt;div&gt;</strong>: Block container dùng để nhóm và style.</li>
+              <li><strong>&lt;span&gt;</strong>: Inline container dùng để style một phần văn bản.</li>
             </ul>
-            <div class="code-block"><span class="tag">&lt;header&gt;</span><span class="tag">&lt;h1&gt;</span>Trang web<span class="tag">&lt;/h1&gt;</span><span class="tag">&lt;nav&gt;</span><span class="tag">&lt;a&gt;</span>Trang chủ<span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/nav&gt;</span><span class="tag">&lt;/header&gt;</span>
-            <span class="tag">&lt;main&gt;</span><span class="tag">&lt;section&gt;</span>Nội dung<span class="tag">&lt;/section&gt;</span><span class="tag">&lt;/main&gt;</span></div>
+
+            <h3>🎯 Bài tập vận dụng</h3>
+            <ol>
+              <li>Xây dựng cấu trúc trang blog với header, nav, main, section, article, aside, footer</li>
+              <li>Sử dụng div để nhóm các phần tử</li>
+              <li>Sử dụng span để định dạng màu sắc cho một phần văn bản</li>
+            </ol>
           `,
-            quiz: [
-                { q: 'Thẻ cho nội dung chính?', opts: ['&lt;header&gt;', '&lt;main&gt;', '&lt;section&gt;',
-                        '&lt;article&gt;'
-                    ], ans: 1 },
-                { q: 'Thẻ tạo điều hướng?', opts: ['&lt;nav&gt;', '&lt;menu&gt;', '&lt;navigation&gt;',
-                        '&lt;ul&gt;'
-                    ], ans: 0 }
-            ]
+            practices: [
+                { title: 'Cấu trúc trang đơn', desc: 'Tạo trang với header, main, footer cơ bản.', level: 'Dễ' },
+                { title: 'Trang blog', desc: 'Tạo trang blog với header, nav, main (section + article), aside, footer.',
+                    level: 'Dễ' },
+                { title: 'Trang giới thiệu sản phẩm', desc: 'Tạo trang với cấu trúc semantic đầy đủ và div/span.',
+                    level: 'Trung bình' },
+                { title: 'Trang portfolio', desc: 'Tạo trang portfolio cá nhân với cấu trúc semantic chuyên nghiệp.',
+                    level: 'Khó' }
+            ],
+            quiz: [{
+                q: 'Thẻ cho nội dung chính?',
+                opts: ['&lt;header&gt;', '&lt;main&gt;', '&lt;section&gt;', '&lt;article&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ tạo điều hướng?',
+                opts: ['&lt;nav&gt;', '&lt;menu&gt;', '&lt;navigation&gt;', '&lt;ul&gt;'],
+                ans: 0
+            }, {
+                q: 'Thẻ nào dùng cho bài viết độc lập?',
+                opts: ['&lt;div&gt;', '&lt;section&gt;', '&lt;article&gt;', '&lt;group&gt;'],
+                ans: 2
+            }, {
+                q: 'Thẻ semantic có lợi ích gì?',
+                opts: ['SEO tốt hơn', 'Accessibility tốt hơn', 'Cấu trúc rõ ràng', 'Tất cả đều đúng'],
+                ans: 3
+            }, {
+                q: 'Thẻ div là loại gì?',
+                opts: ['Inline', 'Block', 'Semantic', 'Không có'],
+                ans: 1
+            }, {
+                q: 'Thẻ span là loại gì?',
+                opts: ['Block', 'Inline', 'Semantic', 'Không có'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào thường dùng cho sidebar?',
+                opts: ['&lt;section&gt;', '&lt;aside&gt;', '&lt;article&gt;', '&lt;nav&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào thường dùng cho chân trang?',
+                opts: ['&lt;header&gt;', '&lt;main&gt;', '&lt;footer&gt;', '&lt;bottom&gt;'],
+                ans: 2
+            }, {
+                q: 'Thẻ nào có thể lồng trong section?',
+                opts: ['article', 'p', 'ul', 'Tất cả đều có thể'],
+                ans: 3
+            }, {
+                q: 'Một trang nên có bao nhiêu thẻ main?',
+                opts: ['Không giới hạn', '1', '2', '3'],
+                ans: 1
+            }]
         }, {
             day: 6,
             title: 'HTML nâng cao',
-            objectives: ['Audio, video, iframe', 'Accessibility cơ bản'],
+            objectives: ['Audio, video, iframe', 'Figure và figcaption', 'Data attributes', 'Accessibility cơ bản'],
+            subLessons: [
+                { title: '6.1 Audio', desc: 'audio + source để phát nhạc, controls để hiển thị điều khiển.' },
+                { title: '6.2 Video', desc: 'video + source để phát video, controls và width/height.' },
+                { title: '6.3 Iframe', desc: 'Nhúng trang web khác vào trang hiện tại.' },
+                { title: '6.4 Figure và Figcaption', desc: 'figure nhóm nội dung, figcaption chú thích.' },
+                { title: '6.5 Data attributes', desc: 'data-* lưu dữ liệu tùy chỉnh trong HTML.' }
+            ],
             content: `
             <h2>HTML nâng cao</h2>
-            <p><strong>Audio:</strong></p>
-            <div class="code-block"><span class="tag">&lt;audio</span> <span class="attr">controls</span><span class="tag">&gt;</span><span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="str">"music.mp3"</span><span class="tag">&gt;</span><span class="tag">&lt;/audio&gt;</span></div>
-            <p><strong>Video:</strong></p>
-            <div class="code-block"><span class="tag">&lt;video</span> <span class="attr">controls</span> <span class="attr">width</span>=<span class="str">"400"</span><span class="tag">&gt;</span><span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="str">"video.mp4"</span><span class="tag">&gt;</span><span class="tag">&lt;/video&gt;</span></div>
-            <p><strong>Iframe:</strong></p>
-            <div class="code-block"><span class="tag">&lt;iframe</span> <span class="attr">src</span>=<span class="str">"https://example.com"</span> <span class="attr">width</span>=<span class="str">"100%"</span> <span class="attr">height</span>=<span class="str">"200"</span><span class="tag">&gt;</span><span class="tag">&lt;/iframe&gt;</span></div>
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">6.1 Audio</div><div class="desc">audio: phát nhạc. source: chỉ định file. controls: hiển thị nút điều khiển.</div></div>
+            <div class="sub-lesson"><div class="title">6.2 Video</div><div class="desc">video: phát video. source: chỉ định file. controls: điều khiển. width/height: kích thước.</div></div>
+            <div class="sub-lesson"><div class="title">6.3 Iframe</div><div class="desc">iframe: nhúng trang web khác. src: URL. width/height: kích thước.</div></div>
+            <div class="sub-lesson"><div class="title">6.4 Figure và Figcaption</div><div class="desc">figure: nhóm nội dung (ảnh, code). figcaption: chú thích cho figure.</div></div>
+            <div class="sub-lesson"><div class="title">6.5 Data attributes</div><div class="desc">data-*: lưu dữ liệu tùy chỉnh trong HTML, dùng với JavaScript.</div></div>
+
+            <h3>🔧 Ví dụ code</h3>
+            <div class="code-block"><span class="tag">&lt;h2&gt;</span>Audio và Video<span class="tag">&lt;/h2&gt;</span>
+            <span class="tag">&lt;audio</span> <span class="attr">controls</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="str">"music.mp3"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;/audio&gt;</span>
+
+            <span class="tag">&lt;video</span> <span class="attr">controls</span> <span class="attr">width</span>=<span class="str">"400"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="str">"video.mp4"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;/video&gt;</span>
+
+            <span class="tag">&lt;h2&gt;</span>Iframe<span class="tag">&lt;/h2&gt;</span>
+            <span class="tag">&lt;iframe</span> <span class="attr">src</span>=<span class="str">"https://example.com"</span> <span class="attr">width</span>=<span class="str">"100%"</span> <span class="attr">height</span>=<span class="str">"200"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;/iframe&gt;</span>
+
+            <span class="tag">&lt;h2&gt;</span>Figure và Figcaption<span class="tag">&lt;/h2&gt;</span>
+            <span class="tag">&lt;figure&gt;</span>
+              <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"image.jpg"</span> <span class="attr">alt</span>=<span class="str">"Mô tả"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;figcaption&gt;</span>Hình ảnh đẹp<span class="tag">&lt;/figcaption&gt;</span>
+            <span class="tag">&lt;/figure&gt;</span>
+
+            <span class="tag">&lt;div</span> <span class="attr">data-user-id</span>=<span class="str">"123"</span> <span class="attr">data-role</span>=<span class="str">"admin"</span><span class="tag">&gt;</span>
+              Nội dung với data attributes
+            <span class="tag">&lt;/div&gt;</span></div>
+
+            <h3>📝 Giải thích chi tiết</h3>
+            <ul>
+              <li><strong>Audio</strong>: Phát nhạc, hỗ trợ MP3, WAV, OGG.</li>
+              <li><strong>Video</strong>: Phát video, hỗ trợ MP4, WebM, OGG.</li>
+              <li><strong>Iframe</strong>: Nhúng trang web khác, hữu ích cho video YouTube, Google Maps.</li>
+              <li><strong>Figure</strong>: Nhóm nội dung như hình ảnh, code.</li>
+              <li><strong>Figcaption</strong>: Chú thích cho figure.</li>
+              <li><strong>Data attributes</strong>: Lưu dữ liệu tùy chỉnh, dùng với JavaScript qua dataset.</li>
+            </ul>
+
+            <h3>🎯 Bài tập vận dụng</h3>
+            <ol>
+              <li>Tạo trang với audio và video (có thể dùng file mẫu)</li>
+              <li>Nhúng một trang web bằng iframe</li>
+              <li>Sử dụng figure và figcaption cho ảnh</li>
+              <li>Thêm data attributes vào một thẻ div</li>
+            </ol>
           `,
-            quiz: [
-                { q: 'Thẻ nhúng trang khác?', opts: ['&lt;embed&gt;', '&lt;iframe&gt;', '&lt;frame&gt;',
-                        '&lt;include&gt;'
-                    ], ans: 1 },
-                { q: 'Thuộc tính mô tả ảnh cho người khiếm thị?', opts: ['title', 'alt', 'desc', 'aria-label'],
-                    ans: 1 }
-            ]
+            practices: [
+                { title: 'Trang đa phương tiện', desc: 'Tạo trang với audio, video và iframe.', level: 'Dễ' },
+                { title: 'Trang gallery', desc: 'Tạo gallery ảnh với figure và figcaption cho mỗi ảnh.', level: 'Trung bình' },
+                { title: 'Trang nhúng nội dung', desc: 'Tạo trang với iframe nhúng YouTube và Google Maps.',
+                    level: 'Trung bình' },
+                { title: 'Trang thông tin với data attributes', desc: 'Sử dụng data attributes để lưu thông tin sản phẩm.',
+                    level: 'Khó' }
+            ],
+            quiz: [{
+                q: 'Thẻ nhúng trang khác?',
+                opts: ['&lt;embed&gt;', '&lt;iframe&gt;', '&lt;frame&gt;', '&lt;include&gt;'],
+                ans: 1
+            }, {
+                q: 'Thuộc tính mô tả ảnh cho người khiếm thị?',
+                opts: ['title', 'alt', 'desc', 'aria-label'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào dùng để phát nhạc?',
+                opts: ['&lt;audio&gt;', '&lt;music&gt;', '&lt;sound&gt;', '&lt;player&gt;'],
+                ans: 0
+            }, {
+                q: 'Thẻ nào dùng để phát video?',
+                opts: ['&lt;video&gt;', '&lt;movie&gt;', '&lt;player&gt;', '&lt;media&gt;'],
+                ans: 0
+            }, {
+                q: 'Thẻ nào tạo chú thích cho figure?',
+                opts: ['&lt;caption&gt;', '&lt;figcaption&gt;', '&lt;desc&gt;', '&lt;note&gt;'],
+                ans: 1
+            }, {
+                q: 'Data attributes bắt đầu với tiền tố gì?',
+                opts: ['data-', 'attr-', 'info-', 'meta-'],
+                ans: 0
+            }, {
+                q: 'Thẻ nào nhóm nội dung như ảnh?',
+                opts: ['&lt;group&gt;', '&lt;figure&gt;', '&lt;container&gt;', '&lt;box&gt;'],
+                ans: 1
+            }, {
+                q: 'Thuộc tính nào hiển thị điều khiển cho video?',
+                opts: ['controls', 'play', 'buttons', 'ui'],
+                ans: 0
+            }, {
+                q: 'Thẻ source dùng trong audio/video để làm gì?',
+                opts: ['Chỉ định file', 'Chỉ định kích thước', 'Chỉ định màu', 'Chỉ định vị trí'],
+                ans: 0
+            }, {
+                q: 'Iframe có thể nhúng nội dung gì?',
+                opts: ['Trang web', 'Video', 'Bản đồ', 'Tất cả đều đúng'],
+                ans: 3
+            }]
         }, {
             day: 7,
             title: 'Tổng hợp HTML',
-            objectives: ['Ôn tập HTML', 'Dự án nhỏ'],
+            objectives: ['Ôn tập HTML', 'Dự án nhỏ', 'Kiểm tra tổng hợp'],
+            subLessons: [
+                { title: '7.1 Ôn tập cấu trúc HTML', desc: 'Nhắc lại các thẻ cơ bản và cấu trúc trang.' },
+                { title: '7.2 Ôn tập form và table', desc: 'Nhắc lại cách tạo bảng và biểu mẫu.' },
+                { title: '7.3 Ôn tập semantic HTML', desc: 'Cấu trúc trang với thẻ semantic.' },
+                { title: '7.4 Dự án nhỏ', desc: 'Xây dựng trang web giới thiệu bản thân hoàn chỉnh.' }
+            ],
             content: `
             <h2>🏗️ Tổng hợp HTML</h2>
-            <p>Xây dựng trang web giới thiệu bản thân.</p>
-            <p><strong>Yêu cầu:</strong></p>
-            <ul>
-              <li>Cấu trúc HTML chuẩn</li>
-              <li>Heading, paragraph, list</li>
-              <li>Hình ảnh, liên kết</li>
-              <li>Bảng hoặc form</li>
-              <li>Semantic HTML</li>
-            </ul>
-            <div class="code-block"><span class="tag">&lt;header&gt;</span><span class="tag">&lt;h1&gt;</span>Giới thiệu<span class="tag">&lt;/h1&gt;</span><span class="tag">&lt;nav&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"#"</span><span class="tag">&gt;</span>Home<span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/nav&gt;</span><span class="tag">&lt;/header&gt;</span>
-            <span class="tag">&lt;main&gt;</span><span class="tag">&lt;section&gt;</span><span class="tag">&lt;h2&gt;</span>Về tôi<span class="tag">&lt;/h2&gt;</span><span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"avatar.jpg"</span> <span class="attr">alt</span>=<span class="str">"Avatar"</span><span class="tag">&gt;</span><span class="tag">&lt;p&gt;</span>Xin chào!<span class="tag">&lt;/p&gt;</span><span class="tag">&lt;/section&gt;</span><span class="tag">&lt;/main&gt;</span>
-            <span class="tag">&lt;footer&gt;</span>© 2026<span class="tag">&lt;/footer&gt;</span></div>
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">7.1 Ôn tập cấu trúc HTML</div><div class="desc">Nhắc lại DOCTYPE, html, head, body, các thẻ heading, paragraph, comment.</div></div>
+            <div class="sub-lesson"><div class="title">7.2 Ôn tập form và table</div><div class="desc">Nhắc lại table, thead, tbody, tfoot, form, input, label, textarea, select.</div></div>
+            <div class="sub-lesson"><div class="title">7.3 Ôn tập semantic HTML</div><div class="desc">Nhắc lại header, nav, main, section, article, aside, footer.</div></div>
+            <div class="sub-lesson"><div class="title">7.4 Dự án nhỏ</div><div class="desc">Xây dựng trang web giới thiệu bản thân hoàn chỉnh với tất cả kiến thức đã học.</div></div>
+
+            <h3>🔧 Ví dụ code - Dự án mẫu</h3>
+            <div class="code-block"><span class="tag">&lt;!DOCTYPE html&gt;</span>
+            <span class="tag">&lt;html&gt;</span>
+            <span class="tag">&lt;head&gt;</span>
+              <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;title&gt;</span>Giới thiệu bản thân<span class="tag">&lt;/title&gt;</span>
+            <span class="tag">&lt;/head&gt;</span>
+            <span class="tag">&lt;body&gt;</span>
+              <span class="tag">&lt;header&gt;</span>
+                <span class="tag">&lt;h1&gt;</span>Chào mừng đến với trang của tôi!<span class="tag">&lt;/h1&gt;</span>
+                <span class="tag">&lt;nav&gt;</span>
+                  <span class="tag">&lt;a&gt;</span>Trang chủ<span class="tag">&lt;/a&gt;</span>
+                  <span class="tag">&lt;a&gt;</span>Sở thích<span class="tag">&lt;/a&gt;</span>
+                  <span class="tag">&lt;a&gt;</span>Liên hệ<span class="tag">&lt;/a&gt;</span>
+                <span class="tag">&lt;/nav&gt;</span>
+              <span class="tag">&lt;/header&gt;</span>
+
+              <span class="tag">&lt;main&gt;</span>
+                <span class="tag">&lt;section&gt;</span>
+                  <span class="tag">&lt;h2&gt;</span>Về tôi<span class="tag">&lt;/h2&gt;</span>
+                  <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"avatar.jpg"</span> <span class="attr">alt</span>=<span class="str">"Ảnh đại diện"</span><span class="tag">&gt;</span>
+                  <span class="tag">&lt;p&gt;</span>Xin chào! Tôi là một học sinh đam mê lập trình.<span class="tag">&lt;/p&gt;</span>
+                <span class="tag">&lt;/section&gt;</span>
+
+                <span class="tag">&lt;section&gt;</span>
+                  <span class="tag">&lt;h2&gt;</span>Sở thích của tôi<span class="tag">&lt;/h2&gt;</span>
+                  <span class="tag">&lt;ul&gt;</span>
+                    <span class="tag">&lt;li&gt;</span>Đọc sách<span class="tag">&lt;/li&gt;</span>
+                    <span class="tag">&lt;li&gt;</span>Lập trình<span class="tag">&lt;/li&gt;</span>
+                    <span class="tag">&lt;li&gt;</span>Chơi thể thao<span class="tag">&lt;/li&gt;</span>
+                  <span class="tag">&lt;/ul&gt;</span>
+                <span class="tag">&lt;/section&gt;</span>
+
+                <span class="tag">&lt;section&gt;</span>
+                  <span class="tag">&lt;h2&gt;</span>Liên hệ<span class="tag">&lt;/h2&gt;</span>
+                  <span class="tag">&lt;form&gt;</span>
+                    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">placeholder</span>=<span class="str">"Email của bạn"</span><span class="tag">&gt;</span>
+                    <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Gửi<span class="tag">&lt;/button&gt;</span>
+                  <span class="tag">&lt;/form&gt;</span>
+                <span class="tag">&lt;/section&gt;</span>
+              <span class="tag">&lt;/main&gt;</span>
+
+              <span class="tag">&lt;footer&gt;</span>
+                <span class="tag">&lt;p&gt;</span>© 2026 - Bản quyền thuộc về tôi<span class="tag">&lt;/p&gt;</span>
+              <span class="tag">&lt;/footer&gt;</span>
+            <span class="tag">&lt;/body&gt;</span>
+            <span class="tag">&lt;/html&gt;</span></div>
+
+            <h3>🎯 Bài tập vận dụng</h3>
+            <ol>
+              <li>Xây dựng trang web giới thiệu bản thân hoàn chỉnh</li>
+              <li>Bao gồm: header, nav, main (2-3 sections), footer</li>
+              <li>Có ít nhất 1 hình ảnh, 1 danh sách, 1 bảng hoặc form</li>
+              <li>Sử dụng thẻ semantic và comment</li>
+            </ol>
           `,
-            quiz: [
-                { q: 'Thẻ cho phần chính?', opts: ['&lt;body&gt;', '&lt;main&gt;', '&lt;content&gt;',
-                        '&lt;section&gt;'
-                    ], ans: 1 },
-                { q: 'Thẻ cho bài viết độc lập?', opts: ['&lt;div&gt;', '&lt;section&gt;', '&lt;article&gt;',
-                        '&lt;group&gt;'
-                    ], ans: 2 }
-            ]
+            practices: [
+                { title: 'Trang giới thiệu bản thân', desc: 'Xây dựng trang giới thiệu đầy đủ với tất cả kiến thức HTML.',
+                    level: 'Dễ' },
+                { title: 'Trang blog cá nhân', desc: 'Tạo trang blog với nhiều bài viết và sidebar.', level: 'Trung bình' },
+                { title: 'Trang portfolio', desc: 'Tạo trang portfolio với các dự án, kỹ năng, thông tin liên hệ.',
+                    level: 'Khó' }
+            ],
+            quiz: [{
+                q: 'Thẻ cho phần chính?',
+                opts: ['&lt;body&gt;', '&lt;main&gt;', '&lt;content&gt;', '&lt;section&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ cho bài viết độc lập?',
+                opts: ['&lt;div&gt;', '&lt;section&gt;', '&lt;article&gt;', '&lt;group&gt;'],
+                ans: 2
+            }, {
+                q: 'Thẻ nào dùng để tạo header?',
+                opts: ['&lt;head&gt;', '&lt;header&gt;', '&lt;top&gt;', '&lt;heading&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào dùng để tạo footer?',
+                opts: ['&lt;bottom&gt;', '&lt;footer&gt;', '&lt;foot&gt;', '&lt;end&gt;'],
+                ans: 1
+            }, {
+                q: 'Thẻ nào tạo navigation?',
+                opts: ['&lt;nav&gt;', '&lt;menu&gt;', '&lt;navigation&gt;', '&lt;links&gt;'],
+                ans: 0
+            }, {
+                q: 'Thẻ section dùng để làm gì?',
+                opts: ['Nhóm nội dung', 'Tạo bài viết', 'Tạo sidebar', 'Tạo header'],
+                ans: 0
+            }, {
+                q: 'Thẻ article dùng để làm gì?',
+                opts: ['Nội dung phụ', 'Bài viết độc lập', 'Điều hướng', 'Chân trang'],
+                ans: 1
+            }, {
+                q: 'Thẻ aside dùng để làm gì?',
+                opts: ['Nội dung phụ', 'Nội dung chính', 'Điều hướng', 'Tiêu đề'],
+                ans: 0
+            }, {
+                q: 'Tổng số thẻ semantic cơ bản là bao nhiêu?',
+                opts: ['3', '4', '5', '6'],
+                ans: 3
+            }, {
+                q: 'Dự án cuối HTML nên bao gồm gì?',
+                opts: ['Ít nhất 3 thẻ semantic', 'Ít nhất 1 form', 'Ít nhất 1 ảnh', 'Tất cả đều đúng'],
+                ans: 3
+            }]
         }, {
             day: 8,
             title: 'CSS cơ bản',
-            objectives: ['Hiểu CSS', 'Selector, class, id'],
+            objectives: ['Hiểu CSS', 'Selector, class, id', 'Màu sắc, background, font'],
+            subLessons: [
+                { title: '8.1 CSS là gì?', desc: 'CSS dùng để định kiểu cho HTML, tạo giao diện đẹp mắt.' },
+                { title: '8.2 3 cách viết CSS', desc: 'Inline, Internal, External.' },
+                { title: '8.3 Selector', desc: 'Tag selector, Class selector, ID selector.' },
+                { title: '8.4 Thuộc tính cơ bản', desc: 'color, background, font-size, border, text-align.' }
+            ],
             content: `
             <h2>CSS cơ bản</h2>
-            <p>CSS (Cascading Style Sheets) dùng để định kiểu cho HTML.</p>
-            <p><strong>3 cách viết CSS:</strong></p>
-            <ul>
-              <li><strong>Inline</strong>: <code>style="color:red;"</code></li>
-              <li><strong>Internal</strong>: &lt;style&gt; trong &lt;head&gt;</li>
-              <li><strong>External</strong>: File .css riêng</li>
-            </ul>
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">8.1 CSS là gì?</div><div class="desc">CSS (Cascading Style Sheets) là ngôn ngữ dùng để định kiểu cho HTML, tạo giao diện đẹp mắt và bố cục trang web.</div></div>
+            <div class="sub-lesson"><div class="title">8.2 3 cách viết CSS</div><div class="desc">Inline: style trong thẻ HTML. Internal: style trong head. External: file .css riêng.</div></div>
+            <div class="sub-lesson"><div class="title">8.3 Selector</div><div class="desc">Tag selector: h1. Class selector: .ten-class. ID selector: #ten-id.</div></div>
+            <div class="sub-lesson"><div class="title">8.4 Thuộc tính cơ bản</div><div class="desc">color: màu chữ. background: nền. font-size: cỡ chữ. border: viền. text-align: căn chỉnh.</div></div>
+
+            <h3>🔧 Ví dụ code</h3>
             <div class="code-block"><span class="comment">/* Internal CSS */</span>
-            <span class="tag">h1</span> { <span class="attr">color</span>: blue; }
-            <span class="tag">.box</span> { <span class="attr">background</span>: #f0f0f0; <span class="attr">padding</span>: 20px; }
-            <span class="tag">#header</span> { <span class="attr">border-bottom</span>: 2px solid black; }</div>
+            <span class="tag">h1</span> {
+              <span class="attr">color</span>: blue;
+              <span class="attr">font-size</span>: 32px;
+            }
+
+            <span class="tag">.box</span> {
+              <span class="attr">background</span>: #f0f0f0;
+              <span class="attr">padding</span>: 20px;
+              <span class="attr">border</span>: 2px solid #ccc;
+              <span class="attr">border-radius</span>: 8px;
+            }
+
+            <span class="tag">#header</span> {
+              <span class="attr">background</span>: #333;
+              <span class="attr">color</span>: white;
+              <span class="attr">text-align</span>: center;
+              <span class="attr">padding</span>: 16px;
+            }
+
+            <span class="comment">/* HTML sử dụng */</span>
+            <span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="str">"header"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;h1&gt;</span>CSS cơ bản<span class="tag">&lt;/h1&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"box"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;p&gt;</span>Nội dung trong box<span class="tag">&lt;/p&gt;</span>
+            <span class="tag">&lt;/div&gt;</span></div>
+
+            <h3>📝 Giải thích chi tiết</h3>
             <ul>
-              <li><strong>Tag</strong>: <code>h1</code></li>
-              <li><strong>Class</strong>: <code>.classname</code></li>
-              <li><strong>ID</strong>: <code>#idname</code></li>
+              <li><strong>3 cách viết CSS</strong>:
+                <ul>
+                  <li><strong>Inline</strong>: <code>style="color:red;"</code> - ưu tiên cao nhất</li>
+                  <li><strong>Internal</strong>: &lt;style&gt; trong &lt;head&gt; - dùng cho trang đơn</li>
+                  <li><strong>External</strong>: File .css riêng - dùng cho nhiều trang</li>
+                </ul>
+              </li>
+              <li><strong>Selector</strong>:
+                <ul>
+                  <li><strong>Tag</strong>: <code>h1 { }</code> - ảnh hưởng tất cả h1</li>
+                  <li><strong>Class</strong>: <code>.ten-class { }</code> - ảnh hưởng element có class đó</li>
+                  <li><strong>ID</strong>: <code>#ten-id { }</code> - ảnh hưởng 1 element duy nhất</li>
+                </ul>
+              </li>
+              <li><strong>Thuộc tính</strong>:
+                <ul>
+                  <li><strong>color</strong>: Màu chữ (tên màu, hex, rgb)</li>
+                  <li><strong>background</strong>: Màu nền</li>
+                  <li><strong>font-size</strong>: Cỡ chữ (px, em, rem)</li>
+                  <li><strong>border</strong>: Viền (độ dày, loại, màu)</li>
+                  <li><strong>padding</strong>: Khoảng cách bên trong</li>
+                </ul>
+              </li>
             </ul>
+
+            <h3>🎯 Bài tập vận dụng</h3>
+            <ol>
+              <li>Viết CSS để tạo một trang với tiêu đề màu xanh dương</li>
+              <li>Tạo class "highlight" để làm nổi bật văn bản</li>
+              <li>Tạo ID "main-header" để style cho header</li>
+              <li>Thêm border và padding cho một section</li>
+            </ol>
           `,
-            quiz: [
-                { q: 'Selector cho nhóm element?', opts: ['ID', 'Class', 'Tag', 'Element'], ans: 1 },
-                { q: 'Thuộc tính đổi màu chữ?', opts: ['background', 'color', 'text-color', 'font-color'],
-                    ans: 1 }
-            ]
+            practices: [
+                { title: 'Style cơ bản', desc: 'Tạo trang với CSS inline, internal và thuộc tính cơ bản.', level: 'Dễ' },
+                { title: 'Selector thực hành', desc: 'Sử dụng tag, class và ID selector để style trang.', level: 'Dễ' },
+                { title: 'Trang được style hoàn chỉnh', desc: 'Tạo trang HTML và CSS với đầy đủ màu sắc, font, border, padding.',
+                    level: 'Trung bình' }
+            ],
+            quiz: [{
+                q: 'Selector cho nhóm element?',
+                opts: ['ID', 'Class', 'Tag', 'Element'],
+                ans: 1
+            }, {
+                q: 'Thuộc tính đổi màu chữ?',
+                opts: ['background', 'color', 'text-color', 'font-color'],
+                ans: 1
+            }, {
+                q: 'CSS viết trong thẻ style là loại gì?',
+                opts: ['Inline', 'Internal', 'External', 'Không có'],
+                ans: 1
+            }, {
+                q: 'CSS viết trong thuộc tính style là loại gì?',
+                opts: ['Inline', 'Internal', 'External', 'Không có'],
+                ans: 0
+            }, {
+                q: 'Selector nào có độ ưu tiên cao nhất?',
+                opts: ['Tag', 'Class', 'ID', 'Tất cả đều bằng'],
+                ans: 2
+            }, {
+                q: 'Thuộc tính nào tạo viền?',
+                opts: ['border', 'outline', 'frame', 'line'],
+                ans: 0
+            }, {
+                q: 'Thuộc tính nào thay đổi cỡ chữ?',
+                opts: ['font', 'font-size', 'size', 'text-size'],
+                ans: 1
+            }, {
+                q: 'CSS là viết tắt của gì?',
+                opts: ['Cascading Style Sheets', 'Creative Style Sheets', 'Color Style Sheets', 'None'],
+                ans: 0
+            }, {
+                q: 'Thuộc tính nào căn chỉnh text?',
+                opts: ['text-align', 'align', 'text-position', 'position'],
+                ans: 0
+            }, {
+                q: 'Padding dùng để làm gì?',
+                opts: ['Khoảng cách ngoài', 'Khoảng cách trong', 'Viền', 'Kích thước'],
+                ans: 1
+            }]
         }, {
             day: 9,
             title: 'CSS Layout - Flexbox',
-            objectives: ['Box Model', 'Flexbox', 'Responsive'],
+            objectives: ['Box Model', 'Flexbox', 'Responsive cơ bản'],
+            subLessons: [
+                { title: '9.1 Box Model', desc: 'content, padding, border, margin.' },
+                { title: '9.2 Display', desc: 'block, inline, inline-block.' },
+                { title: '9.3 Flexbox', desc: 'display:flex, justify-content, align-items, gap, flex-direction.' },
+                { title: '9.4 Responsive cơ bản', desc: 'Sử dụng @media để thay đổi layout trên màn hình nhỏ.' }
+            ],
             content: `
             <h2>CSS Layout - Flexbox</h2>
-            <p><strong>Box Model:</strong></p>
-            <ul>
-              <li><strong>content</strong>: Nội dung</li>
-              <li><strong>padding</strong>: Khoảng cách trong</li>
-              <li><strong>border</strong>: Viền</li>
-              <li><strong>margin</strong>: Khoảng cách ngoài</li>
-            </ul>
-            <p><strong>Flexbox:</strong></p>
-            <div class="code-block">.container {
-              <span class="attr">display</span>: flex;
-              <span class="attr">justify-content</span>: center;
-              <span class="attr">align-items</span>: center;
-              <span class="attr">gap</span>: 16px;
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">9.1 Box Model</div><div class="desc">Mọi element đều có box model: content (nội dung), padding (khoảng cách trong), border (viền), margin (khoảng cách ngoài).</div></div>
+            <div class="sub-lesson"><div class="title">9.2 Display</div><div class="desc">block: chiếm full width. inline: nằm trên cùng dòng. inline-block: kết hợp cả hai.</div></div>
+            <div class="sub-lesson"><div class="title">9.3 Flexbox</div><div class="desc">display:flex tạo container linh hoạt. justify-content: căn ngang. align-items: căn dọc. gap: khoảng cách. flex-direction: hướng.</div></div>
+            <div class="sub-lesson"><div class="title">9.4 Responsive cơ bản</div><div class="desc">Sử dụng @media để thay đổi style theo kích thước màn hình, giúp trang hiển thị tốt trên mọi thiết bị.</div></div>
+
+            <h3>🔧 Ví dụ code</h3>
+            <div class="code-block"><span class="comment">/* Box Model */</span>
+            <span class="tag">.box</span> {
+              <span class="attr">width</span>: 200px;
+              <span class="attr">height</span>: 100px;
+              <span class="attr">padding</span>: 20px;
+              <span class="attr">border</span>: 2px solid black;
+              <span class="attr">margin</span>: 10px;
             }
-            .item { <span class="attr">flex</span>: 1; }</div>
-            <p><strong>Responsive:</strong> <code>@media (max-width: 768px) { ... }</code></p>
+
+            <span class="comment">/* Flexbox */</span>
+            <span class="tag">.container</span> {
+              <span class="attr">display</span>: flex;
+              <span class="attr">justify-content</span>: center;  <span class="comment">/* Căn giữa ngang */</span>
+              <span class="attr">align-items</span>: center;      <span class="comment">/* Căn giữa dọc */</span>
+              <span class="attr">gap</span>: 16px;               <span class="comment">/* Khoảng cách */</span>
+              <span class="attr">flex-wrap</span>: wrap;         <span class="comment">/* Xuống dòng */</span>
+            }
+
+            <span class="tag">.item</span> {
+              <span class="attr">flex</span>: 1;                <span class="comment">/* Chia đều không gian */</span>
+              <span class="attr">padding</span>: 20px;
+              <span class="attr">background</span>: #6C63FF;
+              <span class="attr">color</span>: white;
+              <span class="attr">border-radius</span>: 8px;
+            }
+
+            <span class="comment">/* Responsive */</span>
+            <span class="tag">@media (max-width: 768px)</span> {
+              <span class="tag">.container</span> {
+                <span class="attr">flex-direction</span>: column;  <span class="comment">/* Xếp dọc */</span>
+              }
+            }</div>
+
+            <h3>📝 Giải thích chi tiết</h3>
+            <ul>
+              <li><strong>Box Model</strong>:
+                <ul>
+                  <li><strong>content</strong>: Nội dung bên trong</li>
+                  <li><strong>padding</strong>: Khoảng cách từ content đến border</li>
+                  <li><strong>border</strong>: Viền bao quanh</li>
+                  <li><strong>margin</strong>: Khoảng cách từ border đến element khác</li>
+                </ul>
+              </li>
+              <li><strong>Flexbox</strong>:
+                <ul>
+                  <li><strong>display: flex</strong>: Tạo container flex</li>
+                  <li><strong>justify-content</strong>: Căn chỉnh theo trục chính (ngang)</li>
+                  <li><strong>align-items</strong>: Căn chỉnh theo trục phụ (dọc)</li>
+                  <li><strong>gap</strong>: Khoảng cách giữa các item</li>
+                  <li><strong>flex-wrap</strong>: Cho phép xuống dòng</li>
+                  <li><strong>flex: 1</strong>: Chia đều không gian còn lại</li>
+                </ul>
+              </li>
+              <li><strong>Responsive</strong>:
+                <ul>
+                  <li><strong>@media</strong>: Tạo điều kiện</li>
+                  <li><strong>max-width</strong>: Áp dụng khi màn hình nhỏ hơn</li>
+                  <li><strong>min-width</strong>: Áp dụng khi màn hình lớn hơn</li>
+                </ul>
+              </li>
+            </ul>
+
+            <h3>🎯 Bài tập vận dụng</h3>
+            <ol>
+              <li>Tạo 3 box với box model khác nhau</li>
+              <li>Sử dụng flexbox để tạo layout 3 cột</li>
+              <li>Thêm responsive để 3 cột thành 1 cột trên mobile</li>
+            </ol>
           `,
-            quiz: [
-                { q: 'Căn flex items theo chiều ngang?', opts: ['align-items', 'justify-content', 'flex-direction',
-                        'gap'
-                    ], ans: 1 },
-                { q: 'Padding dùng để?', opts: ['Khoảng cách ngoài', 'Khoảng cách trong', 'Viền', 'Kích thước'],
-                    ans: 1 }
-            ]
+            practices: [
+                { title: 'Box Model thực hành', desc: 'Tạo các box với padding, border, margin khác nhau.', level: 'Dễ' },
+                { title: 'Flexbox layout', desc: 'Tạo layout với flexbox: căn giữa, chia đều, gap.', level: 'Dễ' },
+                { title: 'Trang responsive', desc: 'Tạo trang với flexbox và @media cho responsive.', level: 'Trung bình' },
+                { title: 'Layout phức tạp', desc: 'Tạo layout với header, main (2 cột), footer sử dụng flexbox.',
+                    level: 'Khó' }
+            ],
+            quiz: [{
+                q: 'Căn flex items theo chiều ngang?',
+                opts: ['align-items', 'justify-content', 'flex-direction', 'gap'],
+                ans: 1
+            }, {
+                q: 'Padding dùng để?',
+                opts: ['Khoảng cách ngoài', 'Khoảng cách trong', 'Viền', 'Kích thước'],
+                ans: 1
+            }, {
+                q: 'Thuộc tính nào tạo container flex?',
+                opts: ['display:block', 'display:flex', 'display:inline', 'display:grid'],
+                ans: 1
+            }, {
+                q: 'Thuộc tính nào thay đổi hướng flex?',
+                opts: ['justify-content', 'align-items', 'flex-direction', 'flex-wrap'],
+                ans: 2
+            }, {
+                q: 'Box Model gồm các thành phần nào?',
+                opts: ['content, padding, border, margin', 'content, margin, padding', 'width, height, border',
+                        'Tất cả đều sai'
+                    ],
+                ans: 0
+            }, {
+                q: 'Thuộc tính nào cho phép xuống dòng trong flex?',
+                opts: ['flex-wrap', 'flex-direction', 'justify-content', 'align-items'],
+                ans: 0
+            }, {
+                q: 'Responsive sử dụng công nghệ nào?',
+                opts: ['@media', '@screen', '@responsive', '@mobile'],
+                ans: 0
+            }, {
+                q: 'flex: 1 có tác dụng gì?',
+                opts: ['Cố định kích thước', 'Chia đều không gian', 'Tạo khoảng cách', 'Không có tác dụng'],
+                ans: 1
+            }, {
+                q: 'Thuộc tính nào căn dọc trong flex?',
+                opts: ['justify-content', 'align-items', 'flex-direction', 'gap'],
+                ans: 1
+            }, {
+                q: 'Margin dùng để?',
+                opts: ['Khoảng cách trong', 'Khoảng cách ngoài', 'Viền', 'Nền'],
+                ans: 1
+            }]
         }, {
             day: 10,
             title: 'Dự án cuối khóa',
-            objectives: ['Website hoàn chỉnh', 'Responsive'],
+            objectives: ['Website hoàn chỉnh', 'Responsive', 'Tổng kết khóa học'],
+            subLessons: [
+                { title: '10.1 Lên ý tưởng', desc: 'Xác định chủ đề và cấu trúc website.' },
+                { title: '10.2 Xây dựng HTML', desc: 'Tạo cấu trúc semantic cho website.' },
+                { title: '10.3 Thêm CSS', desc: 'Style và layout cho website.' },
+                { title: '10.4 Responsive', desc: 'Đảm bảo website hiển thị tốt trên mọi thiết bị.' }
+            ],
             content: `
             <h2>🚀 Dự án cuối khóa</h2>
-            <p>Xây dựng trang web hoàn chỉnh với HTML + CSS.</p>
-            <ul>
-              <li>Header + Navigation</li>
-              <li>Hero section</li>
-              <li>Content với card</li>
-              <li>Form liên hệ</li>
-              <li>Footer</li>
-              <li>Responsive</li>
-            </ul>
-            <div class="code-block"><span class="tag">&lt;header</span> <span class="attr">class</span>=<span class="str">"header"</span><span class="tag">&gt;</span>
-            <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"logo"</span><span class="tag">&gt;</span>MySite<span class="tag">&lt;/div&gt;</span>
-            <span class="tag">&lt;nav&gt;</span><span class="tag">&lt;a&gt;</span>Home<span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/nav&gt;</span>
-            <span class="tag">&lt;/header&gt;</span>
-            <span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="str">"hero"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/section&gt;</span>
-            <span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="str">"content"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/section&gt;</span>
-            <span class="tag">&lt;footer</span> <span class="attr">class</span>=<span class="str">"footer"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/footer&gt;</span></div>
-            <p><strong>🎉 Chúc mừng bạn đã hoàn thành khóa học!</strong></p>
+
+            <h3>📚 Các bài học con</h3>
+            <div class="sub-lesson"><div class="title">10.1 Lên ý tưởng</div><div class="desc">Xác định chủ đề website (portfolio, blog, giới thiệu sản phẩm...). Phác thảo bố cục.</div></div>
+            <div class="sub-lesson"><div class="title">10.2 Xây dựng HTML</div><div class="desc">Tạo cấu trúc semantic: header, nav, main (section, article), aside, footer.</div></div>
+            <div class="sub-lesson"><div class="title">10.3 Thêm CSS</div><div class="desc">Áp dụng màu sắc, font, flexbox, box model để tạo giao diện đẹp.</div></div>
+            <div class="sub-lesson"><div class="title">10.4 Responsive</div><div class="desc">Sử dụng @media để trang hiển thị tốt trên desktop, tablet, mobile.</div></div>
+
+            <h3>🔧 Ví dụ code - Dự án mẫu</h3>
+            <div class="code-block"><span class="comment">/* CSS cơ bản cho dự án */</span>
+            <span class="tag">*</span> {
+              <span class="attr">margin</span>: 0;
+              <span class="attr">padding</span>: 0;
+              <span class="attr">box-sizing</span>: border-box;
+            }
+            <span class="tag">body</span> {
+              <span class="attr">font-family</span>: Arial, sans-serif;
+              <span class="attr">line-height</span>: 1.6;
+            }
+            <span class="tag">.header</span> {
+              <span class="attr">display</span>: flex;
+              <span class="attr">justify-content</span>: space-between;
+              <span class="attr">align-items</span>: center;
+              <span class="attr">padding</span>: 16px 32px;
+              <span class="attr">background</span>: #6C63FF;
+              <span class="attr">color</span>: white;
+            }
+            <span class="tag">.logo</span> {
+              <span class="attr">font-size</span>: 24px;
+              <span class="attr">font-weight</span>: bold;
+            }
+            <span class="tag">nav</span> <span class="tag">a</span> {
+              <span class="attr">color</span>: white;
+              <span class="attr">margin</span>: 0 12px;
+              <span class="attr">text-decoration</span>: none;
+            }
+            <span class="tag">.hero</span> {
+              <span class="attr">text-align</span>: center;
+              <span class="attr">padding</span>: 60px 20px;
+              <span class="attr">background</span>: #f5f5f5;
+            }
+            <span class="tag">.content</span> {
+              <span class="attr">display</span>: flex;
+              <span class="attr">gap</span>: 20px;
+              <span class="attr">padding</span>: 40px 32px;
+              <span class="attr">flex-wrap</span>: wrap;
+            }
+            <span class="tag">.card</span> {
+              <span class="attr">flex</span>: 1;
+              <span class="attr">min-width</span>: 200px;
+              <span class="attr">padding</span>: 20px;
+              <span class="attr">background</span>: white;
+              <span class="attr">border-radius</span>: 8px;
+              <span class="attr">box-shadow</span>: 0 4px 12px rgba(0,0,0,0.1);
+              <span class="attr">text-align</span>: center;
+            }
+            <span class="tag">.footer</span> {
+              <span class="attr">text-align</span>: center;
+              <span class="attr">padding</span>: 16px;
+              <span class="attr">background</span>: #333;
+              <span class="attr">color</span>: white;
+            }
+
+            <span class="comment">/* Responsive */</span>
+            <span class="tag">@media (max-width: 768px)</span> {
+              <span class="tag">.header</span> {
+                <span class="attr">flex-direction</span>: column;
+                <span class="attr">gap</span>: 12px;
+                <span class="attr">text-align</span>: center;
+              }
+              <span class="tag">.content</span> {
+                <span class="attr">flex-direction</span>: column;
+              }
+              <span class="tag">.card</span> {
+                <span class="attr">min-width</span>: auto;
+              }
+            }</div>
+
+            <h3>🎯 Bài tập vận dụng - Dự án cuối khóa</h3>
+            <ol>
+              <li><strong>Chọn chủ đề</strong>: Portfolio, Blog, Shop, hoặc Giới thiệu sản phẩm</li>
+              <li><strong>Yêu cầu tối thiểu</strong>:
+                <ul>
+                  <li>Header với logo và navigation</li>
+                  <li>Hero section (banner chính)</li>
+                  <li>Content với ít nhất 3 card hoặc section</li>
+                  <li>Form liên hệ hoặc đăng ký</li>
+                  <li>Footer</li>
+                  <li>Responsive (hoạt động trên mọi thiết bị)</li>
+                  <li>Sử dụng semantic HTML và flexbox</li>
+                </ul>
+              </li>
+              <li><strong>Nâng cao</strong>:
+                <ul>
+                  <li>Thêm animation nhẹ</li>
+                  <li>Tối ưu màu sắc và font chữ</li>
+                  <li>Thêm icon và hình ảnh</li>
+                </ul>
+              </li>
+            </ol>
+
+            <h3>🎊 Chúc mừng bạn đã hoàn thành khóa học HTML + CSS!</h3>
+            <p style="font-size:18px;color:var(--success);">🌟 Bạn đã sẵn sàng cho kỳ thi THPT 2026!</p>
           `,
-            quiz: [
-                { q: 'Responsive dùng công nghệ nào?', opts: ['@media', '@screen', '@responsive', '@mobile'],
-                    ans: 0 },
-                { q: 'Thẻ nhóm nội dung layout?', opts: ['&lt;div&gt;', '&lt;span&gt;', '&lt;section&gt;',
-                        'Cả 3'
-                    ], ans: 3 }
-            ]
+            practices: [
+                { title: 'Dự án Portfolio', desc: 'Xây dựng website portfolio cá nhân hoàn chỉnh.', level: 'Khó' },
+                { title: 'Dự án Blog', desc: 'Xây dựng website blog với các bài viết.', level: 'Khó' },
+                { title: 'Dự án Landing Page', desc: 'Xây dựng landing page cho sản phẩm/dịch vụ.', level: 'Khó' }
+            ],
+            quiz: [{
+                q: 'Responsive dùng công nghệ nào?',
+                opts: ['@media', '@screen', '@responsive', '@mobile'],
+                ans: 0
+            }, {
+                q: 'Thẻ nhóm nội dung layout?',
+                opts: ['&lt;div&gt;', '&lt;span&gt;', '&lt;section&gt;', 'Cả 3'],
+                ans: 3
+            }, {
+                q: 'Flexbox dùng để làm gì?',
+                opts: ['Tạo layout linh hoạt', 'Tạo màu sắc', 'Tạo font chữ', 'Tạo ảnh'],
+                ans: 0
+            }, {
+                q: 'Dự án cuối khóa nên bao gồm gì?',
+                opts: ['Header, Content, Footer', 'Responsive', 'Semantic HTML', 'Tất cả đều đúng'],
+                ans: 3
+            }, {
+                q: 'Thuộc tính nào tạo khoảng cách trong flex?',
+                opts: ['gap', 'margin', 'padding', 'space'],
+                ans: 0
+            }, {
+                q: 'Thẻ nào tạo phần banner chính?',
+                opts: ['&lt;header&gt;', '&lt;hero&gt;', '&lt;section&gt;', '&lt;banner&gt;'],
+                ans: 2
+            }, {
+                q: 'Semantic HTML giúp gì cho SEO?',
+                opts: ['Tốt hơn', 'Không ảnh hưởng', 'Tệ hơn', 'Không có'],
+                ans: 0
+            }, {
+                q: 'Responsive giúp gì?',
+                opts: ['Trang đẹp hơn', 'Trang nhanh hơn', 'Trang hiển thị tốt trên mọi thiết bị', 'Trang an toàn hơn'],
+                ans: 2
+            }, {
+                q: 'Thẻ nào dùng cho navigation?',
+                opts: ['&lt;nav&gt;', '&lt;menu&gt;', '&lt;navigation&gt;', '&lt;links&gt;'],
+                ans: 0
+            }, {
+                q: 'Sau khóa học bạn có thể làm gì?',
+                opts: ['Tạo website cơ bản', 'Thi THPT tốt', 'Tiếp tục học JavaScript', 'Tất cả đều đúng'],
+                ans: 3
+            }]
         }];
 
         // ============================================================
@@ -1760,6 +2751,7 @@
         // ============================================================
         let currentUser = null;
         let currentDay = 1;
+        let currentPracticeIndex = 0;
         let quizAnswers = {};
         let quizTimer = null;
         let quizTime = 0;
@@ -1845,11 +2837,11 @@
             if (id === 'dashboard') renderDashboard();
             if (id === 'course') renderCourse();
             if (id === 'lesson') renderLesson();
+            if (id === 'practice') renderPracticeExercises();
             if (id === 'quiz') renderQuiz();
             if (id === 'assessment') renderAssessment();
             if (id === 'admin') renderAdminUsers();
             document.getElementById('sidebar').classList.remove('open');
-            // Scroll to top when navigating
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -2029,21 +3021,32 @@
         // ============================================================
         function renderRoadmap() {
             const grid = document.getElementById('roadmapGrid');
-            grid.innerHTML = LESSONS.map(l =>
-                `<div class="roadmap-item"><div class="day">Ngày ${l.day}</div><h4>${l.title}</h4></div>`
-            ).join('');
+            grid.innerHTML = LESSONS.map(l => {
+                const totalQuiz = l.quiz ? l.quiz.length : 0;
+                const totalPractice = l.practices ? l.practices.length : 0;
+                return `
+              <div class="roadmap-item">
+                <div class="day">Ngày ${l.day}</div>
+                <h4>${l.title}</h4>
+                <div class="stats">📝 ${totalQuiz} câu hỏi • 💻 ${totalPractice} bài tập</div>
+              </div>
+            `;
+            }).join('');
         }
 
         function renderCourse() {
             const c = document.getElementById('courseList');
             c.innerHTML = LESSONS.map(l => {
                 const done = getProgress(l.day);
+                const totalQuiz = l.quiz ? l.quiz.length : 0;
+                const totalPractice = l.practices ? l.practices.length : 0;
                 return `
               <div style="background:var(--bg-card);padding:18px 22px;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
                 <div>
                   <span class="badge badge-primary">Ngày ${l.day}</span>
                   <h3 style="font-size:17px;margin:4px 0;">${l.title}</h3>
                   <p style="font-size:13px;color:var(--text-secondary);">${l.objectives.join(' • ')}</p>
+                  <p style="font-size:12px;color:var(--text-secondary);">📝 ${totalQuiz} câu hỏi • 💻 ${totalPractice} bài thực hành • 📚 ${l.subLessons.length} bài học con</p>
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
                   <span class="badge ${done ? 'badge-success' : 'badge-warning'}">${done ? '✅ Hoàn thành' : '⏳ Chưa học'}</span>
@@ -2077,7 +3080,8 @@
             const l = LESSONS.find(x => x.day === currentDay);
             if (!l) return;
             document.getElementById('lessonTitle').textContent = `Ngày ${l.day}: ${l.title}`;
-            document.getElementById('lessonSubtitle').textContent = l.objectives.join(' • ');
+            document.getElementById('lessonSubtitle').textContent = l.objectives.join(' • ') +
+                ` (${l.subLessons.length} bài học con, ${l.practices.length} bài thực hành, ${l.quiz.length} câu hỏi)`;
             const container = document.getElementById('lessonContent');
             container.innerHTML = `
             ${l.content}
@@ -2104,49 +3108,112 @@
         // ============================================================
         function openPractice(day) {
             currentDay = day;
+            currentPracticeIndex = 0;
             showPage('practice');
-            document.getElementById('practiceTitle').textContent = `Thực hành ngày ${day}: ${LESSONS[day-1].title}`;
-            const saved = JSON.parse(localStorage.getItem(userKey('practice_' + day)) || 'null');
-            if (saved) {
-                document.getElementById('htmlEditor').value = saved.html || '';
-                document.getElementById('cssEditor').value = saved.css || '';
-            } else {
-                document.getElementById('htmlEditor').value = getDefaultHtml(day);
-                document.getElementById('cssEditor').value = getDefaultCss(day);
+            renderPracticeExercises();
+            loadPracticeEditor(day, 0);
+        }
+
+        function renderPracticeExercises() {
+            const l = LESSONS.find(x => x.day === currentDay);
+            if (!l || !l.practices) {
+                document.getElementById('practiceExercises').innerHTML = '';
+                return;
             }
+            const container = document.getElementById('practiceExercises');
+            const levelClass = { 'Dễ': 'level-easy', 'Trung bình': 'level-medium', 'Khó': 'level-hard' };
+            container.innerHTML = `
+            <h3 style="margin-bottom:8px;">📋 Bài tập thực hành ngày ${currentDay}</h3>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+              ${l.practices.map((p, idx) => `
+                <button class="btn ${idx === currentPracticeIndex ? 'btn-primary' : 'btn-outline'} btn-sm" onclick="selectPractice(${idx})">
+                  <span class="level ${levelClass[p.level] || 'level-easy'}">${p.level}</span>
+                  ${p.title}
+                </button>
+              `).join('')}
+            </div>
+            <div style="background:var(--bg);padding:12px 16px;border-radius:var(--radius-sm);margin-bottom:12px;border-left:4px solid var(--primary);">
+              <strong>${l.practices[currentPracticeIndex]?.title || ''}</strong>
+              <p style="color:var(--text-secondary);font-size:14px;margin-top:4px;">${l.practices[currentPracticeIndex]?.desc || ''}</p>
+            </div>
+          `;
+            loadPracticeEditor(currentDay, currentPracticeIndex);
+        }
+
+        function selectPractice(idx) {
+            currentPracticeIndex = idx;
+            renderPracticeExercises();
+        }
+
+        function loadPracticeEditor(day, idx) {
+            const l = LESSONS.find(x => x.day === day);
+            if (!l || !l.practices || idx >= l.practices.length) return;
+            const saved = JSON.parse(localStorage.getItem(userKey('practice_' + day + '_' + idx)) || 'null');
+            const defaultHtml = getPracticeHtml(day, idx);
+            const defaultCss = getPracticeCss(day, idx);
+            if (saved) {
+                document.getElementById('htmlEditor').value = saved.html || defaultHtml;
+                document.getElementById('cssEditor').value = saved.css || defaultCss;
+            } else {
+                document.getElementById('htmlEditor').value = defaultHtml;
+                document.getElementById('cssEditor').value = defaultCss;
+            }
+            document.getElementById('practiceTitle').textContent =
+                `Thực hành ngày ${day}: ${l.practices[idx].title}`;
             runCode();
         }
 
-        function getDefaultHtml(d) {
-            const map = {
-                1: '<h1>Chào mừng!</h1>\n<p>Trang web đầu tiên</p>',
-                2: '<h1>Tiêu đề chính</h1>\n<p><strong>In đậm</strong> và <em>in nghiêng</em></p>\n<a href="#">Liên kết</a>',
-                3: '<img src="https://picsum.photos/200/150" alt="Ảnh">\n<ul><li>Mục 1</li><li>Mục 2</li></ul>',
-                4: '<table border="1"><tr><th>Tên</th><th>Tuổi</th></tr><tr><td>An</td><td>18</td></tr></table>\n<form><input type="email" placeholder="Email"><button>Gửi</button></form>',
-                5: '<header><h1>Trang web</h1><nav><a href="#">Home</a></nav></header><main><section>Nội dung</section></main><footer>© 2026</footer>',
-                6: '<video controls width="300"><source src="https://www.w3schools.com/html/mov_bbb.mp4"></video>',
-                7: '<header><h1>Giới thiệu</h1></header><main><section><h2>Về tôi</h2><img src="https://picsum.photos/100/100" alt="Avatar"><p>Xin chào!</p></section></main><footer>© 2026</footer>',
-                8: '<div class="box">Box</div>\n<div class="highlight">Highlight</div>',
-                9: '<div class="container"><div class="item">1</div><div class="item">2</div><div class="item">3</div></div>',
-                10: '<header class="header"><div class="logo">MySite</div><nav><a href="#">Home</a></nav></header><section class="hero"><h1>Chào mừng</h1></section><footer class="footer">© 2026</footer>'
+        function getPracticeHtml(day, idx) {
+            const templates = {
+                '1_0': '<h1>Chào mừng!</h1>\n<p>Trang web đầu tiên của tôi</p>\n<h2>Giới thiệu</h2>\n<p>Tôi đang học HTML.</p>',
+                '1_1': '<h1>Giới thiệu bản thân</h1>\n<p>Xin chào! Tôi là một học sinh.</p>\n<h2>Sở thích</h2>\n<p>Tôi thích lập trình.</p>',
+                '1_2': '<h1>Trang chủ</h1>\n<h2>Chào mừng đến với trang web</h2>\n<p>Đây là trang chủ của tôi.</p>\n<p>Bạn có thể tìm hiểu thêm về tôi ở đây.</p>',
+                '2_0': '<h1>Văn bản định dạng</h1>\n<p><strong>Đậm</strong> và <em>nghiêng</em></p>\n<p><mark>Highlight</mark></p>\n<hr>\n<br>Xuống dòng',
+                '2_1': '<h1>Trang liên kết</h1>\n<a href="https://google.com" target="_blank">Google</a>\n<a href="about.html">Giới thiệu</a>\n<a href="contact.html">Liên hệ</a>',
+                '2_2': '<h1>Giới thiệu</h1>\n<a href="index.html">Trang chủ</a>\n<a href="about.html">Về tôi</a>\n<a href="contact.html">Liên hệ</a>',
+                '3_0': '<h1>Hình ảnh</h1>\n<img src="https://picsum.photos/300/200" alt="Ảnh 1" width="300">\n<img src="https://picsum.photos/200/150" alt="Ảnh 2" width="200">',
+                '3_1': '<h1>Danh sách</h1>\n<ul><li>Mục 1</li><li>Mục 2</li></ul>\n<ol><li>Bước 1</li><li>Bước 2</li></ol>',
+                '3_2': '<h1>Giới thiệu</h1>\n<img src="https://picsum.photos/150/150" alt="Avatar">\n<ul><li>Sở thích\n  <ul><li>Đọc sách</li><li>Lập trình</li></ul>\n</li></ul>',
+                '4_0': '<table border="1"><tr><th>Tên</th><th>Tuổi</th></tr><tr><td>An</td><td>18</td></tr></table>',
+                '4_1': '<form><label>Họ tên:</label><input type="text" placeholder="Nhập họ tên"><br><label>Email:</label><input type="email" placeholder="email@example.com"><br><button type="submit">Đăng ký</button></form>',
+                '4_2': '<h1>Đăng ký</h1><form><label>Họ tên:</label><input type="text"><br><label>Email:</label><input type="email"><br><label>Giới tính:</label><input type="radio" name="gender"> Nam <input type="radio" name="gender"> Nữ<br><label>Sở thích:</label><input type="checkbox"> Đọc <input type="checkbox"> Thể thao<br><button type="submit">Gửi</button></form>',
+                '5_0': '<header><h1>Trang web</h1><nav><a href="#">Home</a> <a href="#">About</a></nav></header><main><p>Nội dung chính</p></main><footer>© 2026</footer>',
+                '5_1': '<header><h1>Blog của tôi</h1><nav><a href="#">Home</a> <a href="#">Posts</a> <a href="#">About</a></nav></header><main><section><article><h2>Bài viết 1</h2><p>Nội dung...</p></article></section><aside><h3>Sidebar</h3><ul><li>Liên kết 1</li></ul></aside></main><footer>© 2026</footer>',
+                '5_2': '<header><h1>Portfolio</h1><nav><a href="#">Home</a> <a href="#">Projects</a> <a href="#">Contact</a></nav></header><main><section><h2>Dự án</h2><div class="project">Project 1</div><div class="project">Project 2</div></section></main><footer>© 2026</footer>',
+                '6_0': '<h1>Đa phương tiện</h1><audio controls><source src="music.mp3"></audio><video controls width="300"><source src="video.mp4"></video>',
+                '6_1': '<figure><img src="https://picsum.photos/300/200" alt="Ảnh"><figcaption>Hình ảnh đẹp</figcaption></figure>',
+                '6_2': '<h1>Nội dung nhúng</h1><iframe src="https://example.com" width="100%" height="200"></iframe><div data-user="123">Data attributes</div>',
+                '7_0': '<header><h1>Giới thiệu bản thân</h1><nav><a href="#">Home</a> <a href="#">About</a></nav></header><main><section><h2>Về tôi</h2><img src="https://picsum.photos/100/100" alt="Avatar"><p>Xin chào!</p></section><section><h2>Sở thích</h2><ul><li>Đọc sách</li><li>Lập trình</li></ul></section></main><footer>© 2026</footer>',
+                '7_1': '<header><h1>Blog cá nhân</h1><nav><a href="#">Home</a> <a href="#">Posts</a> <a href="#">About</a></nav></header><main><section><article><h2>Bài viết 1</h2><p>Nội dung bài viết...</p></article><article><h2>Bài viết 2</h2><p>Nội dung bài viết...</p></article></section><aside><h3>Recent Posts</h3><ul><li>Post 1</li><li>Post 2</li></ul></aside></main><footer>© 2026</footer>',
+                '7_2': '<header><h1>Portfolio</h1><nav><a href="#">Home</a> <a href="#">Projects</a> <a href="#">Contact</a></nav></header><main><section><h2>Dự án của tôi</h2><div class="project"><h3>Project 1</h3><p>Mô tả...</p></div><div class="project"><h3>Project 2</h3><p>Mô tả...</p></div></section><section><h2>Kỹ năng</h2><ul><li>HTML</li><li>CSS</li></ul></section></main><footer>© 2026</footer>',
+                '8_0': '<h1>CSS cơ bản</h1><div class="box">Box</div><p class="highlight">Highlight</p>',
+                '8_1': '<h1>Selector</h1><p class="text-blue">Class selector</p><p id="unique">ID selector</p><h2>Tag selector</h2>',
+                '8_2': '<h1>Trang được style</h1><div class="card"><h2>Card 1</h2><p>Nội dung card</p></div><div class="card"><h2>Card 2</h2><p>Nội dung card</p></div>',
+                '9_0': '<div class="container"><div class="item">1</div><div class="item">2</div><div class="item">3</div></div>',
+                '9_1': '<div class="flex-container"><div class="flex-item">A</div><div class="flex-item">B</div><div class="flex-item">C</div></div>',
+                '9_2': '<header class="header"><div class="logo">Logo</div><nav><a href="#">Home</a> <a href="#">About</a> <a href="#">Contact</a></nav></header><main><div class="content"><div class="card">Card 1</div><div class="card">Card 2</div><div class="card">Card 3</div></div></main><footer class="footer">© 2026</footer>',
+                '10_0': '<header class="header"><div class="logo">MySite</div><nav><a href="#">Home</a> <a href="#">About</a> <a href="#">Contact</a></nav></header><section class="hero"><h1>Chào mừng</h1><p>Đến với website của tôi</p></section><section class="content"><div class="card">Card 1</div><div class="card">Card 2</div><div class="card">Card 3</div></section><footer class="footer">© 2026</footer>',
+                '10_1': '<header class="header"><div class="logo">Blog</div><nav><a href="#">Home</a> <a href="#">Posts</a> <a href="#">About</a></nav></header><main><section class="posts"><article class="post"><h2>Bài viết 1</h2><p>Nội dung...</p></article><article class="post"><h2>Bài viết 2</h2><p>Nội dung...</p></article></section></main><footer class="footer">© 2026</footer>',
+                '10_2': '<header class="header"><div class="logo">Landing</div><nav><a href="#">Features</a> <a href="#">Pricing</a> <a href="#">Contact</a></nav></header><section class="hero"><h1>Sản phẩm của chúng tôi</h1><p>Mô tả sản phẩm...</p><button>Mua ngay</button></section><section class="features"><div class="feature"><h3>Feature 1</h3><p>Mô tả...</p></div><div class="feature"><h3>Feature 2</h3><p>Mô tả...</p></div></section><footer class="footer">© 2026</footer>'
             };
-            return map[d] || map[1];
+            const key = day + '_' + idx;
+            return templates[key] || templates['1_0'];
         }
 
-        function getDefaultCss(d) {
-            const map = {
-                1: 'body { font-family: Arial; margin: 20px; }',
-                2: 'body { font-family: Arial; max-width: 600px; margin: 20px auto; }',
-                3: 'body { font-family: Arial; padding: 20px; } img { border-radius: 8px; }',
-                4: 'body { font-family: Arial; padding: 20px; } table { border-collapse: collapse; } td, th { padding: 8px; border: 1px solid #ccc; }',
-                5: '* { margin:0; padding:0; box-sizing:border-box; } body { font-family: Arial; } header { background: #333; color: #fff; padding: 16px; } nav a { color: #fff; margin: 0 8px; } main { padding: 20px; } footer { background: #333; color: #fff; text-align: center; padding: 12px; }',
-                6: 'body { font-family: Arial; padding: 20px; }',
-                7: '* { margin:0; padding:0; box-sizing:border-box; } body { font-family: Arial; } header { background: #6C63FF; color: #fff; padding: 20px; text-align: center; } main { padding: 20px; max-width: 600px; margin: 0 auto; } section { background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 16px 0; } footer { background: #333; color: #fff; text-align: center; padding: 12px; }',
-                8: '.box { background: #6C63FF; color: #fff; padding: 20px; border-radius: 8px; margin: 8px 0; } .highlight { background: #FFD700; padding: 10px; border-radius: 4px; }',
-                9: '.container { display: flex; gap: 16px; justify-content: center; padding: 20px; background: #f5f5f5; border-radius: 8px; } .item { background: #6C63FF; color: #fff; padding: 20px 40px; border-radius: 8px; flex: 1; text-align: center; }',
-                10: '* { margin:0; padding:0; box-sizing:border-box; } body { font-family: Arial; } .header { display: flex; justify-content: space-between; padding: 16px 32px; background: #6C63FF; color: #fff; } .logo { font-size: 24px; font-weight: bold; } nav a { color: #fff; margin: 0 12px; } .hero { text-align: center; padding: 60px 20px; background: #f5f5f5; } .footer { text-align: center; padding: 16px; background: #333; color: #fff; } @media (max-width: 768px) { .header { flex-direction: column; gap: 12px; } }'
+        function getPracticeCss(day, idx) {
+            const templates = {
+                '8_0': '.box { background: #6C63FF; color: white; padding: 20px; border-radius: 8px; } .highlight { background: #FFD700; padding: 10px; border-radius: 4px; }',
+                '8_1': '.text-blue { color: blue; font-weight: bold; } #unique { color: red; font-size: 20px; border: 2px solid black; padding: 10px; } h2 { color: green; }',
+                '8_2': '.card { background: #f5f5f5; padding: 16px; border-radius: 8px; border: 1px solid #ddd; margin: 8px 0; } .card h2 { color: #6C63FF; }',
+                '9_0': '.container { display: flex; gap: 16px; justify-content: center; padding: 20px; background: #f5f5f5; border-radius: 8px; } .item { background: #6C63FF; color: white; padding: 20px 40px; border-radius: 8px; flex: 1; text-align: center; } @media (max-width: 600px) { .container { flex-direction: column; } }',
+                '9_1': '.flex-container { display: flex; gap: 12px; justify-content: space-around; align-items: center; padding: 20px; background: #f5f5f5; border-radius: 8px; flex-wrap: wrap; } .flex-item { background: #6C63FF; color: white; padding: 20px; border-radius: 8px; min-width: 60px; text-align: center; font-weight: bold; }',
+                '9_2': '* { margin:0; padding:0; box-sizing:border-box; } .header { display: flex; justify-content: space-between; padding: 16px 32px; background: #6C63FF; color: white; } nav a { color: white; margin: 0 12px; } .content { display: flex; gap: 20px; padding: 40px 32px; flex-wrap: wrap; } .card { flex: 1; min-width: 150px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; } .footer { text-align: center; padding: 16px; background: #333; color: white; } @media (max-width: 768px) { .header { flex-direction: column; gap: 12px; text-align: center; } .content { flex-direction: column; } }',
+                '10_0': '* { margin:0; padding:0; box-sizing:border-box; } body { font-family: Arial, sans-serif; } .header { display: flex; justify-content: space-between; padding: 16px 32px; background: #6C63FF; color: white; } .logo { font-size: 24px; font-weight: bold; } nav a { color: white; margin: 0 12px; } .hero { text-align: center; padding: 60px 20px; background: #f5f5f5; } .hero h1 { font-size: 36px; margin-bottom: 12px; } .content { display: flex; gap: 20px; padding: 40px 32px; flex-wrap: wrap; } .card { flex: 1; min-width: 200px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; } .footer { text-align: center; padding: 16px; background: #333; color: white; } @media (max-width: 768px) { .header { flex-direction: column; gap: 12px; text-align: center; } .content { flex-direction: column; } }',
+                '10_1': '* { margin:0; padding:0; box-sizing:border-box; } body { font-family: Arial, sans-serif; background: #f5f5f5; } .header { display: flex; justify-content: space-between; padding: 16px 32px; background: #333; color: white; } .logo { font-size: 24px; font-weight: bold; } nav a { color: white; margin: 0 12px; } .posts { max-width: 800px; margin: 20px auto; padding: 0 20px; } .post { background: white; padding: 20px; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); } .post h2 { color: #6C63FF; } .footer { text-align: center; padding: 16px; background: #333; color: white; } @media (max-width: 768px) { .header { flex-direction: column; gap: 12px; text-align: center; } }',
+                '10_2': '* { margin:0; padding:0; box-sizing:border-box; } body { font-family: Arial, sans-serif; } .header { display: flex; justify-content: space-between; padding: 16px 32px; background: #6C63FF; color: white; } .logo { font-size: 24px; font-weight: bold; } nav a { color: white; margin: 0 12px; } .hero { text-align: center; padding: 80px 20px; background: linear-gradient(135deg, #6C63FF, #FF6584); color: white; } .hero h1 { font-size: 48px; } .hero button { padding: 12px 32px; background: white; color: #6C63FF; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 16px; } .features { display: flex; gap: 20px; padding: 40px 32px; flex-wrap: wrap; justify-content: center; } .feature { flex: 1; min-width: 200px; max-width: 300px; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; } .feature h3 { color: #6C63FF; } .footer { text-align: center; padding: 16px; background: #333; color: white; } @media (max-width: 768px) { .header { flex-direction: column; gap: 12px; text-align: center; } .hero h1 { font-size: 32px; } .features { flex-direction: column; align-items: center; } }'
             };
-            return map[d] || map[1];
+            const key = day + '_' + idx;
+            return templates[key] || '';
         }
 
         function runCode() {
@@ -2161,10 +3228,13 @@
 
         function resetPractice() {
             const d = currentDay;
-            document.getElementById('htmlEditor').value = getDefaultHtml(d);
-            document.getElementById('cssEditor').value = getDefaultCss(d);
+            const idx = currentPracticeIndex;
+            const defaultHtml = getPracticeHtml(d, idx);
+            const defaultCss = getPracticeCss(d, idx);
+            document.getElementById('htmlEditor').value = defaultHtml;
+            document.getElementById('cssEditor').value = defaultCss;
             runCode();
-            localStorage.removeItem(userKey('practice_' + d));
+            localStorage.removeItem(userKey('practice_' + d + '_' + idx));
             showToast('Đã reset', 'info');
         }
 
@@ -2176,10 +3246,11 @@
 
         function submitPractice() {
             const d = currentDay;
+            const idx = currentPracticeIndex;
             const html = document.getElementById('htmlEditor').value;
             const css = document.getElementById('cssEditor').value;
-            localStorage.setItem(userKey('practice_' + d), JSON.stringify({ html, css }));
-            showToast('✅ Đã nộp bài thực hành!', 'success');
+            localStorage.setItem(userKey('practice_' + d + '_' + idx), JSON.stringify({ html, css }));
+            showToast(`✅ Đã nộp bài thực hành ${idx + 1}!`, 'success');
             setProgress(d, true);
             renderDashboard();
         }
@@ -2201,10 +3272,11 @@
                 return;
             }
             const qs = l.quiz;
-            document.getElementById('quizSubtitle').textContent = `Ngày ${currentDay}: ${l.title} (${qs.length} câu)`;
+            document.getElementById('quizSubtitle').textContent =
+                `Ngày ${currentDay}: ${l.title} (${qs.length} câu hỏi)`;
             let html = `
             <div class="flex-between mb-16">
-              <div class="quiz-timer"><i class="fas fa-clock"></i> <span id="quizTimerDisplay">05:00</span></div>
+              <div class="quiz-timer"><i class="fas fa-clock"></i> <span id="quizTimerDisplay">10:00</span></div>
               <div><span id="quizProgressText">0/${qs.length}</span> đã trả lời</div>
             </div>
             <div id="quizQuestions">
@@ -2229,7 +3301,7 @@
             html += `</div><button class="btn btn-success" onclick="submitQuiz()"><i class="fas fa-check"></i> Nộp bài</button>`;
             document.getElementById('quizContainer').innerHTML = html;
             updateQuizProgress();
-            quizTime = 300;
+            quizTime = 600;
             if (quizTimer) clearInterval(quizTimer);
             quizTimer = setInterval(() => {
                 quizTime--;
@@ -2520,19 +3592,15 @@
         // INIT
         // ============================================================
         loadState();
-
-        // Restore theme preference
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
             document.documentElement.dataset.theme = 'dark';
             document.getElementById('themeIcon').className = 'fas fa-sun';
         }
-
         updateUI();
         if (isLoggedIn()) showPage('dashboard');
         else showPage('home');
 
-        // Auto-run practice with Ctrl+Enter
         document.addEventListener('keydown', e => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                 const active = document.activeElement;
@@ -2563,18 +3631,12 @@
             }
         });
 
-        // Print support
-        document.addEventListener('keydown', e => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-                // Allow native print dialog
-            }
-        });
-
-        console.log('🚀 Học HTML + CSS - Sẵn sàng!');
-        console.log('📚', LESSONS.length, 'bài học');
+        console.log('🚀 Học HTML + CSS Pro - Phiên bản nâng cao!');
+        console.log('📚', LESSONS.length, 'ngày học');
+        console.log('📝 Tổng câu hỏi:', LESSONS.reduce((s, l) => s + (l.quiz ? l.quiz.length : 0), 0));
+        console.log('💻 Tổng bài thực hành:', LESSONS.reduce((s, l) => s + (l.practices ? l.practices.length : 0), 0));
         console.log('👤', isLoggedIn() ? currentUser.email : 'Chưa đăng nhập');
         console.log('💡 Ctrl+Enter để chạy code trong Practice');
-        console.log('🖨️ Ctrl+P để in bài học');
     </script>
 </body>
 </html>
