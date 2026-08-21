@@ -1,658 +1,2580 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>✦ PHOTO BOOTH ✦</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{--cream:#faf3e8;--warm:#e8d5b7;--tc:#c9714a;--dark:#2a1f1a;--film:#f5edd8;}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{background:var(--dark);min-height:100vh;display:flex;flex-direction:column;align-items:center;font-family:'Space Mono',monospace;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4;}
-header{width:100%;text-align:center;padding:14px 16px 6px;}
-.logo{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,5vw,1.8rem);color:var(--cream);letter-spacing:.15em;}
-.logo em{color:var(--tc);font-style:italic;}
-.sub{font-size:.46rem;letter-spacing:.4em;color:var(--warm);margin-top:2px;opacity:.58;text-transform:uppercase;}
-.deco{width:65px;height:1.5px;background:linear-gradient(90deg,transparent,var(--tc),transparent);margin:5px auto 0;}
-.app{width:100%;max-width:460px;padding:8px 14px 30px;display:flex;flex-direction:column;gap:9px;}
-.cam-wrap{position:relative;width:100%;aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:#111;border:2.5px solid rgba(201,113,74,.55);box-shadow:0 0 0 1px rgba(201,113,74,.2),0 8px 40px rgba(0,0,0,.6);}
-.cam-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,transparent 25%,transparent 72%,rgba(0,0,0,.14) 100%);pointer-events:none;z-index:2;}
-.vfc{position:absolute;width:20px;height:20px;z-index:6;}
-.vfc.tl{top:8px;left:8px;border-top:3px solid var(--tc);border-left:3px solid var(--tc);}
-.vfc.tr{top:8px;right:8px;border-top:3px solid var(--tc);border-right:3px solid var(--tc);}
-.vfc.bl{bottom:8px;left:8px;border-bottom:3px solid var(--tc);border-left:3px solid var(--tc);}
-.vfc.br{bottom:8px;right:8px;border-bottom:3px solid var(--tc);border-right:3px solid var(--tc);}
-#video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:0;}
-#preview-canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;display:block;}
-#frame-overlay{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden;}
-#frame-overlay .fo-em{position:absolute;line-height:1;user-select:none;pointer-events:none;}
-#frame-overlay.fo-stars::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 55%,rgba(5,2,30,.45) 100%);}
-#frame-overlay.fo-whale::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,40,100,.38) 100%);}
-#frame-overlay.fo-floral::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(255,180,200,.22) 100%);}
-#frame-overlay.fo-pink::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(255,160,190,.18) 100%);}
-#frame-overlay.fo-lavender::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(180,130,220,.16) 100%);}
-#frame-overlay.fo-mint::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 50%,rgba(80,180,140,.14) 100%);}
-#sticker-layer{position:absolute;inset:0;z-index:5;pointer-events:none;}
-#sticker-layer.interactive{pointer-events:auto;}
-.placed-sticker{position:absolute;cursor:grab;user-select:none;line-height:1;touch-action:none;}
-#cd-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:10;background:rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .15s;}
-#cd-overlay.on{opacity:1;pointer-events:auto;}
-.cd-num{font-family:'Playfair Display',serif;font-size:7rem;color:#fff;text-shadow:0 0 40px rgba(201,113,74,.9);line-height:1;}
-@keyframes popNum{0%{transform:scale(1.7);opacity:0}30%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:scale(.85);opacity:0}}
-#flash{position:absolute;inset:0;background:#fff;z-index:20;opacity:0;pointer-events:none;}
-.dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:7;}
-.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);transition:all .3s;}
-.dot.on{background:var(--tc);border-color:var(--tc);box-shadow:0 0 8px rgba(201,113,74,.7);}
-.status{text-align:center;font-size:.5rem;letter-spacing:.2em;color:var(--warm);opacity:.58;text-transform:uppercase;min-height:12px;}
-.controls{display:flex;align-items:center;justify-content:center;gap:14px;padding:2px 0;}
-.btn-s{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);color:var(--warm);font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.1em;padding:8px 12px;border-radius:2px;cursor:pointer;text-transform:uppercase;transition:all .18s;white-space:nowrap;}
-.btn-s:disabled{opacity:.3;cursor:not-allowed;}
-.shutter{width:68px;height:68px;border-radius:50%;background:var(--cream);border:3px solid var(--tc);box-shadow:0 0 0 4px rgba(201,113,74,.18),0 4px 18px rgba(0,0,0,.4);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.shutter::after{content:'';width:48px;height:48px;border-radius:50%;background:var(--tc);transition:all .14s;}
-.shutter:active::after{width:40px;height:40px;}
-.shutter:disabled{opacity:.25;cursor:not-allowed;filter:grayscale(.5);}
-@keyframes shutPop{0%{transform:scale(1)}50%{transform:scale(.9)}100%{transform:scale(1)}}
-.shutter.pop{animation:shutPop .25s ease-out;}
-.shot-count-row{display:flex;align-items:center;gap:8px;}
-.sc-label{font-size:.44rem;letter-spacing:.22em;color:var(--warm);opacity:.5;text-transform:uppercase;white-space:nowrap;}
-.sc-options{display:flex;gap:5px;}
-.scb{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--warm);font-family:'Space Mono',monospace;font-size:.55rem;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .17s;}
-.scb.active{background:var(--tc);border-color:var(--tc);color:var(--cream);box-shadow:0 0 12px rgba(201,113,74,.38);}
-.main-tabs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.1);}
-.mtab{flex:1;background:none;border:none;color:var(--warm);font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.1em;padding:9px 4px;cursor:pointer;text-transform:uppercase;opacity:.5;transition:all .18s;position:relative;}
-.mtab.active{color:var(--cream);opacity:1;}
-.mtab.active::after{content:'';position:absolute;bottom:-1px;left:15%;right:15%;height:2.5px;background:var(--tc);border-radius:2px;}
-.tab-panel{display:none;padding-top:10px;}
-.tab-panel.on{display:block;}
-.filters-row{display:flex;gap:8px;overflow-x:auto;padding:2px 0 3px;scrollbar-width:none;}
-.filters-row::-webkit-scrollbar{display:none;}
-.filter-btn{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:2px;}
-.fp{width:40px;height:40px;border-radius:50%;border:2px solid transparent;transition:all .18s;display:flex;align-items:center;justify-content:center;font-size:1rem;}
-.filter-btn.active .fp{border-color:var(--tc);box-shadow:0 0 0 2.5px rgba(201,113,74,.45);}
-.fl{font-size:.38rem;letter-spacing:.07em;color:var(--warm);text-transform:uppercase;}
-.frames-grid-ui{display:flex;flex-direction:row;gap:10px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none;}
-.frames-grid-ui::-webkit-scrollbar{display:none;}
-.frame-opt{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:2px;}
-.frame-preview{width:38px;height:50px;border-radius:3px;border:2px solid transparent;transition:all .18s;overflow:hidden;position:relative;display:flex;flex-direction:column;gap:1px;padding:2px;}
-.frame-opt.active .frame-preview{border-color:var(--tc);box-shadow:0 0 0 2.5px rgba(201,113,74,.45);}
-.fp-bar{flex:1;border-radius:1px;}
-.frame-name{font-size:.36rem;letter-spacing:.05em;color:var(--warm);text-transform:uppercase;text-align:center;max-width:50px;}
-.fp-em{font-size:.48rem;position:absolute;line-height:1;}
-.fp-em.tl{top:1px;left:1px;}.fp-em.tr{top:1px;right:1px;}.fp-em.bl{bottom:5px;left:1px;}.fp-em.br{bottom:5px;right:1px;}
-.sticker-tabs{display:flex;gap:5px;margin-bottom:7px;flex-wrap:wrap;}
-.stab{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--warm);font-family:'Space Mono',monospace;font-size:.44rem;letter-spacing:.07em;padding:4px 8px;border-radius:2px;cursor:pointer;text-transform:uppercase;transition:all .17s;}
-.stab.active{background:var(--tc);color:var(--cream);border-color:var(--tc);}
-.sticker-grid{display:flex;flex-wrap:wrap;gap:5px;}
-.sk{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:4px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;transition:all .15s;}
-.sk:active{transform:scale(.82);background:rgba(201,113,74,.16);}
-.sticker-controls{display:flex;gap:7px;margin-top:7px;align-items:center;}
-.size-row{display:flex;gap:4px;}
-.szb{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);color:var(--warm);font-family:'Space Mono',monospace;font-size:.43rem;padding:3px 8px;border-radius:2px;cursor:pointer;transition:all .15s;}
-.szb.active{background:rgba(201,113,74,.22);border-color:var(--tc);color:var(--cream);}
-.btn-clear{background:none;border:1px solid rgba(255,80,60,.26);color:rgba(255,140,120,.62);font-family:'Space Mono',monospace;font-size:.42rem;letter-spacing:.07em;padding:3px 8px;border-radius:2px;cursor:pointer;margin-left:auto;}
-.sk-hint{font-size:.41rem;color:var(--warm);opacity:.36;letter-spacing:.04em;margin-top:3px;}
-.strip-sec{display:none;}.strip-sec.on{display:block;}
-.strip-wrap{border-radius:4px;padding:12px 8px;display:flex;flex-direction:column;gap:5px;box-shadow:0 6px 36px rgba(0,0,0,.7),0 0 0 1.5px rgba(201,113,74,.18);position:relative;overflow:hidden;}
-.strip-wrap.frame-film{background:var(--film);}
-.strip-wrap.frame-film::before,.strip-wrap.frame-film::after{content:'';position:absolute;left:0;right:0;height:15px;background-image:repeating-linear-gradient(90deg,var(--film) 0,var(--film) 8px,var(--dark) 8px,var(--dark) 15px);opacity:.42;}
-.strip-wrap.frame-film::before{top:0;}.strip-wrap.frame-film::after{bottom:0;}
-.strip-wrap.frame-white{background:#fff;}.strip-wrap.frame-white .strip-date{color:#555;}
-.strip-wrap.frame-black{background:#0d0d0d;border:1px solid #2a2a2a;}.strip-wrap.frame-black .strip-date{color:#888;}
-.strip-wrap.frame-pink{background:#fde8ee;}.strip-wrap.frame-pink .strip-date{color:#a05060;}
-.strip-wrap.frame-mint{background:#e0f5ef;}.strip-wrap.frame-mint .strip-date{color:#3a7a60;}
-.strip-wrap.frame-lavender{background:#ede0f5;}.strip-wrap.frame-lavender .strip-date{color:#6040a0;}
-.strip-wrap.frame-grid{background:var(--film);padding:10px;}
-.strip-wrap.frame-grid .frames-grid-result{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
-.strip-wrap.frame-stars{background:#08051e;}.strip-wrap.frame-stars .strip-date{color:#aab0d8;}
-.strip-wrap.frame-whale{background:#e8f4ff;}.strip-wrap.frame-whale .strip-date{color:#2060a0;}
-.strip-wrap.frame-floral{background:#fff8f8;}.strip-wrap.frame-floral .strip-date{color:#a05070;}
-.strip-frame{position:relative;width:100%;aspect-ratio:3/4;overflow:hidden;border-radius:2px;background:#bbb;}
-.strip-frame img{width:100%;height:100%;object-fit:cover;display:block;}
-.frame-num{position:absolute;bottom:4px;right:5px;font-size:.42rem;color:rgba(255,255,255,.5);text-shadow:0 1px 3px rgba(0,0,0,.8);font-family:'Space Mono',monospace;}
-.strip-date{text-align:center;font-family:'Playfair Display',serif;font-size:.65rem;color:var(--dark);opacity:.52;font-style:italic;padding:2px 0 6px;}
-.dl-area{display:flex;gap:9px;justify-content:center;margin-top:4px;}
-.btn-dl{background:var(--tc);color:var(--cream);border:none;font-family:'Space Mono',monospace;font-size:.54rem;letter-spacing:.15em;padding:11px 20px;border-radius:2px;cursor:pointer;text-transform:uppercase;transition:all .17s;box-shadow:0 4px 14px rgba(201,113,74,.36);}
-.btn-dl:disabled{opacity:.5;cursor:wait;}
-.btn-retake{background:transparent;color:var(--warm);border:1px solid rgba(255,255,255,.15);font-family:'Space Mono',monospace;font-size:.54rem;letter-spacing:.15em;padding:11px 20px;border-radius:2px;cursor:pointer;text-transform:uppercase;}
-#ios-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 0 28px;}
-#ios-modal.open{display:flex;}
-.modal-box{background:#1e1510;border-radius:10px 10px 0 0;width:100%;max-width:460px;padding:16px 16px 20px;}
-.modal-ttl{font-size:.54rem;letter-spacing:.22em;color:var(--warm);text-transform:uppercase;margin-bottom:9px;opacity:.65;}
-#modal-img{width:100%;max-height:50vh;object-fit:contain;border-radius:4px;border:1px solid rgba(255,255,255,.1);}
-.modal-hint{font-size:.48rem;color:var(--warm);opacity:.52;margin-top:8px;letter-spacing:.04em;line-height:1.7;}
-.modal-hint strong{color:var(--tc);}
-.modal-close{margin-top:11px;width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);color:var(--warm);font-family:'Space Mono',monospace;font-size:.53rem;letter-spacing:.15em;padding:10px;border-radius:4px;cursor:pointer;text-transform:uppercase;}
-#start-screen{position:fixed;inset:0;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:14px;padding:32px;text-align:center;}
-.start-icon{font-size:2.5rem;animation:float 3s ease-in-out infinite;}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.start-title{font-family:'Playfair Display',serif;font-size:1.75rem;color:var(--cream);line-height:1.1;}
-.start-title em{color:var(--tc);}
-.start-desc{font-size:.55rem;color:var(--warm);letter-spacing:.11em;line-height:1.9;opacity:.65;max-width:255px;}
-.perm-box{display:flex;align-items:flex-start;gap:8px;background:rgba(201,113,74,.1);border:1px solid rgba(201,113,74,.25);border-radius:6px;padding:10px 13px;max-width:280px;text-align:left;}
-.perm-icon{font-size:.9rem;flex-shrink:0;margin-top:1px;}
-.perm-txt{font-size:.51rem;color:var(--warm);letter-spacing:.03em;line-height:1.7;opacity:.77;}
-.perm-txt strong{color:var(--tc);}
-.btn-start{background:var(--tc);color:var(--cream);border:none;font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.2em;padding:13px 26px;border-radius:2px;cursor:pointer;text-transform:uppercase;box-shadow:0 4px 26px rgba(201,113,74,.46);margin-top:3px;transition:all .17s;}
-.perm-error{background:rgba(220,70,50,.12);border:1px solid rgba(220,70,50,.27);color:#ffb0a0;font-size:.49rem;letter-spacing:.05em;line-height:1.8;padding:9px 12px;border-radius:5px;max-width:272px;text-align:center;}
-canvas{display:none;}
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Học HTML &amp; CSS - Luyện thi THPT 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* ===== RESET & VARIABLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52D5;
+            --secondary: #FF6584;
+            --success: #00D2A0;
+            --warning: #FFB347;
+            --danger: #FF6B6B;
+            --bg: #F0F2F5;
+            --bg-card: #FFFFFF;
+            --bg-sidebar: #FFFFFF;
+            --text: #1A1A2E;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+            --shadow: 0 4px 24px rgba(108, 99, 255, 0.10);
+            --shadow-hover: 0 8px 40px rgba(108, 99, 255, 0.18);
+            --radius: 14px;
+            --radius-sm: 8px;
+            --header-h: 64px;
+            --sidebar-w: 260px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="dark"] {
+            --bg: #0D1117;
+            --bg-card: #161B22;
+            --bg-sidebar: #161B22;
+            --text: #F0F6FC;
+            --text-secondary: #8B949E;
+            --border: #30363D;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.6);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background var(--transition), color var(--transition);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        button {
+            cursor: pointer;
+            font-family: inherit;
+            border: none;
+            outline: none;
+            background: none;
+        }
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+            outline: none;
+            border: none;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        /* ===== UTILITY ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .flex-between {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+        .gap-12 {
+            gap: 12px;
+        }
+        .gap-16 {
+            gap: 16px;
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mt-24 {
+            margin-top: 24px;
+        }
+        .mb-8 {
+            margin-bottom: 8px;
+        }
+        .mb-16 {
+            margin-bottom: 16px;
+        }
+        .mb-24 {
+            margin-bottom: 24px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-secondary {
+            color: var(--text-secondary);
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(108, 99, 255, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+        .btn-success:hover {
+            opacity: 0.85;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            opacity: 0.85;
+            transform: translateY(-2px);
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 13px;
+        }
+        .btn-block {
+            width: 100%;
+        }
+
+        /* ===== BADGE ===== */
+        .badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: rgba(0, 210, 160, 0.15);
+            color: var(--success);
+        }
+        .badge-warning {
+            background: rgba(255, 179, 71, 0.15);
+            color: var(--warning);
+        }
+        .badge-danger {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--danger);
+        }
+        .badge-primary {
+            background: rgba(108, 99, 255, 0.15);
+            color: var(--primary);
+        }
+
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            top: 76px;
+            right: 20px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 360px;
+            width: 100%;
+        }
+        .toast {
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-card);
+            color: var(--text);
+            box-shadow: var(--shadow-hover);
+            border-left: 4px solid var(--primary);
+            animation: slideIn 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+        .toast-success {
+            border-left-color: var(--success);
+        }
+        .toast-error {
+            border-left-color: var(--danger);
+        }
+        .toast-warning {
+            border-left-color: var(--warning);
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-h);
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .header-brand i {
+            font-size: 26px;
+        }
+        .header-brand span {
+            color: var(--text);
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-actions .btn-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: var(--transition);
+            color: var(--text-secondary);
+        }
+        .header-actions .btn-icon:hover {
+            background: var(--border);
+            color: var(--text);
+        }
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 4px 12px 4px 4px;
+            border-radius: 30px;
+            background: var(--bg);
+            transition: var(--transition);
+        }
+        .header-user:hover {
+            background: var(--border);
+        }
+        .header-user .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .header-user .name {
+            font-size: 14px;
+            font-weight: 500;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .menu-btn {
+            display: none;
+            font-size: 24px;
+            color: var(--text);
+            padding: 4px;
+        }
+        @media (max-width: 1024px) {
+            .menu-btn {
+                display: block;
+            }
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: var(--header-h);
+            left: 0;
+            width: var(--sidebar-w);
+            height: calc(100vh - var(--header-h));
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            padding: 16px 0;
+            overflow-y: auto;
+            transition: transform var(--transition);
+            z-index: 998;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 12px;
+        }
+        .sidebar-menu li {
+            margin-bottom: 2px;
+        }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .sidebar-menu a:hover {
+            background: var(--border);
+            color: var(--text);
+        }
+        .sidebar-menu a.active {
+            background: var(--primary);
+            color: #fff;
+        }
+        .sidebar-menu a i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 12px 16px;
+        }
+        .sidebar-label {
+            padding: 8px 16px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            margin-left: var(--sidebar-w);
+            margin-top: var(--header-h);
+            min-height: calc(100vh - var(--header-h));
+            padding: 28px 32px;
+            transition: margin var(--transition);
+        }
+        @media (max-width: 1024px) {
+            .main {
+                margin-left: 0;
+                padding: 20px 16px;
+            }
+        }
+        @media (max-width: 600px) {
+            .main {
+                padding: 14px 12px;
+            }
+        }
+
+        /* ===== PAGES ===== */
+        .page {
+            display: none;
+            animation: fadeUp 0.4s ease;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .page-header {
+            margin-bottom: 28px;
+        }
+        .page-header h1 {
+            font-size: 26px;
+            font-weight: 700;
+        }
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-top: 2px;
+        }
+
+        /* ===== HOME ===== */
+        .hero {
+            text-align: center;
+            padding: 40px 0 20px;
+        }
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 560px;
+            margin: 12px auto 28px;
+        }
+        .hero .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 36px 0;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            padding: 24px 18px;
+            border-radius: var(--radius);
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        .feature-card i {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .feature-card h3 {
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .roadmap-item {
+            background: var(--bg-card);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            text-align: center;
+            transition: var(--transition);
+        }
+        .roadmap-item:hover {
+            border-color: var(--primary);
+        }
+        .roadmap-item .day {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        .roadmap-item h4 {
+            font-size: 14px;
+            margin: 6px 0;
+        }
+
+        /* ===== DASHBOARD ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .stat-card .value .sub {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-left: 6px;
+        }
+        .card-section {
+            background: var(--bg-card);
+            padding: 20px 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: 18px;
+        }
+        .card-section h3 {
+            margin-bottom: 12px;
+            font-size: 17px;
+        }
+        .progress-track {
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 4px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 0.6s ease;
+        }
+
+        /* ===== LESSON ===== */
+        .lesson-content {
+            background: var(--bg-card);
+            padding: 28px 32px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        .lesson-content h2 {
+            margin-bottom: 12px;
+            font-size: 22px;
+        }
+        .lesson-content ul,
+        .lesson-content ol {
+            padding-left: 24px;
+            margin: 8px 0;
+        }
+        .lesson-content li {
+            margin: 4px 0;
+        }
+        .code-block {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            margin: 12px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid var(--border);
+            line-height: 1.8;
+            white-space: pre;
+        }
+        .code-block .comment {
+            color: var(--text-secondary);
+        }
+        .code-block .tag {
+            color: var(--secondary);
+        }
+        .code-block .attr {
+            color: var(--warning);
+        }
+        .code-block .str {
+            color: var(--success);
+        }
+
+        /* ===== PRACTICE ===== */
+        .practice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: 460px;
+        }
+        @media (max-width: 900px) {
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .editor-box {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .editor-box .head {
+            padding: 10px 16px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .editor-box textarea {
+            width: 100%;
+            height: 340px;
+            padding: 14px;
+            border: none;
+            background: var(--bg-card);
+            color: var(--text);
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            line-height: 1.8;
+            tab-size: 2;
+        }
+        .editor-box textarea:focus {
+            outline: none;
+        }
+        .preview-box {
+            background: #fff;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            min-height: 460px;
+        }
+        .preview-box .head {
+            padding: 10px 16px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .preview-box iframe {
+            width: 100%;
+            height: 420px;
+            border: none;
+            background: #fff;
+        }
+        @media (max-width: 900px) {
+            .preview-box iframe {
+                height: 300px;
+            }
+            .editor-box textarea {
+                height: 200px;
+            }
+        }
+
+        /* ===== QUIZ ===== */
+        .quiz-q {
+            background: var(--bg-card);
+            padding: 20px 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: 14px;
+        }
+        .quiz-q .q-num {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .quiz-q .q-text {
+            font-size: 16px;
+            margin: 6px 0 14px;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .quiz-options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .quiz-options label:hover {
+            border-color: var(--primary);
+            background: var(--bg);
+        }
+        .quiz-options input[type="radio"] {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--primary);
+            flex-shrink: 0;
+        }
+        .quiz-timer {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ===== AUTH ===== */
+        .auth-wrap {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-box {
+            background: var(--bg-card);
+            padding: 36px 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-hover);
+            max-width: 400px;
+            width: 100%;
+        }
+        .auth-box h1 {
+            text-align: center;
+            margin-bottom: 4px;
+            font-size: 26px;
+        }
+        .auth-box .sub {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .auth-box .field {
+            margin-bottom: 14px;
+        }
+        .auth-box .field label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        .auth-box .field input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .auth-box .field input:focus {
+            border-color: var(--primary);
+        }
+        .auth-box .field .hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .auth-box .field .hint.error {
+            color: var(--danger);
+        }
+        .auth-box .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 18px 0;
+        }
+        .auth-box .divider::before,
+        .auth-box .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        .auth-box .divider span {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        .auth-box .social-btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+        .auth-box .social-btn:hover {
+            background: var(--border);
+        }
+        .auth-box .footer-text {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .auth-box .footer-text a {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .auth-box .footer-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== ASSESSMENT ===== */
+        .skill-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 6px 0;
+        }
+        .skill-row .name {
+            min-width: 110px;
+            font-size: 14px;
+        }
+        .skill-row .bar {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .skill-row .bar .fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.8s ease;
+        }
+        .skill-row .score {
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 40px;
+            text-align: right;
+        }
+        .rec-item {
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 3px solid var(--primary);
+        }
+        .rec-item .prio {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+        .prio-high {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--danger);
+        }
+        .prio-medium {
+            background: rgba(255, 179, 71, 0.15);
+            color: var(--warning);
+        }
+        .prio-low {
+            background: rgba(0, 210, 160, 0.15);
+            color: var(--success);
+        }
+
+        /* ===== ADMIN ===== */
+        .admin-table-wrap {
+            overflow-x: auto;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .admin-table th {
+            text-align: left;
+            padding: 10px 14px;
+            background: var(--bg);
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+        }
+        .admin-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .admin-table tr:hover td {
+            background: var(--bg);
+        }
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .admin-stat {
+            background: var(--bg-card);
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .admin-stat .num {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-hover);
+        }
+        .modal h2 {
+            margin-bottom: 12px;
+        }
+        .modal .field {
+            margin-bottom: 14px;
+        }
+        .modal .field label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        .modal .field input,
+        .modal .field select,
+        .modal .field textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .modal .field input:focus,
+        .modal .field select:focus,
+        .modal .field textarea:focus {
+            border-color: var(--primary);
+        }
+        .modal .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            .hero p {
+                font-size: 16px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .features {
+                grid-template-columns: 1fr 1fr;
+            }
+            .roadmap-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .auth-box {
+                padding: 24px 20px;
+            }
+            .lesson-content {
+                padding: 18px 16px;
+            }
+            .modal {
+                padding: 20px;
+                margin: 12px;
+            }
+            .header-brand span {
+                display: none;
+            }
+            .header-user .name {
+                display: none;
+            }
+        }
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .roadmap-grid {
+                grid-template-columns: 1fr;
+            }
+            .btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+            .header {
+                padding: 0 12px;
+            }
+            .main {
+                padding: 12px 10px;
+            }
+        }
+
+        /* ===== PRINT ===== */
+        @media print {
+            .header,
+            .sidebar,
+            .toast-container,
+            .modal-overlay {
+                display: none !important;
+            }
+            .main {
+                margin: 0 !important;
+                padding: 20px !important;
+            }
+            .page {
+                display: block !important;
+            }
+            .page:not(.active) {
+                display: none !important;
+            }
+            .btn {
+                display: none !important;
+            }
+            .code-block {
+                background: #f5f5f5 !important;
+                border: 1px solid #ddd !important;
+            }
+            .lesson-content {
+                border: none !important;
+                box-shadow: none !important;
+            }
+            .card-section {
+                border: 1px solid #ddd !important;
+                box-shadow: none !important;
+                break-inside: avoid;
+            }
+        }
+
+        /* ===== LOADING SHIMMER ===== */
+        .shimmer {
+            background: linear-gradient(90deg, var(--bg) 25%, var(--border) 50%, var(--bg) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* ===== BACK TO TOP ===== */
+        .back-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--shadow-hover);
+            transition: var(--transition);
+            z-index: 997;
+        }
+        .back-top:hover {
+            transform: translateY(-3px);
+            background: var(--primary-dark);
+        }
+        .back-top.visible {
+            display: flex;
+        }
+
+        /* ===== KEYBOARD SHORTCUT HINT ===== */
+        .shortcut-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: var(--bg);
+            padding: 4px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .shortcut-hint kbd {
+            background: var(--border);
+            padding: 1px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: inherit;
+        }
+    </style>
 </head>
 <body>
-<div id="start-screen">
-  <div class="start-icon">&#128247;</div>
-  <div class="start-title">Photo<br><em>Booth</em></div>
-  <div class="start-desc">FILTER &middot; KHUNG &middot; STICKER &middot; 1&ndash;6 T&#7844;M</div>
-  <div class="perm-box">
-    <div class="perm-icon">&#128274;</div>
-    <div class="perm-txt">App c&#7847;n quy&#7873;n <strong>Camera</strong>. &#7842;nh kh&#244;ng l&#432;u l&#234;n m&#225;y ch&#7911;.</div>
-  </div>
-  <button class="btn-start" id="start-btn">CHO PH&#201;P CAMERA &amp; B&#7854;T &#272;&#7846;U &#8594;</button>
-  <div id="perm-error" class="perm-error" style="display:none">&#9888;&#65039; Kh&#244;ng truy c&#7853;p &#273;&#432;&#7907;c camera.<br>Cho ph&#233;p trong c&#224;i &#273;&#7863;t tr&#236;nh duy&#7879;t r&#7891;i t&#7843;i l&#7841;i.</div>
-</div>
-<div id="ios-modal">
-  <div class="modal-box">
-    <div class="modal-ttl">&#10022; L&#432;u &#7843;nh v&#7873; m&#225;y</div>
-    <img id="modal-img" src="" alt="">
-    <div class="modal-hint">
-      <strong>iOS Safari:</strong> Ch&#7841;m gi&#7919; &#7843;nh &#8594; "Add to Photos"<br>
-      <strong>Brave/Chrome iOS:</strong> &#8943; &#8594; Share &#8594; Save to Photos
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== BACK TO TOP ===== -->
+    <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="header-brand">
+                <i class="fas fa-code"></i>
+                <span>Học HTML+CSS</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn-icon" onclick="toggleTheme()" title="Chuyển theme">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <div id="headerAuth">
+                <button class="btn btn-outline btn-sm" onclick="showPage('login')">Đăng nhập</button>
+                <button class="btn btn-primary btn-sm" onclick="showPage('register')">Đăng ký</button>
+            </div>
+            <div id="headerUser" class="hidden" onclick="showPage('profile')">
+                <div class="header-user">
+                    <div class="avatar" id="userAvatar">H</div>
+                    <span class="name" id="userName">Học viên</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="showPage('home')" class="active" data-page="home"><i class="fas fa-home"></i> Trang chủ</a></li>
+            <li><a href="#" onclick="showPage('dashboard')" data-page="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+            <li><a href="#" onclick="showPage('course')" data-page="course"><i class="fas fa-road"></i> Lộ trình</a></li>
+            <li><a href="#" onclick="showPage('lesson')" data-page="lesson"><i class="fas fa-book"></i> Bài học</a></li>
+            <li><a href="#" onclick="showPage('practice')" data-page="practice"><i class="fas fa-laptop-code"></i> Thực hành</a></li>
+            <li><a href="#" onclick="showPage('quiz')" data-page="quiz"><i class="fas fa-question-circle"></i> Kiểm tra</a></li>
+            <li><a href="#" onclick="showPage('assessment')" data-page="assessment"><i class="fas fa-brain"></i> Đánh giá AI</a></li>
+            <li><a href="#" onclick="showPage('profile')" data-page="profile"><i class="fas fa-user"></i> Hồ sơ</a></li>
+        </ul>
+        <div class="sidebar-divider"></div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="showPage('admin')" data-page="admin" id="adminLink" class="hidden"><i class="fas fa-shield-alt"></i> Admin</a></li>
+            <li><a href="#" onclick="logout()" id="logoutLink" class="hidden"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+        </ul>
+        <div class="sidebar-divider"></div>
+        <div style="padding:12px 20px;font-size:12px;color:var(--text-secondary);">
+            <i class="fas fa-print"></i> <kbd style="background:var(--border);padding:1px 8px;border-radius:4px;font-size:11px;font-family:inherit;">Ctrl+P</kbd> in
+        </div>
+    </nav>
+
+    <!-- ===== MAIN ===== -->
+    <main class="main" id="mainContent">
+
+        <!-- HOME -->
+        <section class="page active" id="page-home">
+            <div class="hero">
+                <h1>🏆 Học HTML + CSS Cho Kỳ Thi THPT 2026</h1>
+                <p>Nắm vững kiến thức nền tảng, luyện tập thực hành và sẵn sàng cho kỳ thi tốt nghiệp với lộ trình 10 ngày</p>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="handleStart()"><i class="fas fa-rocket"></i> Bắt đầu học</button>
+                    <button class="btn btn-outline" onclick="showPage('login')">Đăng nhập</button>
+                </div>
+            </div>
+            <div class="features">
+                <div class="feature-card"><i class="fas fa-graduation-cap"></i><h3>Lộ trình 10 ngày</h3><p>7 ngày HTML + 3 ngày CSS</p></div>
+                <div class="feature-card"><i class="fas fa-code"></i><h3>Thực hành trực tiếp</h3><p>Viết code ngay trên trình duyệt</p></div>
+                <div class="feature-card"><i class="fas fa-robot"></i><h3>Đánh giá AI</h3><p>Phân tích điểm mạnh/yếu</p></div>
+                <div class="feature-card"><i class="fas fa-chart-line"></i><h3>Theo dõi tiến độ</h3><p>Dashboard chi tiết</p></div>
+            </div>
+            <div class="card-section">
+                <h3>📅 Lộ trình 10 ngày</h3>
+                <div class="roadmap-grid" id="roadmapGrid"></div>
+            </div>
+        </section>
+
+        <!-- LOGIN -->
+        <section class="page" id="page-login">
+            <div class="auth-wrap">
+                <div class="auth-box">
+                    <h1><i class="fas fa-code" style="color:var(--primary);"></i> Đăng nhập</h1>
+                    <p class="sub">Chào mừng bạn quay trở lại!</p>
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="field"><label>Email</label><input type="email" id="loginEmail" placeholder="example@email.com" required maxlength="120" autocomplete="email"></div>
+                        <div class="field"><label>Mật khẩu</label><input type="password" id="loginPassword" placeholder="••••••••" required minlength="6" maxlength="100" autocomplete="current-password"></div>
+                        <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">Đăng nhập</button>
+                        <div class="divider"><span>hoặc</span></div>
+                        <button type="button" class="social-btn" onclick="handleGoogleLogin()"><i class="fab fa-google" style="color:#EA4335;"></i> Đăng nhập với Google</button>
+                        <div class="footer-text">Chưa có tài khoản? <a href="#" onclick="showPage('register')">Đăng ký ngay</a></div>
+                        <div class="footer-text" style="margin-top:4px;"><a href="#" onclick="showToast('Vui lòng liên hệ admin để đặt lại mật khẩu','warning')">Quên mật khẩu?</a></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- REGISTER -->
+        <section class="page" id="page-register">
+            <div class="auth-wrap">
+                <div class="auth-box">
+                    <h1><i class="fas fa-user-plus" style="color:var(--primary);"></i> Đăng ký</h1>
+                    <p class="sub">Tạo tài khoản để bắt đầu học</p>
+                    <form id="registerForm" onsubmit="handleRegister(event)">
+                        <div class="field"><label>Họ tên</label><input type="text" id="registerName" placeholder="Nguyễn Văn A" required maxlength="60" autocomplete="name"></div>
+                        <div class="field"><label>Email</label><input type="email" id="registerEmail" placeholder="example@email.com" required maxlength="120" autocomplete="email"></div>
+                        <div class="field"><label>Mật khẩu (tối thiểu 6 ký tự)</label><input type="password" id="registerPassword" placeholder="••••••••" required minlength="6" maxlength="100" autocomplete="new-password"></div>
+                        <button type="submit" class="btn btn-primary btn-block" id="registerSubmitBtn">Đăng ký</button>
+                        <div class="footer-text">Đã có tài khoản? <a href="#" onclick="showPage('login')">Đăng nhập</a></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD -->
+        <section class="page" id="page-dashboard">
+            <div class="page-header"><h1>📊 Dashboard</h1><p id="dashboardGreeting">Xin chào, học viên!</p></div>
+            <div class="stats-grid" id="dashStats">
+                <div class="stat-card"><div class="label">Tiến độ</div><div class="value" id="dashProgress">0%</div></div>
+                <div class="stat-card"><div class="label">Điểm TB</div><div class="value" id="dashAvgScore">0</div></div>
+                <div class="stat-card"><div class="label">HTML</div><div class="value" id="dashHtmlScore">0%</div></div>
+                <div class="stat-card"><div class="label">CSS</div><div class="value" id="dashCssScore">0%</div></div>
+            </div>
+            <div class="card-section"><h3>📈 Tiến độ chi tiết</h3><div id="dashDetailedProgress"></div></div>
+            <div class="card-section"><h3>🧠 Điểm mạnh &amp; Điểm yếu</h3><div id="dashStrengths"></div></div>
+        </section>
+
+        <!-- COURSE -->
+        <section class="page" id="page-course">
+            <div class="page-header"><h1>🗺️ Lộ trình học</h1><p>10 ngày chinh phục HTML + CSS</p></div>
+            <div id="courseList"></div>
+        </section>
+
+        <!-- LESSON -->
+        <section class="page" id="page-lesson">
+            <div class="page-header"><h1 id="lessonTitle">Bài học</h1><p id="lessonSubtitle">Nội dung bài học</p></div>
+            <div class="lesson-content" id="lessonContent"></div>
+        </section>
+
+        <!-- PRACTICE -->
+        <section class="page" id="page-practice">
+            <div class="page-header"><h1>💻 Thực hành code</h1><p id="practiceTitle">Viết HTML và CSS trực tiếp</p></div>
+            <div class="practice-grid">
+                <div>
+                    <div class="editor-box">
+                        <div class="head"><span>📄 HTML</span></div>
+                        <textarea id="htmlEditor" spellcheck="false"></textarea>
+                    </div>
+                    <div class="editor-box mt-16">
+                        <div class="head"><span>🎨 CSS</span></div>
+                        <textarea id="cssEditor" spellcheck="false"></textarea>
+                    </div>
+                </div>
+                <div>
+                    <div class="preview-box">
+                        <div class="head">🔍 Preview</div>
+                        <iframe id="previewFrame" sandbox="allow-scripts"></iframe>
+                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+                        <button class="btn btn-primary btn-sm" onclick="runCode()"><i class="fas fa-play"></i> Chạy</button>
+                        <button class="btn btn-outline btn-sm" onclick="resetPractice()"><i class="fas fa-undo"></i> Reset</button>
+                        <button class="btn btn-success btn-sm" onclick="submitPractice()"><i class="fas fa-check"></i> Nộp</button>
+                        <button class="btn btn-danger btn-sm" onclick="clearPractice()"><i class="fas fa-trash"></i> Xóa</button>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <span class="shortcut-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> Chạy code</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUIZ -->
+        <section class="page" id="page-quiz">
+            <div class="page-header"><h1>📝 Bài kiểm tra</h1><p id="quizSubtitle">Kiểm tra kiến thức</p></div>
+            <div id="quizContainer"></div>
+        </section>
+
+        <!-- ASSESSMENT -->
+        <section class="page" id="page-assessment">
+            <div class="page-header"><h1>🧠 Đánh giá AI</h1><p>Phân tích chi tiết dựa trên kết quả học tập</p></div>
+            <div id="assessmentContainer"></div>
+        </section>
+
+        <!-- PROFILE -->
+        <section class="page" id="page-profile">
+            <div class="page-header"><h1>👤 Hồ sơ cá nhân</h1><p>Quản lý thông tin tài khoản</p></div>
+            <div class="card-section" style="max-width:480px;">
+                <div style="display:flex;align-items:center;gap:18px;margin-bottom:20px;">
+                    <div class="avatar" style="width:64px;height:64px;font-size:28px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;" id="profileAvatar">H</div>
+                    <div><h3 id="profileName">Học viên</h3><p style="color:var(--text-secondary);" id="profileEmail">email@example.com</p></div>
+                </div>
+                <div class="field"><label>Họ tên</label><input type="text" id="profileInputName" maxlength="60"></div>
+                <div class="field"><label>Email</label><input type="email" id="profileInputEmail" disabled></div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <button class="btn btn-primary" onclick="updateProfile()"><i class="fas fa-save"></i> Cập nhật</button>
+                    <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN -->
+        <section class="page" id="page-admin">
+            <div class="page-header"><h1>🛡️ Admin Dashboard</h1><p>Quản lý hệ thống và học viên (chỉ hiển thị dữ liệu trên trình duyệt này)</p></div>
+            <div class="admin-stats" id="adminStats">
+                <div class="admin-stat"><div class="num" id="adminTotalStudents">0</div><div style="color:var(--text-secondary);">Học viên</div></div>
+                <div class="admin-stat"><div class="num">10</div><div style="color:var(--text-secondary);">Bài học</div></div>
+                <div class="admin-stat"><div class="num" id="adminAvgScore">0%</div><div style="color:var(--text-secondary);">Điểm TB</div></div>
+            </div>
+            <div class="card-section">
+                <div class="flex-between mb-16">
+                    <h3 style="font-size:16px;">📋 Danh sách học viên</h3>
+                    <input type="text" placeholder="Tìm kiếm..." style="padding:8px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);width:200px;font-size:14px;" id="adminSearchInput" oninput="renderAdminUsers()">
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead><tr><th>Học viên</th><th>Email</th><th>Tiến độ</th><th>Điểm TB</th></tr></thead>
+                        <tbody id="adminUsersBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h2 id="modalTitle">Thông báo</h2>
+            <div id="modalBody"></div>
+            <div class="actions" id="modalActions">
+                <button class="btn btn-primary" onclick="closeModal()">Đóng</button>
+            </div>
+        </div>
     </div>
-    <button class="modal-close" id="modal-close">&#272;&#243;ng</button>
-  </div>
-</div>
-<header>
-  <div class="logo">Photo <em>Booth</em></div>
-  <div class="sub">&#10022; film &amp; memory &#10022;</div>
-  <div class="deco"></div>
-</header>
-<div class="app">
-  <div class="cam-wrap" id="cam-wrap">
-    <div class="vfc tl"></div><div class="vfc tr"></div>
-    <div class="vfc bl"></div><div class="vfc br"></div>
-    <video id="video" autoplay playsinline muted></video>
-    <canvas id="preview-canvas"></canvas>
-    <div id="frame-overlay"></div>
-    <div id="sticker-layer"></div>
-    <div id="cd-overlay"><span class="cd-num" id="cd-num">3</span></div>
-    <div id="flash"></div>
-    <div class="dots" id="dots-row"></div>
-  </div>
-  <div class="status" id="status">S&#7861;n s&#224;ng ch&#7909;p &middot; 4 t&#7845;m</div>
-  <div class="controls">
-    <button class="btn-s" id="timer-btn">&#9201; 3s</button>
-    <button class="shutter" id="shutter-btn"></button>
-    <button class="btn-s" id="flip-btn">&#8596; Cam</button>
-  </div>
-  <div class="shot-count-row">
-    <span class="sc-label">S&#7889; t&#7845;m:</span>
-    <div class="sc-options">
-      <button class="scb" data-n="1">1</button>
-      <button class="scb" data-n="2">2</button>
-      <button class="scb" data-n="3">3</button>
-      <button class="scb active" data-n="4">4</button>
-      <button class="scb" data-n="6">6</button>
-    </div>
-  </div>
-  <div class="main-tabs">
-    <button class="mtab active" data-tab="filter">&#127912; B&#7897; l&#7885;c</button>
-    <button class="mtab" data-tab="frame">&#128444;&#65039; Khung</button>
-    <button class="mtab" data-tab="sticker">&#10024; Sticker</button>
-  </div>
-  <div class="tab-panel on" id="tp-filter">
-    <div class="filters-row">
-      <button class="filter-btn active" data-filter="normal"><div class="fp" style="background:#777">&#128247;</div><span class="fl">Normal</span></button>
-      <button class="filter-btn" data-filter="warm"><div class="fp" style="background:#c9935a">&#128247;</div><span class="fl">Warm</span></button>
-      <button class="filter-btn" data-filter="bw"><div class="fp" style="background:#555">&#128247;</div><span class="fl">B&amp;W</span></button>
-      <button class="filter-btn" data-filter="vintage"><div class="fp" style="background:#9f7e5e">&#128247;</div><span class="fl">Vintage</span></button>
-      <button class="filter-btn" data-filter="lv"><div class="fp" style="background:#c4aa88">&#128247;</div><span class="fl">Lt.Vintage</span></button>
-      <button class="filter-btn" data-filter="fade"><div class="fp" style="background:#aab0a8">&#128247;</div><span class="fl">Fade</span></button>
-      <button class="filter-btn" data-filter="rose"><div class="fp" style="background:linear-gradient(135deg,#ffd6e8,#ffb3cc,#ffe8f0)">&#128247;</div><span class="fl">Rose</span></button>
-    </div>
-  </div>
-  <div class="tab-panel" id="tp-frame">
-    <div class="frames-grid-ui">
-      <button class="frame-opt active" data-frame="film"><div class="frame-preview" style="background:#f5edd8;padding:2px 5px;gap:1px;"><div class="fp-bar" style="background:#c8b89a;"></div><div class="fp-bar" style="background:#c8b89a;"></div><div class="fp-bar" style="background:#c8b89a;"></div></div><span class="frame-name">Film</span></button>
-      <button class="frame-opt" data-frame="white"><div class="frame-preview" style="background:#fff;padding:3px 3px 9px;gap:2px;"><div class="fp-bar" style="background:#ddd;"></div><div class="fp-bar" style="background:#ddd;"></div><div class="fp-bar" style="background:#ddd;"></div></div><span class="frame-name">Polaroid</span></button>
-      <button class="frame-opt" data-frame="black"><div class="frame-preview" style="background:#111;padding:2px;gap:1px;border:1px solid #333;"><div class="fp-bar" style="background:#2a2a2a;"></div><div class="fp-bar" style="background:#2a2a2a;"></div><div class="fp-bar" style="background:#2a2a2a;"></div></div><span class="frame-name">Black</span></button>
-      <button class="frame-opt" data-frame="pink"><div class="frame-preview" style="background:#fde8ee;padding:3px;gap:2px;"><div class="fp-bar" style="background:#f5b8c8;"></div><div class="fp-bar" style="background:#f5b8c8;"></div><div class="fp-bar" style="background:#f5b8c8;"></div><span class="fp-em tl">&#127800;</span><span class="fp-em br">&#127801;</span></div><span class="frame-name">Pink</span></button>
-      <button class="frame-opt" data-frame="mint"><div class="frame-preview" style="background:#e0f5ef;padding:3px;gap:2px;"><div class="fp-bar" style="background:#9dd4be;"></div><div class="fp-bar" style="background:#9dd4be;"></div><div class="fp-bar" style="background:#9dd4be;"></div><span class="fp-em tl">&#127807;</span><span class="fp-em br">&#127808;</span></div><span class="frame-name">Mint</span></button>
-      <button class="frame-opt" data-frame="lavender"><div class="frame-preview" style="background:#ede0f5;padding:3px;gap:2px;"><div class="fp-bar" style="background:#c5a8e0;"></div><div class="fp-bar" style="background:#c5a8e0;"></div><div class="fp-bar" style="background:#c5a8e0;"></div><span class="fp-em tl">&#128156;</span><span class="fp-em br">&#127800;</span></div><span class="frame-name">Lavender</span></button>
-      <button class="frame-opt" data-frame="grid" id="grid-opt"><div class="frame-preview" style="background:#f5edd8;padding:3px;display:grid;grid-template-columns:1fr 1fr;gap:2px;"><div style="background:#c8b89a;border-radius:1px;aspect-ratio:1;"></div><div style="background:#c8b89a;border-radius:1px;aspect-ratio:1;"></div><div style="background:#c8b89a;border-radius:1px;aspect-ratio:1;"></div><div style="background:#c8b89a;border-radius:1px;aspect-ratio:1;"></div></div><span class="frame-name" id="grid-label">Grid 2x2</span></button>
-      <button class="frame-opt" data-frame="stars"><div class="frame-preview" style="background:#08051e;padding:3px;gap:2px;"><div class="fp-bar" style="background:#1a1540;"></div><div class="fp-bar" style="background:#1a1540;"></div><div class="fp-bar" style="background:#1a1540;"></div><span class="fp-em tl">&#127769;</span><span class="fp-em br">&#10024;</span></div><span class="frame-name">Tinh t&uacute;</span></button>
-      <button class="frame-opt" data-frame="whale"><div class="frame-preview" style="background:#e8f4ff;padding:3px;gap:2px;"><div class="fp-bar" style="background:#b8d8f5;"></div><div class="fp-bar" style="background:#b8d8f5;"></div><div class="fp-bar" style="background:#cce8f5;"></div><span class="fp-em bl">&#128051;</span><span class="fp-em tr">&#129703;</span></div><span class="frame-name">C&aacute; voi</span></button>
-      <button class="frame-opt" data-frame="floral"><div class="frame-preview" style="background:#fff8f8;padding:3px;gap:1px;"><div class="fp-bar" style="background:#f8d0d8;"></div><div class="fp-bar" style="background:#f8d0d8;"></div><div class="fp-bar" style="background:#f8d0d8;"></div><span class="fp-em tl">&#127800;</span><span class="fp-em tr">&#127802;</span><span class="fp-em bl">&#127801;</span><span class="fp-em br">&#129411;</span></div><span class="frame-name">Hoa h&ograve;e</span></button>
-    </div>
-  </div>
-  <div class="tab-panel" id="tp-sticker">
-    <div class="sticker-tabs">
-      <button class="stab active" data-cat="kawaii">Kawaii</button>
-      <button class="stab" data-cat="nature">Thi&ecirc;n nhi&ecirc;n</button>
-      <button class="stab" data-cat="food">&#272;&#7891; &#259;n</button>
-      <button class="stab" data-cat="misc">Misc</button>
-    </div>
-    <div class="sticker-grid" id="sticker-grid"></div>
-    <div class="sticker-controls">
-      <div class="size-row">
-        <button class="szb" data-size="sm">S</button>
-        <button class="szb active" data-size="md">M</button>
-        <button class="szb" data-size="lg">L</button>
-      </div>
-      <button class="btn-clear" id="clear-btn">&#10005; X&oacute;a h&#7871;t</button>
-    </div>
-    <div class="sk-hint">Tap &#273;&#7875; th&ecirc;m &middot; K&eacute;o &#273;&#7875; di chuy&#7875;n &middot; Tap 2 l&#7847;n &#273;&#7875; x&oacute;a</div>
-  </div>
-  <div class="strip-sec" id="strip-sec">
-    <div style="text-align:center;font-size:.44rem;letter-spacing:.26em;color:var(--warm);opacity:.48;text-transform:uppercase;margin-bottom:7px">&#10022; &#7843;nh c&#7911;a b&#7841;n &#10022;</div>
-    <div class="strip-wrap frame-film" id="strip-wrap">
-      <div class="strip-date" id="strip-date"></div>
-    </div>
-    <div class="dl-area">
-      <button class="btn-retake" id="retake-btn">&#8634; Ch&#7909;p l&#7841;i</button>
-      <button class="btn-dl" id="dl-btn">&#8595; L&#432;u &#7843;nh</button>
-    </div>
-  </div>
-</div>
-<canvas id="main-canvas"></canvas>
-<canvas id="strip-canvas"></canvas>
-<script>
-const video=document.getElementById('video');
-const camWrap=document.getElementById('cam-wrap');
-const previewCanvas=document.getElementById('preview-canvas');
-const pctx=previewCanvas.getContext('2d',{willReadFrequently:true});
-const frameOverlay=document.getElementById('frame-overlay');
-const stickerLayer=document.getElementById('sticker-layer');
-const cdOverlay=document.getElementById('cd-overlay'),cdNum=document.getElementById('cd-num');
-const flashEl=document.getElementById('flash'),statusBar=document.getElementById('status');
-const stripSec=document.getElementById('strip-sec'),stripWrap=document.getElementById('strip-wrap');
-const dlBtn=document.getElementById('dl-btn'),retakeBtn=document.getElementById('retake-btn');
-const startBtn=document.getElementById('start-btn'),startScreen=document.getElementById('start-screen');
-const iosModal=document.getElementById('ios-modal'),modalImg=document.getElementById('modal-img');
-const dotsRow=document.getElementById('dots-row');
-const mainCanvas=document.getElementById('main-canvas'),stripCanvas=document.getElementById('strip-canvas');
-const ctx=mainCanvas.getContext('2d'),sctx=stripCanvas.getContext('2d');
-let stream=null,facingMode='user',currentFilter='normal',currentFrame='film';
-let timerDelay=3,totalShots=4,photos=[],shooting=false,shotCount=0,stickerSize='md';
-let rafId=null;
 
-/* FILTERS */
-function brighten(v,a){return Math.min(255,v+(255-v)*a);}
-function applyPixelFilter(d,f){
-  for(let i=0;i<d.length;i+=4){
-    let r=d[i],g=d[i+1],b=d[i+2];
-    r=brighten(r,.18);g=brighten(g,.18);b=brighten(b,.18);
-    if(f==='warm'){r=Math.min(255,r*1.05+10);g=Math.min(255,g*1.01+3);b=Math.max(0,b*.90);}
-    else if(f==='bw'){const gr=.299*r+.587*g+.114*b;const br=brighten(gr,.08);r=g=b=Math.min(255,br);}
-    else if(f==='vintage'){r=Math.min(255,r*.94+22);g=Math.min(255,g*.88+14);b=Math.min(255,b*.78+12);}
-    else if(f==='lv'){r=Math.min(255,r*.97+10);g=Math.min(255,g*.95+7);b=Math.min(255,b*.88+8);}
-    else if(f==='fade'){r=Math.min(255,r*.80+42);g=Math.min(255,g*.80+42);b=Math.min(255,b*.80+42);}
-    else if(f==='rose'){r=Math.min(255,r*1.04+22);g=Math.min(255,g*.86+18);b=Math.min(255,b*.89+16);}
-    d[i]=r;d[i+1]=g;d[i+2]=b;
-  }
-}
-function renderLoop(){
-  if(!stream||video.readyState<2){rafId=requestAnimationFrame(renderLoop);return;}
-  const W=video.videoWidth||640,H=video.videoHeight||853;
-  if(previewCanvas.width!==W||previewCanvas.height!==H){previewCanvas.width=W;previewCanvas.height=H;}
-  pctx.save();
-  if(facingMode==='user'){pctx.scale(-1,1);pctx.drawImage(video,-W,0,W,H);}
-  else pctx.drawImage(video,0,0,W,H);
-  pctx.restore();
-  if(currentFilter!=='normal'){const imgData=pctx.getImageData(0,0,W,H);applyPixelFilter(imgData.data,currentFilter);pctx.putImageData(imgData,0,0);}
-  rafId=requestAnimationFrame(renderLoop);
-}
-function capturePhoto(){
-  const W=previewCanvas.width||640,H=previewCanvas.height||853;
-  mainCanvas.width=W;mainCanvas.height=H;
-
-  /* 1. draw filtered video frame */
-  ctx.drawImage(previewCanvas,0,0,W,H);
-
-  /* 2. bake frame overlay gradient/vignette */
-  const frameVignettes={
-    stars: ()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.28,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(5,2,30,.45)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
-    whale: ()=>{const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(.55,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,40,100,.38)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
-    floral:()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.2,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(255,180,200,.22)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
-    pink:  ()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(255,160,190,.18)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
-    lavender:()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(180,130,220,.16)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
-    mint:  ()=>{const g=ctx.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.72);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(80,180,140,.14)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);},
-  };
-  if(frameVignettes[currentFrame])frameVignettes[currentFrame]();
-
-  /* 3. bake frame emoji decos onto photo */
-  const decos=FRAME_DECOS[currentFrame]||[];
-  if(decos.length){
-    ctx.save();ctx.textBaseline='top';ctx.textAlign='left';
-    decos.forEach(d=>{
-      const fs=Math.round(W*d.s*1.05);
-      ctx.font=`${fs}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Segoe UI Symbol",serif`;
-      ctx.fillText(d.char,d.x*W,d.y*H);
-    });
-    ctx.restore();
-  }
-
-  /* 4. bake stickers */
-  stickerLayer.querySelectorAll('.placed-sticker').forEach(s=>{
-    const xp=parseFloat(s.dataset.xp)/100,yp=parseFloat(s.dataset.yp)/100;
-    const fs=Math.round(W*CFRAC[s.dataset.sz||'md']);
-    ctx.font=`${fs}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",serif`;
-    ctx.textBaseline='top';ctx.fillText(s.textContent,xp*W,yp*H);
-  });
-
-  return mainCanvas.toDataURL('image/jpeg',0.97);
-}
-
-/* FRAME DECOS — precise coords & larger sizes for crispness */
-const FRAME_DECOS={
-  film:[],white:[],black:[],grid:[],
-  pink:[
-    {e:'&#127800;',x:.014,y:.010,s:.090},{e:'&#127809;',x:.868,y:.010,s:.090},
-    {e:'&#127802;',x:.014,y:.942,s:.090},{e:'&#128150;',x:.868,y:.942,s:.090},
-    {e:'&#127809;',x:.012,y:.263,s:.076},{e:'&#127800;',x:.876,y:.263,s:.076},
-    {e:'&#128149;',x:.012,y:.527,s:.072},{e:'&#127802;',x:.876,y:.527,s:.072},
-    {e:'&#127800;',x:.012,y:.753,s:.068},{e:'&#127809;',x:.876,y:.753,s:.068},
-  ],
-  mint:[
-    {e:'&#127811;',x:.014,y:.010,s:.090},{e:'&#127807;',x:.868,y:.010,s:.090},
-    {e:'&#127808;',x:.014,y:.942,s:.090},{e:'&#127811;',x:.868,y:.942,s:.090},
-    {e:'&#127807;',x:.012,y:.263,s:.076},{e:'&#127811;',x:.876,y:.263,s:.076},
-    {e:'&#127808;',x:.012,y:.527,s:.072},{e:'&#127807;',x:.876,y:.527,s:.072},
-    {e:'&#127811;',x:.012,y:.753,s:.068},{e:'&#127808;',x:.876,y:.753,s:.068},
-  ],
-  lavender:[
-    {e:'&#128156;',x:.014,y:.010,s:.090},{e:'&#127800;',x:.868,y:.010,s:.090},
-    {e:'&#127800;',x:.014,y:.942,s:.090},{e:'&#128156;',x:.868,y:.942,s:.090},
-    {e:'&#10024;',x:.012,y:.263,s:.074},{e:'&#128156;',x:.876,y:.263,s:.074},
-    {e:'&#127800;',x:.012,y:.527,s:.070},{e:'&#10024;',x:.876,y:.527,s:.070},
-    {e:'&#128156;',x:.012,y:.753,s:.068},{e:'&#127800;',x:.876,y:.753,s:.068},
-  ],
-  stars:[
-    {e:'&#127769;',x:.012,y:.006,s:.110},{e:'&#10024;',x:.856,y:.006,s:.100},
-    {e:'&#11088;',x:.010,y:.158,s:.086},{e:'&#128171;',x:.864,y:.158,s:.086},
-    {e:'&#10024;',x:.010,y:.302,s:.080},{e:'&#11088;',x:.864,y:.302,s:.080},
-    {e:'&#128171;',x:.010,y:.452,s:.086},{e:'&#127775;',x:.856,y:.452,s:.086},
-    {e:'&#11088;',x:.010,y:.606,s:.080},{e:'&#10024;',x:.864,y:.606,s:.080},
-    {e:'&#10024;',x:.010,y:.756,s:.086},{e:'&#128171;',x:.856,y:.756,s:.086},
-    {e:'&#128171;',x:.010,y:.912,s:.076},{e:'&#11088;',x:.864,y:.912,s:.076},
-  ],
-  whale:[
-    {e:'&#127754;',x:.008,y:.856,s:.158},{e:'&#127754;',x:.325,y:.876,s:.158},{e:'&#127754;',x:.632,y:.856,s:.158},
-    {e:'&#128051;',x:.008,y:.686,s:.155},
-    {e:'&#129703;',x:.016,y:.536,s:.080},{e:'&#129703;',x:.030,y:.376,s:.070},
-    {e:'&#129703;',x:.016,y:.218,s:.064},{e:'&#129703;',x:.022,y:.068,s:.056},
-    {e:'&#128032;',x:.866,y:.112,s:.100},{e:'&#128153;',x:.872,y:.006,s:.082},
-    {e:'&#129703;',x:.878,y:.316,s:.076},{e:'&#128032;',x:.860,y:.510,s:.100},
-    {e:'&#129703;',x:.878,y:.714,s:.070},{e:'&#127754;',x:.864,y:.904,s:.086},
-  ],
-  floral:[
-    {e:'&#127800;',x:.010,y:.006,s:.124},{e:'&#127802;',x:.854,y:.006,s:.124},
-    {e:'&#127801;',x:.010,y:.932,s:.124},{e:'&#127809;',x:.854,y:.932,s:.124},
-    {e:'&#127803;',x:.010,y:.265,s:.106},{e:'&#127809;',x:.862,y:.265,s:.106},
-    {e:'&#129455;',x:.010,y:.535,s:.106},{e:'&#127800;',x:.862,y:.535,s:.106},
-    {e:'&#129411;',x:.010,y:.402,s:.082},{e:'&#129411;',x:.862,y:.402,s:.082},
-    {e:'&#127802;',x:.010,y:.733,s:.100},{e:'&#127801;',x:.862,y:.733,s:.100},
-    {e:'&#129411;',x:.016,y:.165,s:.076},{e:'&#129411;',x:.862,y:.165,s:.076},
-  ],
-};
-function entityToChar(str){const t=document.createElement('textarea');t.innerHTML=str;return t.value;}
-Object.values(FRAME_DECOS).forEach(arr=>arr.forEach(d=>{d.char=entityToChar(d.e);}));
-function updateFrameOverlay(){
-  frameOverlay.innerHTML='';frameOverlay.className='';
-  if(currentFrame)frameOverlay.classList.add('fo-'+currentFrame);
-  const decos=FRAME_DECOS[currentFrame]||[];
-  decos.forEach(d=>{
-    const el=document.createElement('span');el.className='fo-em';el.innerHTML=d.e;
-    el.style.left=(d.x*100)+'%';el.style.top=(d.y*100)+'%';el.dataset.s=d.s;
-    frameOverlay.appendChild(el);
-  });
-  resizeOverlayEmoji();
-}
-function resizeOverlayEmoji(){
-  const W=camWrap.offsetWidth;
-  frameOverlay.querySelectorAll('.fo-em').forEach(el=>{el.style.fontSize=Math.round(W*parseFloat(el.dataset.s))+'px';});
-}
-window.addEventListener('resize',resizeOverlayEmoji);
-
-/* TABS */
-document.querySelectorAll('.mtab').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.mtab').forEach(x=>x.classList.remove('active'));b.classList.add('active');
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
-  document.getElementById('tp-'+b.dataset.tab).classList.add('on');
-}));
-function buildDots(){dotsRow.innerHTML='';for(let i=1;i<=totalShots;i++){const d=document.createElement('div');d.className='dot';d.id='d'+i;dotsRow.appendChild(d);}}
-buildDots();
-function gridAllowed(){return totalShots===4||totalShots===6;}
-function updateGridLabel(){const el=document.getElementById('grid-label');if(el)el.textContent=totalShots===6?'Grid 2x3':'Grid 2x2';}
-document.querySelectorAll('.scb').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.scb').forEach(x=>x.classList.remove('active'));b.classList.add('active');
-  totalShots=parseInt(b.dataset.n);buildDots();statusBar.textContent='Sẵn sàng chụp · '+totalShots+' tấm';
-  const gridOpt=document.getElementById('grid-opt');
-  if(!gridAllowed()&&currentFrame==='grid'){currentFrame='film';document.querySelectorAll('.frame-opt').forEach(x=>x.classList.remove('active'));document.querySelector('[data-frame="film"]').classList.add('active');updateStripFrameClass();updateFrameOverlay();}
-  gridOpt.style.opacity=gridAllowed()?'1':'0.3';gridOpt.style.pointerEvents=gridAllowed()?'auto':'none';
-  updateGridLabel();
-}));
-function updateStripFrameClass(){stripWrap.className='strip-wrap frame-'+currentFrame;}
-document.querySelectorAll('.frame-opt').forEach(b=>b.addEventListener('click',()=>{
-  if(b.id==='grid-opt'&&!gridAllowed())return;
-  document.querySelectorAll('.frame-opt').forEach(x=>x.classList.remove('active'));b.classList.add('active');
-  currentFrame=b.dataset.frame;updateStripFrameClass();updateFrameOverlay();
-}));
-
-/* STICKERS */
-const CATS={
-  kawaii:['🌸','🌷','💖','✨','🌟','⭐','💫','🦋','🎀','🍓','🌈','💕','🥹','😊','🥰','😍','💗','🫧'],
-  nature:['🌺','🌻','🌼','🌿','🍀','🍃','🌙','☀️','🌊','🦄','🐝','🦩','🌴','🍄','🌵','🪷','🌹','🌾'],
-  food:['🍰','🧁','🍩','🍪','🍫','🧋','☕','🍵','🍓','🍒','🍑','🥝','🍦','🎂','🍭','🧃','🥞','🍡'],
-  misc:['🎵','🎶','💌','🎈','🎉','🎊','📷','🔮','💎','🪩','🛸','⚡','🔥','💯','🕊️','🪄','🎭','🫶'],
-};
-const FSIZE={sm:'1.4rem',md:'2.1rem',lg:'3.2rem'};
-const CFRAC={sm:.055,md:.09,lg:.14};
-function renderStickerGrid(cat){const g=document.getElementById('sticker-grid');g.innerHTML='';CATS[cat].forEach(em=>{const b=document.createElement('button');b.className='sk';b.textContent=em;b.addEventListener('click',()=>placeSticker(em));g.appendChild(b);});}
-renderStickerGrid('kawaii');
-document.querySelectorAll('.stab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.stab').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderStickerGrid(b.dataset.cat);}));
-document.querySelectorAll('.szb').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.szb').forEach(x=>x.classList.remove('active'));b.classList.add('active');stickerSize=b.dataset.size;}));
-function placeSticker(em){
-  stickerLayer.classList.add('interactive');
-  const el=document.createElement('div');el.className='placed-sticker';el.textContent=em;el.style.fontSize=FSIZE[stickerSize];
-  const xp=15+Math.random()*55,yp=10+Math.random()*65;
-  el.style.left=xp+'%';el.style.top=yp+'%';el.dataset.xp=xp;el.dataset.yp=yp;el.dataset.sz=stickerSize;
-  stickerLayer.appendChild(el);makeDraggable(el);
-}
-function makeDraggable(el){
-  let ox=0,oy=0,drag=false,lastTap=0;
-  el.addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();const r=el.getBoundingClientRect();ox=e.clientX-r.left;oy=e.clientY-r.top;el.setPointerCapture(e.pointerId);drag=true;el.style.zIndex=99;},{passive:false});
-  el.addEventListener('pointermove',e=>{if(!drag||!el.hasPointerCapture(e.pointerId))return;const wr=camWrap.getBoundingClientRect();let x=Math.max(0,Math.min(wr.width-50,e.clientX-wr.left-ox));let y=Math.max(0,Math.min(wr.height-50,e.clientY-wr.top-oy));el.style.left=(x/wr.width*100)+'%';el.style.top=(y/wr.height*100)+'%';el.dataset.xp=x/wr.width*100;el.dataset.yp=y/wr.height*100;});
-  el.addEventListener('pointerup',()=>{drag=false;el.style.zIndex='';});
-  el.addEventListener('click',()=>{const now=Date.now();if(now-lastTap<330)el.remove();lastTap=now;});
-}
-document.getElementById('clear-btn').addEventListener('click',()=>stickerLayer.innerHTML='');
-document.querySelectorAll('.filter-btn').forEach(b=>b.addEventListener('click',()=>{
-  document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');currentFilter=b.dataset.filter;
-}));
-
-/* CAMERA */
-async function startCamera(){
-  if(stream)stream.getTracks().forEach(t=>t.stop());
-  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode,width:{ideal:1920},height:{ideal:2560}},audio:false});
-  video.srcObject=stream;await video.play().catch(()=>{});
-  if(rafId)cancelAnimationFrame(rafId);renderLoop();
-}
-
-/* SHOOT */
-function countdown(sec){return new Promise(resolve=>{if(sec===0){resolve();return;}cdOverlay.classList.add('on');let n=sec;function tick(){cdNum.textContent=n;cdNum.style.animation='none';void cdNum.offsetWidth;cdNum.style.animation='popNum 1s ease-out';if(--n<0){cdOverlay.classList.remove('on');resolve();return;}setTimeout(tick,1000);}tick();});}
-function doFlash(){return new Promise(r=>{flashEl.style.transition='none';flashEl.style.opacity='1';void flashEl.offsetWidth;flashEl.style.transition='opacity 0.22s';flashEl.style.opacity='0';setTimeout(r,240);});}
-async function shootSequence(){
-  if(shooting)return;shooting=true;photos=[];shotCount=0;
-  ['shutter-btn','timer-btn','flip-btn'].forEach(id=>document.getElementById(id).disabled=true);
-  for(let i=1;i<=totalShots;i++)document.getElementById('d'+i).classList.remove('on');
-  stripSec.classList.remove('on');
-  for(let i=0;i<totalShots;i++){
-    statusBar.textContent='Chuẩn bị tấm '+(i+1)+' / '+totalShots+' ...';
-    await countdown(timerDelay);await doFlash();
-    photos.push(capturePhoto());shotCount++;
-    document.getElementById('d'+shotCount).classList.add('on');
-    statusBar.textContent='Đã chụp '+shotCount+' / '+totalShots;
-    if(i<totalShots-1)await new Promise(r=>setTimeout(r,480));
-  }
-  shooting=false;
-  ['shutter-btn','timer-btn','flip-btn'].forEach(id=>document.getElementById(id).disabled=false);
-  statusBar.textContent='✦ Ảnh đã sẵn sàng';renderStrip();
-}
-
-/* STRIP PREVIEW */
-function renderStrip(){
-  stripWrap.querySelectorAll('.strip-frame,.frames-grid-result').forEach(e=>e.remove());
-  updateStripFrameClass();
-  const dateEl=document.getElementById('strip-date');
-  dateEl.textContent=new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'long',year:'numeric'});
-  if(currentFrame==='grid'&&gridAllowed()){
-    const grid=document.createElement('div');grid.className='frames-grid-result';grid.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:4px;';
-    photos.forEach(src=>{const f=document.createElement('div');f.className='strip-frame';const img=document.createElement('img');img.src=src;f.appendChild(img);grid.appendChild(f);});
-    stripWrap.insertBefore(grid,dateEl);
-  }else{
-    photos.forEach((src,i)=>{
-      const f=document.createElement('div');f.className='strip-frame';
-      const img=document.createElement('img');img.src=src;
-      const num=document.createElement('div');num.className='frame-num';num.textContent='0'+(i+1);
-      f.appendChild(img);f.appendChild(num);stripWrap.insertBefore(f,dateEl);
-    });
-  }
-  stripSec.classList.add('on');setTimeout(()=>stripSec.scrollIntoView({behavior:'smooth',block:'start'}),120);
-}
-
-/* HIGH-QUALITY EXPORT
-   - Photo cell: 800×1067px (2× effective resolution)
-   - Emoji decos rendered at proportionally large font size
-   - JPEG quality 0.97
-*/
-const FRAME_CFG={
-  film    :{bg:'#f5edd8',pad:72,pTop:50, pBot:92, sprockets:true, dateColor:'#2a1f1a'},
-  white   :{bg:'#ffffff',pad:56,pTop:60, pBot:108,sprockets:false,dateColor:'#555555'},
-  black   :{bg:'#0d0d0d',pad:48,pTop:40, pBot:88, sprockets:false,dateColor:'#aaaaaa'},
-  pink    :{bg:'#fde8ee',pad:56,pTop:56, pBot:100,sprockets:false,dateColor:'#a05060'},
-  mint    :{bg:'#e0f5ef',pad:56,pTop:56, pBot:100,sprockets:false,dateColor:'#3a7a60'},
-  lavender:{bg:'#ede0f5',pad:56,pTop:56, pBot:100,sprockets:false,dateColor:'#6040a0'},
-  grid    :{bg:'#f5edd8',pad:32,pTop:40, pBot:88, sprockets:false,dateColor:'#2a1f1a',isGrid:true},
-  stars   :{bg:'#08051e',pad:48,pTop:40, pBot:88, sprockets:false,dateColor:'#aab0d8'},
-  whale   :{bg:'#e8f4ff',pad:48,pTop:40, pBot:88, sprockets:false,dateColor:'#2060a0'},
-  floral  :{bg:'#fff8f8',pad:56,pTop:56, pBot:100,sprockets:false,dateColor:'#a05070'},
-};
-function drawCover(c,img,dx,dy,dw,dh){
-  const iR=img.naturalWidth/img.naturalHeight,dR=dw/dh;let sx,sy,sw,sh;
-  if(iR>dR){sh=img.naturalHeight;sw=Math.round(sh*dR);sx=Math.round((img.naturalWidth-sw)/2);sy=0;}
-  else{sw=img.naturalWidth;sh=Math.round(sw/dR);sx=0;sy=Math.round((img.naturalHeight-sh)/2);}
-  c.drawImage(img,sx,sy,sw,sh,dx,dy,dw,dh);
-}
-function drawDecos(c,W,H,frame){
-  const decos=FRAME_DECOS[frame]||[];
-  if(!decos.length)return;
-  c.save();c.textBaseline='top';c.textAlign='left';
-  decos.forEach(d=>{
-    /* render at generous font size for crisp emoji on large canvas */
-    const fs=Math.round(W*d.s*1.08);
-    c.font=`${fs}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Segoe UI Symbol",serif`;
-    c.fillText(d.char,d.x*W,d.y*H);
-  });
-  c.restore();
-}
-function drawSprockets(c,W,H){
-  const hW=20,hH=14,hGap=24;c.fillStyle='#2a1f1a';
-  for(let y=0;y<H;y+=hH+hGap){
-    [[8],[W-8-hW]].forEach(([x])=>{c.beginPath();if(c.roundRect)c.roundRect(x,y+6,hW,hH,4);else c.rect(x,y+6,hW,hH);c.fill();});
-  }
-}
-function buildStripImage(){
-  return new Promise((resolve,reject)=>{
-    const cfg=FRAME_CFG[currentFrame]||FRAME_CFG.film;
-    const fW=800,fH=Math.round(fW*4/3),gap=12,pH=cfg.pad,pTop=cfg.pTop,pBot=cfg.pBot;
-    let W,H;
-    if(cfg.isGrid&&gridAllowed()){
-      const rows=totalShots/2,cellW=Math.round((fW-gap)/2),cellH=Math.round(cellW*4/3);
-      W=cellW*2+gap+pH*2;H=pTop+cellH*rows+(rows-1)*gap+pBot;
-    }else{W=fW+pH*2;H=pTop+totalShots*fH+(totalShots-1)*gap+pBot;}
-    stripCanvas.width=W;stripCanvas.height=H;
-    sctx.fillStyle=cfg.bg;sctx.fillRect(0,0,W,H);
-    if(cfg.sprockets)drawSprockets(sctx,W,H);
-    /* stars vignette */
-    if(currentFrame==='stars'){
-      const vg=sctx.createRadialGradient(W/2,H/2,H*.18,W/2,H/2,H*.78);
-      vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(5,2,30,.50)');
-      sctx.fillStyle=vg;sctx.fillRect(0,0,W,H);
-    }
-    let loaded=0;const imgs=new Array(photos.length);
-    photos.forEach((src,i)=>{
-      const im=new Image();
-      im.onload=()=>{imgs[i]=im;if(++loaded===photos.length)draw();};
-      im.onerror=()=>reject(new Error('Lỗi ảnh '+i));
-      im.src=src;
-    });
-    function draw(){
-      if(cfg.isGrid&&gridAllowed()){
-        const rows=totalShots/2,cellW=Math.round((fW-gap)/2),cellH=Math.round(cellW*4/3);
-        for(let i=0;i<totalShots;i++){
-          if(!imgs[i])continue;
-          drawCover(sctx,imgs[i],pH+(i%2)*(cellW+gap),pTop+Math.floor(i/2)*(cellH+gap),cellW,cellH);
+    <script>
+        // ============================================================
+        // SECURITY HELPERS
+        // ============================================================
+        function escapeHtml(str) {
+            if (str === undefined || str === null) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
         }
-      }else{
-        imgs.forEach((im,i)=>{
-          const x=pH,y=pTop+i*(fH+gap);drawCover(sctx,im,x,y,fW,fH);
-          sctx.fillStyle=currentFrame==='black'?'rgba(220,220,220,.38)':'rgba(42,31,26,.26)';
-          sctx.font='bold 22px "Space Mono",monospace';sctx.textAlign='right';sctx.textBaseline='alphabetic';
-          sctx.fillText('0'+(i+1),x+fW-10,y+fH-12);
-        });
-      }
-      /* photos already have decos baked — just draw date */
-      sctx.save();sctx.globalAlpha=.54;sctx.fillStyle=cfg.dateColor;
-      sctx.font='italic 26px "Playfair Display",Georgia,serif';
-      sctx.textAlign='center';sctx.textBaseline='alphabetic';
-      sctx.fillText(new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'long',year:'numeric'}),W/2,H-28);
-      sctx.restore();
-      stripCanvas.toBlob(blob=>{if(!blob)return reject(new Error('Không tạo được ảnh'));resolve(blob);},'image/jpeg',0.97);
-    }
-  });
-}
 
-/* DOWNLOAD */
-function isIOS(){return /iP(hone|ad|od)/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);}
-dlBtn.addEventListener('click',async()=>{
-  if(photos.length<totalShots){statusBar.textContent='Chưa đủ '+totalShots+' tấm!';return;}
-  const orig=dlBtn.textContent;dlBtn.textContent='Đang tạo...';dlBtn.disabled=true;
-  try{
-    const blob=await buildStripImage();
-    if(isIOS()){const reader=new FileReader();reader.onload=e=>{modalImg.src=e.target.result;iosModal.classList.add('open');};reader.readAsDataURL(blob);}
-    else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='photobooth_'+Date.now()+'.jpg';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),5000);}
-  }catch(e){alert('Lỗi: '+e.message);}
-  dlBtn.textContent=orig;dlBtn.disabled=false;
-});
-document.getElementById('modal-close').addEventListener('click',()=>iosModal.classList.remove('open'));
-iosModal.addEventListener('click',e=>{if(e.target===iosModal)iosModal.classList.remove('open');});
-retakeBtn.addEventListener('click',()=>{
-  photos=[];shotCount=0;
-  for(let i=1;i<=totalShots;i++){const d=document.getElementById('d'+i);if(d)d.classList.remove('on');}
-  stripSec.classList.remove('on');statusBar.textContent='Sẵn sàng chụp · '+totalShots+' tấm';
-  window.scrollTo({top:0,behavior:'smooth'});
-});
-document.getElementById('shutter-btn').addEventListener('click',()=>{
-  const s=document.getElementById('shutter-btn');s.classList.add('pop');setTimeout(()=>s.classList.remove('pop'),260);shootSequence();
-});
-document.getElementById('timer-btn').addEventListener('click',()=>{
-  const dl=[0,3,5,10],lb=['0s','3s','5s','10s'];const i=dl.indexOf(timerDelay);
-  timerDelay=dl[(i+1)%dl.length];
-  document.getElementById('timer-btn').textContent=(timerDelay===0?'⚡':'⏱')+' '+lb[(i+1)%dl.length];
-});
-document.getElementById('flip-btn').addEventListener('click',()=>{
-  if(shooting)return;facingMode=facingMode==='user'?'environment':'user';startCamera().catch(()=>{});
-});
-startBtn.addEventListener('click',async()=>{
-  document.getElementById('perm-error').style.display='none';
-  startBtn.textContent='Đang yêu cầu quyền camera...';startBtn.disabled=true;
-  try{
-    await startCamera();
-    startScreen.style.opacity='0';startScreen.style.transition='opacity 0.4s';
-    setTimeout(()=>{startScreen.style.display='none';updateFrameOverlay();},400);
-  }catch(e){document.getElementById('perm-error').style.display='block';startBtn.textContent='THỬ LẠI';startBtn.disabled=false;}
-});
-</script>
+        async function hashPassword(pw) {
+            const enc = new TextEncoder().encode(pw);
+            const buf = await crypto.subtle.digest('SHA-256', enc);
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        const RESERVED_ADMIN_EMAIL = 'admin@example.com';
+        const STORAGE_VERSION = '2.0';
+
+        // ============================================================
+        // DATA
+        // ============================================================
+        const LESSONS = [{
+            day: 1,
+            title: 'HTML là gì? Cấu trúc HTML',
+            objectives: ['Hiểu HTML là gì', 'Nắm cấu trúc HTML cơ bản'],
+            content: `
+            <h2>HTML là gì?</h2>
+            <p>HTML (HyperText Markup Language) là ngôn ngữ đánh dấu dùng để tạo cấu trúc cho trang web.</p>
+            <p><strong>Cấu trúc cơ bản:</strong></p>
+            <div class="code-block"><span class="comment">&lt;!-- Comment --&gt;</span>
+            <span class="tag">&lt;!DOCTYPE html&gt;</span>
+            <span class="tag">&lt;html&gt;</span>
+            <span class="tag">&lt;head&gt;</span>
+            <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;title&gt;</span>Trang web<span class="tag">&lt;/title&gt;</span>
+            <span class="tag">&lt;/head&gt;</span>
+            <span class="tag">&lt;body&gt;</span>
+            <span class="tag">&lt;h1&gt;</span>Xin chào!<span class="tag">&lt;/h1&gt;</span>
+            <span class="tag">&lt;p&gt;</span>Đoạn văn bản.<span class="tag">&lt;/p&gt;</span>
+            <span class="tag">&lt;/body&gt;</span>
+            <span class="tag">&lt;/html&gt;</span></div>
+            <ul>
+              <li><strong>&lt;!DOCTYPE html&gt;</strong>: Khai báo HTML5</li>
+              <li><strong>&lt;html&gt;</strong>: Thẻ gốc</li>
+              <li><strong>&lt;head&gt;</strong>: Metadata, title</li>
+              <li><strong>&lt;body&gt;</strong>: Nội dung hiển thị</li>
+              <li><strong>&lt;h1&gt;</strong> - <strong>&lt;h6&gt;</strong>: Tiêu đề</li>
+              <li><strong>&lt;p&gt;</strong>: Đoạn văn</li>
+            </ul>
+          `,
+            quiz: [
+                { q: 'Thẻ nào khai báo tài liệu HTML5?', opts: ['&lt;html&gt;', '&lt;!DOCTYPE html&gt;', '&lt;head&gt;',
+                        '&lt;body&gt;'
+                    ], ans: 1 },
+                { q: 'Nội dung nào đặt trong &lt;body&gt;?', opts: ['Tiêu đề trang', 'Nội dung hiển thị', 'Link CSS',
+                        'Meta tags'
+                    ], ans: 1 }
+            ]
+        }, {
+            day: 2,
+            title: 'Text và Liên kết',
+            objectives: ['Sử dụng thẻ định dạng text', 'Tạo liên kết với a'],
+            content: `
+            <h2>Text và Liên kết</h2>
+            <p><strong>Thẻ định dạng text:</strong></p>
+            <ul>
+              <li><strong>&lt;h1&gt;</strong> - <strong>&lt;h6&gt;</strong>: Tiêu đề</li>
+              <li><strong>&lt;p&gt;</strong>: Đoạn văn</li>
+              <li><strong>&lt;strong&gt;</strong>: In đậm</li>
+              <li><strong>&lt;em&gt;</strong>: In nghiêng</li>
+              <li><strong>&lt;br&gt;</strong>: Xuống dòng</li>
+              <li><strong>&lt;hr&gt;</strong>: Đường kẻ ngang</li>
+            </ul>
+            <p><strong>Liên kết:</strong></p>
+            <div class="code-block"><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"https://example.com"</span> <span class="attr">target</span>=<span class="str">"_blank"</span><span class="tag">&gt;</span>Liên kết<span class="tag">&lt;/a&gt;</span></div>
+            <ul>
+              <li><strong>href</strong>: Địa chỉ đích</li>
+              <li><strong>target="_blank"</strong>: Mở tab mới</li>
+            </ul>
+          `,
+            quiz: [
+                { q: 'Thẻ nào tạo liên kết?', opts: ['&lt;link&gt;', '&lt;a&gt;', '&lt;href&gt;', '&lt;url&gt;'],
+                    ans: 1 },
+                { q: 'Thuộc tính mở link trong tab mới?', opts: ['target="_self"', 'target="_blank"',
+                        'target="_new"', 'target="_top"'
+                    ], ans: 1 }
+            ]
+        }, {
+            day: 3,
+            title: 'Hình ảnh và Danh sách',
+            objectives: ['Chèn hình ảnh', 'Tạo danh sách'],
+            content: `
+            <h2>Hình ảnh & Danh sách</h2>
+            <p><strong>Thẻ img:</strong></p>
+            <div class="code-block"><span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"image.jpg"</span> <span class="attr">alt</span>=<span class="str">"Mô tả"</span> <span class="attr">width</span>=<span class="str">"200"</span><span class="tag">&gt;</span></div>
+            <ul>
+              <li><strong>src</strong>: Đường dẫn ảnh</li>
+              <li><strong>alt</strong>: Văn bản thay thế (quan trọng)</li>
+            </ul>
+            <p><strong>Danh sách:</strong></p>
+            <div class="code-block"><span class="tag">&lt;ul&gt;</span> <span class="comment">&lt;!-- Không thứ tự --&gt;</span>
+            <span class="tag">&lt;li&gt;</span>Mục 1<span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;/ul&gt;</span>
+            <span class="tag">&lt;ol&gt;</span> <span class="comment">&lt;!-- Có thứ tự --&gt;</span>
+            <span class="tag">&lt;li&gt;</span>Bước 1<span class="tag">&lt;/li&gt;</span>
+            <span class="tag">&lt;/ol&gt;</span></div>
+          `,
+            quiz: [
+                { q: 'Thuộc tính mô tả hình ảnh?', opts: ['src', 'alt', 'title', 'desc'], ans: 1 },
+                { q: 'Thẻ tạo danh sách có thứ tự?', opts: ['&lt;ul&gt;', '&lt;ol&gt;', '&lt;li&gt;',
+                        '&lt;list&gt;'
+                    ], ans: 1 }
+            ]
+        }, {
+            day: 4,
+            title: 'Bảng và Biểu mẫu',
+            objectives: ['Tạo bảng', 'Tạo biểu mẫu'],
+            content: `
+            <h2>Bảng & Biểu mẫu</h2>
+            <p><strong>Bảng:</strong></p>
+            <div class="code-block"><span class="tag">&lt;table&gt;</span>
+            <span class="tag">&lt;thead&gt;</span><span class="tag">&lt;tr&gt;</span><span class="tag">&lt;th&gt;</span>Tên<span class="tag">&lt;/th&gt;</span><span class="tag">&lt;th&gt;</span>Tuổi<span class="tag">&lt;/th&gt;</span><span class="tag">&lt;/tr&gt;</span><span class="tag">&lt;/thead&gt;</span>
+            <span class="tag">&lt;tbody&gt;</span><span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td&gt;</span>An<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>18<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span><span class="tag">&lt;/tbody&gt;</span>
+            <span class="tag">&lt;/table&gt;</span></div>
+            <p><strong>Biểu mẫu:</strong></p>
+            <div class="code-block"><span class="tag">&lt;form&gt;</span>
+            <span class="tag">&lt;label&gt;</span>Email:<span class="tag">&lt;/label&gt;</span>
+            <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">placeholder</span>=<span class="str">"email@example.com"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Gửi<span class="tag">&lt;/button&gt;</span>
+            <span class="tag">&lt;/form&gt;</span></div>
+          `,
+            quiz: [
+                { q: 'Thẻ tạo hàng trong bảng?', opts: ['&lt;td&gt;', '&lt;tr&gt;', '&lt;th&gt;', '&lt;row&gt;'],
+                    ans: 1 },
+                { q: 'Input type dùng cho email?', opts: ['text', 'email', 'mail', 'input'], ans: 1 }
+            ]
+        }, {
+            day: 5,
+            title: 'HTML Semantic',
+            objectives: ['Hiểu semantic HTML', 'Cấu trúc trang chuẩn'],
+            content: `
+            <h2>HTML Semantic</h2>
+            <ul>
+              <li><strong>&lt;header&gt;</strong>: Đầu trang</li>
+              <li><strong>&lt;nav&gt;</strong>: Điều hướng</li>
+              <li><strong>&lt;main&gt;</strong>: Nội dung chính</li>
+              <li><strong>&lt;section&gt;</strong>: Phần nội dung</li>
+              <li><strong>&lt;article&gt;</strong>: Bài viết độc lập</li>
+              <li><strong>&lt;aside&gt;</strong>: Nội dung phụ</li>
+              <li><strong>&lt;footer&gt;</strong>: Chân trang</li>
+            </ul>
+            <div class="code-block"><span class="tag">&lt;header&gt;</span><span class="tag">&lt;h1&gt;</span>Trang web<span class="tag">&lt;/h1&gt;</span><span class="tag">&lt;nav&gt;</span><span class="tag">&lt;a&gt;</span>Trang chủ<span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/nav&gt;</span><span class="tag">&lt;/header&gt;</span>
+            <span class="tag">&lt;main&gt;</span><span class="tag">&lt;section&gt;</span>Nội dung<span class="tag">&lt;/section&gt;</span><span class="tag">&lt;/main&gt;</span></div>
+          `,
+            quiz: [
+                { q: 'Thẻ cho nội dung chính?', opts: ['&lt;header&gt;', '&lt;main&gt;', '&lt;section&gt;',
+                        '&lt;article&gt;'
+                    ], ans: 1 },
+                { q: 'Thẻ tạo điều hướng?', opts: ['&lt;nav&gt;', '&lt;menu&gt;', '&lt;navigation&gt;',
+                        '&lt;ul&gt;'
+                    ], ans: 0 }
+            ]
+        }, {
+            day: 6,
+            title: 'HTML nâng cao',
+            objectives: ['Audio, video, iframe', 'Accessibility cơ bản'],
+            content: `
+            <h2>HTML nâng cao</h2>
+            <p><strong>Audio:</strong></p>
+            <div class="code-block"><span class="tag">&lt;audio</span> <span class="attr">controls</span><span class="tag">&gt;</span><span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="str">"music.mp3"</span><span class="tag">&gt;</span><span class="tag">&lt;/audio&gt;</span></div>
+            <p><strong>Video:</strong></p>
+            <div class="code-block"><span class="tag">&lt;video</span> <span class="attr">controls</span> <span class="attr">width</span>=<span class="str">"400"</span><span class="tag">&gt;</span><span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="str">"video.mp4"</span><span class="tag">&gt;</span><span class="tag">&lt;/video&gt;</span></div>
+            <p><strong>Iframe:</strong></p>
+            <div class="code-block"><span class="tag">&lt;iframe</span> <span class="attr">src</span>=<span class="str">"https://example.com"</span> <span class="attr">width</span>=<span class="str">"100%"</span> <span class="attr">height</span>=<span class="str">"200"</span><span class="tag">&gt;</span><span class="tag">&lt;/iframe&gt;</span></div>
+          `,
+            quiz: [
+                { q: 'Thẻ nhúng trang khác?', opts: ['&lt;embed&gt;', '&lt;iframe&gt;', '&lt;frame&gt;',
+                        '&lt;include&gt;'
+                    ], ans: 1 },
+                { q: 'Thuộc tính mô tả ảnh cho người khiếm thị?', opts: ['title', 'alt', 'desc', 'aria-label'],
+                    ans: 1 }
+            ]
+        }, {
+            day: 7,
+            title: 'Tổng hợp HTML',
+            objectives: ['Ôn tập HTML', 'Dự án nhỏ'],
+            content: `
+            <h2>🏗️ Tổng hợp HTML</h2>
+            <p>Xây dựng trang web giới thiệu bản thân.</p>
+            <p><strong>Yêu cầu:</strong></p>
+            <ul>
+              <li>Cấu trúc HTML chuẩn</li>
+              <li>Heading, paragraph, list</li>
+              <li>Hình ảnh, liên kết</li>
+              <li>Bảng hoặc form</li>
+              <li>Semantic HTML</li>
+            </ul>
+            <div class="code-block"><span class="tag">&lt;header&gt;</span><span class="tag">&lt;h1&gt;</span>Giới thiệu<span class="tag">&lt;/h1&gt;</span><span class="tag">&lt;nav&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"#"</span><span class="tag">&gt;</span>Home<span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/nav&gt;</span><span class="tag">&lt;/header&gt;</span>
+            <span class="tag">&lt;main&gt;</span><span class="tag">&lt;section&gt;</span><span class="tag">&lt;h2&gt;</span>Về tôi<span class="tag">&lt;/h2&gt;</span><span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"avatar.jpg"</span> <span class="attr">alt</span>=<span class="str">"Avatar"</span><span class="tag">&gt;</span><span class="tag">&lt;p&gt;</span>Xin chào!<span class="tag">&lt;/p&gt;</span><span class="tag">&lt;/section&gt;</span><span class="tag">&lt;/main&gt;</span>
+            <span class="tag">&lt;footer&gt;</span>© 2026<span class="tag">&lt;/footer&gt;</span></div>
+          `,
+            quiz: [
+                { q: 'Thẻ cho phần chính?', opts: ['&lt;body&gt;', '&lt;main&gt;', '&lt;content&gt;',
+                        '&lt;section&gt;'
+                    ], ans: 1 },
+                { q: 'Thẻ cho bài viết độc lập?', opts: ['&lt;div&gt;', '&lt;section&gt;', '&lt;article&gt;',
+                        '&lt;group&gt;'
+                    ], ans: 2 }
+            ]
+        }, {
+            day: 8,
+            title: 'CSS cơ bản',
+            objectives: ['Hiểu CSS', 'Selector, class, id'],
+            content: `
+            <h2>CSS cơ bản</h2>
+            <p>CSS (Cascading Style Sheets) dùng để định kiểu cho HTML.</p>
+            <p><strong>3 cách viết CSS:</strong></p>
+            <ul>
+              <li><strong>Inline</strong>: <code>style="color:red;"</code></li>
+              <li><strong>Internal</strong>: &lt;style&gt; trong &lt;head&gt;</li>
+              <li><strong>External</strong>: File .css riêng</li>
+            </ul>
+            <div class="code-block"><span class="comment">/* Internal CSS */</span>
+            <span class="tag">h1</span> { <span class="attr">color</span>: blue; }
+            <span class="tag">.box</span> { <span class="attr">background</span>: #f0f0f0; <span class="attr">padding</span>: 20px; }
+            <span class="tag">#header</span> { <span class="attr">border-bottom</span>: 2px solid black; }</div>
+            <ul>
+              <li><strong>Tag</strong>: <code>h1</code></li>
+              <li><strong>Class</strong>: <code>.classname</code></li>
+              <li><strong>ID</strong>: <code>#idname</code></li>
+            </ul>
+          `,
+            quiz: [
+                { q: 'Selector cho nhóm element?', opts: ['ID', 'Class', 'Tag', 'Element'], ans: 1 },
+                { q: 'Thuộc tính đổi màu chữ?', opts: ['background', 'color', 'text-color', 'font-color'],
+                    ans: 1 }
+            ]
+        }, {
+            day: 9,
+            title: 'CSS Layout - Flexbox',
+            objectives: ['Box Model', 'Flexbox', 'Responsive'],
+            content: `
+            <h2>CSS Layout - Flexbox</h2>
+            <p><strong>Box Model:</strong></p>
+            <ul>
+              <li><strong>content</strong>: Nội dung</li>
+              <li><strong>padding</strong>: Khoảng cách trong</li>
+              <li><strong>border</strong>: Viền</li>
+              <li><strong>margin</strong>: Khoảng cách ngoài</li>
+            </ul>
+            <p><strong>Flexbox:</strong></p>
+            <div class="code-block">.container {
+              <span class="attr">display</span>: flex;
+              <span class="attr">justify-content</span>: center;
+              <span class="attr">align-items</span>: center;
+              <span class="attr">gap</span>: 16px;
+            }
+            .item { <span class="attr">flex</span>: 1; }</div>
+            <p><strong>Responsive:</strong> <code>@media (max-width: 768px) { ... }</code></p>
+          `,
+            quiz: [
+                { q: 'Căn flex items theo chiều ngang?', opts: ['align-items', 'justify-content', 'flex-direction',
+                        'gap'
+                    ], ans: 1 },
+                { q: 'Padding dùng để?', opts: ['Khoảng cách ngoài', 'Khoảng cách trong', 'Viền', 'Kích thước'],
+                    ans: 1 }
+            ]
+        }, {
+            day: 10,
+            title: 'Dự án cuối khóa',
+            objectives: ['Website hoàn chỉnh', 'Responsive'],
+            content: `
+            <h2>🚀 Dự án cuối khóa</h2>
+            <p>Xây dựng trang web hoàn chỉnh với HTML + CSS.</p>
+            <ul>
+              <li>Header + Navigation</li>
+              <li>Hero section</li>
+              <li>Content với card</li>
+              <li>Form liên hệ</li>
+              <li>Footer</li>
+              <li>Responsive</li>
+            </ul>
+            <div class="code-block"><span class="tag">&lt;header</span> <span class="attr">class</span>=<span class="str">"header"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"logo"</span><span class="tag">&gt;</span>MySite<span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;nav&gt;</span><span class="tag">&lt;a&gt;</span>Home<span class="tag">&lt;/a&gt;</span><span class="tag">&lt;/nav&gt;</span>
+            <span class="tag">&lt;/header&gt;</span>
+            <span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="str">"hero"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/section&gt;</span>
+            <span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="str">"content"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/section&gt;</span>
+            <span class="tag">&lt;footer</span> <span class="attr">class</span>=<span class="str">"footer"</span><span class="tag">&gt;</span>...<span class="tag">&lt;/footer&gt;</span></div>
+            <p><strong>🎉 Chúc mừng bạn đã hoàn thành khóa học!</strong></p>
+          `,
+            quiz: [
+                { q: 'Responsive dùng công nghệ nào?', opts: ['@media', '@screen', '@responsive', '@mobile'],
+                    ans: 0 },
+                { q: 'Thẻ nhóm nội dung layout?', opts: ['&lt;div&gt;', '&lt;span&gt;', '&lt;section&gt;',
+                        'Cả 3'
+                    ], ans: 3 }
+            ]
+        }];
+
+        // ============================================================
+        // STATE
+        // ============================================================
+        let currentUser = null;
+        let currentDay = 1;
+        let quizAnswers = {};
+        let quizTimer = null;
+        let quizTime = 0;
+
+        function loadState() {
+            try {
+                const u = localStorage.getItem('user');
+                if (u) currentUser = JSON.parse(u);
+                const d = localStorage.getItem('currentDay');
+                if (d) currentDay = parseInt(d) || 1;
+            } catch (_) {
+                currentUser = null;
+            }
+        }
+
+        function saveState() {
+            if (currentUser) localStorage.setItem('user', JSON.stringify(currentUser));
+            localStorage.setItem('currentDay', String(currentDay));
+        }
+
+        function isLoggedIn() { return currentUser !== null; }
+
+        function userKey(base, uid) {
+            const id = uid || (currentUser && currentUser.id) || 'anon';
+            return base + '_' + id + '_v' + STORAGE_VERSION;
+        }
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(msg, type = 'info') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle' };
+            t.className = `toast toast-${type}`;
+            t.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${msg}`;
+            c.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0';
+                t.style.transform = 'translateX(60px)';
+                setTimeout(() => t.remove(), 400); }, 3000);
+        }
+
+        // ============================================================
+        // MODAL
+        // ============================================================
+        function openModal(title, body, actions) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = body;
+            if (actions) document.getElementById('modalActions').innerHTML = actions;
+            else document.getElementById('modalActions').innerHTML =
+                `<button class="btn btn-primary" onclick="closeModal()">Đóng</button>`;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
+        function showPage(id) {
+            if (id !== 'quiz' && quizTimer) {
+                clearInterval(quizTimer);
+                quizTimer = null;
+            }
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const el = document.getElementById('page-' + id);
+            if (el) el.classList.add('active');
+            document.querySelectorAll('.sidebar-menu a[data-page]').forEach(a => {
+                a.classList.toggle('active', a.dataset.page === id);
+            });
+            const protectedPages = ['dashboard', 'lesson', 'practice', 'quiz', 'assessment', 'profile', 'course'];
+            if (protectedPages.includes(id) && !isLoggedIn()) {
+                showToast('Vui lòng đăng nhập!', 'warning');
+                showPage('login');
+                return;
+            }
+            if (id === 'admin' && (!isLoggedIn() || currentUser.role !== 'admin')) {
+                showToast('Bạn không có quyền!', 'error');
+                showPage('home');
+                return;
+            }
+            if (id === 'dashboard') renderDashboard();
+            if (id === 'course') renderCourse();
+            if (id === 'lesson') renderLesson();
+            if (id === 'quiz') renderQuiz();
+            if (id === 'assessment') renderAssessment();
+            if (id === 'admin') renderAdminUsers();
+            document.getElementById('sidebar').classList.remove('open');
+            // Scroll to top when navigating
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.dataset.theme === 'dark') {
+                html.dataset.theme = '';
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.dataset.theme = 'dark';
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function handleStart() {
+            if (isLoggedIn()) showPage('course');
+            else showPage('register');
+        }
+
+        // ============================================================
+        // AUTH
+        // ============================================================
+        async function handleLogin(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('loginSubmitBtn');
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPassword').value;
+            if (!email || !pass) return;
+            submitBtn.disabled = true;
+            try {
+                const passHash = await hashPassword(pass);
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === email && u.passwordHash === passHash);
+                if (user) {
+                    currentUser = { ...user };
+                    delete currentUser.passwordHash;
+                    saveState();
+                    updateUI();
+                    showPage('dashboard');
+                    showToast('Đăng nhập thành công!', 'success');
+                    document.getElementById('loginForm').reset();
+                    return;
+                }
+                if (email === RESERVED_ADMIN_EMAIL && pass === 'admin123') {
+                    currentUser = { id: 'admin_001', name: 'Quản trị viên', email: RESERVED_ADMIN_EMAIL, role: 'admin',
+                        avatar: 'A' };
+                    saveState();
+                    updateUI();
+                    showPage('admin');
+                    showToast('Đăng nhập Admin!', 'success');
+                    document.getElementById('loginForm').reset();
+                    return;
+                }
+                showToast('Email hoặc mật khẩu không đúng!', 'error');
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('registerSubmitBtn');
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('registerPassword').value;
+            if (!name) { showToast('Vui lòng nhập họ tên!', 'error'); return; }
+            if (!email) { showToast('Vui lòng nhập email!', 'error'); return; }
+            if (pass.length < 6) { showToast('Mật khẩu tối thiểu 6 ký tự!', 'error'); return; }
+            if (email === RESERVED_ADMIN_EMAIL) {
+                showToast('Email này đã được hệ thống sử dụng!', 'error');
+                return;
+            }
+            submitBtn.disabled = true;
+            try {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.find(u => u.email === email)) { showToast('Email đã được đăng ký!', 'error'); return; }
+                const passwordHash = await hashPassword(pass);
+                const newUser = {
+                    id: 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+                    name, email, passwordHash, role: 'student',
+                    avatar: name.charAt(0).toUpperCase(), createdAt: new Date().toISOString()
+                };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                currentUser = { ...newUser };
+                delete currentUser.passwordHash;
+                saveState();
+                updateUI();
+                showPage('dashboard');
+                showToast('Đăng ký thành công!', 'success');
+                document.getElementById('registerForm').reset();
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        function handleGoogleLogin() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            let gu = users.find(u => u.email === 'google_user@example.com');
+            if (!gu) {
+                gu = { id: 'google_' + Date.now(), name: 'Google User', email: 'google_user@example.com',
+                    role: 'student', avatar: 'G', createdAt: new Date().toISOString() };
+                users.push(gu);
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            currentUser = { ...gu };
+            delete currentUser.passwordHash;
+            saveState();
+            updateUI();
+            showPage('dashboard');
+            showToast('Đăng nhập Google thành công!', 'success');
+        }
+
+        function logout() {
+            if (!confirm('Bạn chắc chắn muốn đăng xuất?')) return;
+            currentUser = null;
+            localStorage.removeItem('user');
+            updateUI();
+            showPage('home');
+            showToast('Đã đăng xuất', 'warning');
+        }
+
+        function updateProfile() {
+            if (!isLoggedIn()) return;
+            const name = document.getElementById('profileInputName').value.trim();
+            if (!name) { showToast('Vui lòng nhập tên!', 'error'); return; }
+            currentUser.name = name;
+            currentUser.avatar = name.charAt(0).toUpperCase();
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const idx = users.findIndex(u => u.id === currentUser.id);
+            if (idx !== -1) { users[idx].name = name;
+                localStorage.setItem('users', JSON.stringify(users)); }
+            saveState();
+            updateUI();
+            showToast('Cập nhật thành công!', 'success');
+        }
+
+        // ============================================================
+        // UI UPDATE
+        // ============================================================
+        function updateUI() {
+            const auth = document.getElementById('headerAuth');
+            const user = document.getElementById('headerUser');
+            const logoutLink = document.getElementById('logoutLink');
+            const adminLink = document.getElementById('adminLink');
+            if (isLoggedIn()) {
+                auth.classList.add('hidden');
+                user.classList.remove('hidden');
+                document.getElementById('userName').textContent = currentUser.name || 'Học viên';
+                document.getElementById('userAvatar').textContent = currentUser.avatar || currentUser.name.charAt(0)
+                    .toUpperCase();
+                logoutLink.classList.remove('hidden');
+                adminLink.classList.toggle('hidden', currentUser.role !== 'admin');
+                document.getElementById('profileName').textContent = currentUser.name;
+                document.getElementById('profileEmail').textContent = currentUser.email;
+                document.getElementById('profileAvatar').textContent = currentUser.avatar || currentUser.name.charAt(0)
+                    .toUpperCase();
+                document.getElementById('profileInputName').value = currentUser.name;
+                document.getElementById('profileInputEmail').value = currentUser.email;
+                document.getElementById('dashboardGreeting').textContent = `Xin chào, ${currentUser.name}!`;
+            } else {
+                auth.classList.remove('hidden');
+                user.classList.add('hidden');
+                logoutLink.classList.add('hidden');
+                adminLink.classList.add('hidden');
+            }
+            renderRoadmap();
+        }
+
+        // ============================================================
+        // RENDER FUNCTIONS
+        // ============================================================
+        function renderRoadmap() {
+            const grid = document.getElementById('roadmapGrid');
+            grid.innerHTML = LESSONS.map(l =>
+                `<div class="roadmap-item"><div class="day">Ngày ${l.day}</div><h4>${l.title}</h4></div>`
+            ).join('');
+        }
+
+        function renderCourse() {
+            const c = document.getElementById('courseList');
+            c.innerHTML = LESSONS.map(l => {
+                const done = getProgress(l.day);
+                return `
+              <div style="background:var(--bg-card);padding:18px 22px;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                <div>
+                  <span class="badge badge-primary">Ngày ${l.day}</span>
+                  <h3 style="font-size:17px;margin:4px 0;">${l.title}</h3>
+                  <p style="font-size:13px;color:var(--text-secondary);">${l.objectives.join(' • ')}</p>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <span class="badge ${done ? 'badge-success' : 'badge-warning'}">${done ? '✅ Hoàn thành' : '⏳ Chưa học'}</span>
+                  <button class="btn btn-primary btn-sm" onclick="openLesson(${l.day})"><i class="fas fa-play"></i> Học</button>
+                  <button class="btn btn-outline btn-sm" onclick="openPractice(${l.day})"><i class="fas fa-code"></i> Thực hành</button>
+                  <button class="btn btn-outline btn-sm" onclick="openQuiz(${l.day})"><i class="fas fa-question"></i> Kiểm tra</button>
+                </div>
+              </div>
+            `;
+            }).join('');
+        }
+
+        function getProgress(day, uid) {
+            const p = JSON.parse(localStorage.getItem(userKey('progress', uid)) || '{}');
+            return p[day] || false;
+        }
+
+        function setProgress(day, val) {
+            const key = userKey('progress');
+            const p = JSON.parse(localStorage.getItem(key) || '{}');
+            p[day] = val;
+            localStorage.setItem(key, JSON.stringify(p));
+        }
+
+        function openLesson(day) {
+            currentDay = day;
+            showPage('lesson');
+        }
+
+        function renderLesson() {
+            const l = LESSONS.find(x => x.day === currentDay);
+            if (!l) return;
+            document.getElementById('lessonTitle').textContent = `Ngày ${l.day}: ${l.title}`;
+            document.getElementById('lessonSubtitle').textContent = l.objectives.join(' • ');
+            const container = document.getElementById('lessonContent');
+            container.innerHTML = `
+            ${l.content}
+            <div class="flex-between mt-24">
+              <div>${currentDay > 1 ? `<button class="btn btn-outline btn-sm" onclick="openLesson(${currentDay - 1})"><i class="fas fa-arrow-left"></i> Bài trước</button>` : ''}</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button class="btn btn-success btn-sm" onclick="markComplete(${currentDay})"><i class="fas fa-check"></i> Hoàn thành</button>
+                ${currentDay < 10 ? `<button class="btn btn-primary btn-sm" onclick="openLesson(${currentDay + 1})">Bài tiếp <i class="fas fa-arrow-right"></i></button>` : ''}
+              </div>
+            </div>
+          `;
+        }
+
+        function markComplete(day) {
+            setProgress(day, true);
+            showToast(`✅ Ngày ${day} hoàn thành!`, 'success');
+            renderCourse();
+            renderDashboard();
+            if (day < 10) showToast(`🔓 Ngày ${day + 1} đã được mở!`, 'info');
+        }
+
+        // ============================================================
+        // PRACTICE
+        // ============================================================
+        function openPractice(day) {
+            currentDay = day;
+            showPage('practice');
+            document.getElementById('practiceTitle').textContent = `Thực hành ngày ${day}: ${LESSONS[day-1].title}`;
+            const saved = JSON.parse(localStorage.getItem(userKey('practice_' + day)) || 'null');
+            if (saved) {
+                document.getElementById('htmlEditor').value = saved.html || '';
+                document.getElementById('cssEditor').value = saved.css || '';
+            } else {
+                document.getElementById('htmlEditor').value = getDefaultHtml(day);
+                document.getElementById('cssEditor').value = getDefaultCss(day);
+            }
+            runCode();
+        }
+
+        function getDefaultHtml(d) {
+            const map = {
+                1: '<h1>Chào mừng!</h1>\n<p>Trang web đầu tiên</p>',
+                2: '<h1>Tiêu đề chính</h1>\n<p><strong>In đậm</strong> và <em>in nghiêng</em></p>\n<a href="#">Liên kết</a>',
+                3: '<img src="https://picsum.photos/200/150" alt="Ảnh">\n<ul><li>Mục 1</li><li>Mục 2</li></ul>',
+                4: '<table border="1"><tr><th>Tên</th><th>Tuổi</th></tr><tr><td>An</td><td>18</td></tr></table>\n<form><input type="email" placeholder="Email"><button>Gửi</button></form>',
+                5: '<header><h1>Trang web</h1><nav><a href="#">Home</a></nav></header><main><section>Nội dung</section></main><footer>© 2026</footer>',
+                6: '<video controls width="300"><source src="https://www.w3schools.com/html/mov_bbb.mp4"></video>',
+                7: '<header><h1>Giới thiệu</h1></header><main><section><h2>Về tôi</h2><img src="https://picsum.photos/100/100" alt="Avatar"><p>Xin chào!</p></section></main><footer>© 2026</footer>',
+                8: '<div class="box">Box</div>\n<div class="highlight">Highlight</div>',
+                9: '<div class="container"><div class="item">1</div><div class="item">2</div><div class="item">3</div></div>',
+                10: '<header class="header"><div class="logo">MySite</div><nav><a href="#">Home</a></nav></header><section class="hero"><h1>Chào mừng</h1></section><footer class="footer">© 2026</footer>'
+            };
+            return map[d] || map[1];
+        }
+
+        function getDefaultCss(d) {
+            const map = {
+                1: 'body { font-family: Arial; margin: 20px; }',
+                2: 'body { font-family: Arial; max-width: 600px; margin: 20px auto; }',
+                3: 'body { font-family: Arial; padding: 20px; } img { border-radius: 8px; }',
+                4: 'body { font-family: Arial; padding: 20px; } table { border-collapse: collapse; } td, th { padding: 8px; border: 1px solid #ccc; }',
+                5: '* { margin:0; padding:0; box-sizing:border-box; } body { font-family: Arial; } header { background: #333; color: #fff; padding: 16px; } nav a { color: #fff; margin: 0 8px; } main { padding: 20px; } footer { background: #333; color: #fff; text-align: center; padding: 12px; }',
+                6: 'body { font-family: Arial; padding: 20px; }',
+                7: '* { margin:0; padding:0; box-sizing:border-box; } body { font-family: Arial; } header { background: #6C63FF; color: #fff; padding: 20px; text-align: center; } main { padding: 20px; max-width: 600px; margin: 0 auto; } section { background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 16px 0; } footer { background: #333; color: #fff; text-align: center; padding: 12px; }',
+                8: '.box { background: #6C63FF; color: #fff; padding: 20px; border-radius: 8px; margin: 8px 0; } .highlight { background: #FFD700; padding: 10px; border-radius: 4px; }',
+                9: '.container { display: flex; gap: 16px; justify-content: center; padding: 20px; background: #f5f5f5; border-radius: 8px; } .item { background: #6C63FF; color: #fff; padding: 20px 40px; border-radius: 8px; flex: 1; text-align: center; }',
+                10: '* { margin:0; padding:0; box-sizing:border-box; } body { font-family: Arial; } .header { display: flex; justify-content: space-between; padding: 16px 32px; background: #6C63FF; color: #fff; } .logo { font-size: 24px; font-weight: bold; } nav a { color: #fff; margin: 0 12px; } .hero { text-align: center; padding: 60px 20px; background: #f5f5f5; } .footer { text-align: center; padding: 16px; background: #333; color: #fff; } @media (max-width: 768px) { .header { flex-direction: column; gap: 12px; } }'
+            };
+            return map[d] || map[1];
+        }
+
+        function runCode() {
+            const html = document.getElementById('htmlEditor').value;
+            const css = document.getElementById('cssEditor').value;
+            const frame = document.getElementById('previewFrame');
+            const doc = frame.contentDocument || frame.contentWindow.document;
+            doc.open();
+            doc.write(`<!DOCTYPE html><html><head><style>${css}</style></head><body>${html}</body></html>`);
+            doc.close();
+        }
+
+        function resetPractice() {
+            const d = currentDay;
+            document.getElementById('htmlEditor').value = getDefaultHtml(d);
+            document.getElementById('cssEditor').value = getDefaultCss(d);
+            runCode();
+            localStorage.removeItem(userKey('practice_' + d));
+            showToast('Đã reset', 'info');
+        }
+
+        function clearPractice() {
+            document.getElementById('htmlEditor').value = '';
+            document.getElementById('cssEditor').value = '';
+            runCode();
+        }
+
+        function submitPractice() {
+            const d = currentDay;
+            const html = document.getElementById('htmlEditor').value;
+            const css = document.getElementById('cssEditor').value;
+            localStorage.setItem(userKey('practice_' + d), JSON.stringify({ html, css }));
+            showToast('✅ Đã nộp bài thực hành!', 'success');
+            setProgress(d, true);
+            renderDashboard();
+        }
+
+        // ============================================================
+        // QUIZ
+        // ============================================================
+        function openQuiz(day) {
+            currentDay = day;
+            quizAnswers = {};
+            showPage('quiz');
+        }
+
+        function renderQuiz() {
+            const l = LESSONS.find(x => x.day === currentDay);
+            if (!l || !l.quiz) {
+                document.getElementById('quizContainer').innerHTML =
+                `<p class="text-secondary">Chưa có câu hỏi cho ngày này.</p>`;
+                return;
+            }
+            const qs = l.quiz;
+            document.getElementById('quizSubtitle').textContent = `Ngày ${currentDay}: ${l.title} (${qs.length} câu)`;
+            let html = `
+            <div class="flex-between mb-16">
+              <div class="quiz-timer"><i class="fas fa-clock"></i> <span id="quizTimerDisplay">05:00</span></div>
+              <div><span id="quizProgressText">0/${qs.length}</span> đã trả lời</div>
+            </div>
+            <div id="quizQuestions">
+          `;
+            qs.forEach((q, i) => {
+                const sel = quizAnswers[i] !== undefined ? quizAnswers[i] : -1;
+                html += `
+              <div class="quiz-q">
+                <div class="q-num">Câu ${i+1}</div>
+                <div class="q-text">${q.q}</div>
+                <div class="quiz-options">
+                  ${q.opts.map((o, oi) => `
+                    <label style="${sel === oi ? 'border-color:var(--primary);background:var(--bg);' : ''}">
+                      <input type="radio" name="q_${i}" value="${oi}" ${sel === oi ? 'checked' : ''} onchange="quizAnswers[${i}]=${oi}; updateQuizProgress();">
+                      ${o}
+                    </label>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+            });
+            html += `</div><button class="btn btn-success" onclick="submitQuiz()"><i class="fas fa-check"></i> Nộp bài</button>`;
+            document.getElementById('quizContainer').innerHTML = html;
+            updateQuizProgress();
+            quizTime = 300;
+            if (quizTimer) clearInterval(quizTimer);
+            quizTimer = setInterval(() => {
+                quizTime--;
+                const m = String(Math.floor(quizTime / 60)).padStart(2, '0');
+                const s = String(quizTime % 60).padStart(2, '0');
+                const disp = document.getElementById('quizTimerDisplay');
+                if (disp) disp.textContent = `${m}:${s}`;
+                if (quizTime <= 0) { clearInterval(quizTimer);
+                    quizTimer = null;
+                    showToast('⏰ Hết giờ!', 'warning');
+                    submitQuiz(); }
+            }, 1000);
+        }
+
+        function updateQuizProgress() {
+            const total = document.querySelectorAll('.quiz-q').length;
+            const answered = Object.keys(quizAnswers).filter(k => quizAnswers[k] !== -1 && quizAnswers[k] !== undefined)
+            .length;
+            const el = document.getElementById('quizProgressText');
+            if (el) el.textContent = `${answered}/${total}`;
+        }
+
+        function submitQuiz() {
+            if (quizTimer) { clearInterval(quizTimer);
+                quizTimer = null; }
+            const l = LESSONS.find(x => x.day === currentDay);
+            if (!l) return;
+            const qs = l.quiz;
+            let correct = 0,
+                wrong = 0;
+            const results = [];
+            qs.forEach((q, i) => {
+                const ua = quizAnswers[i];
+                const ok = ua === q.ans;
+                if (ok) correct++;
+                else if (ua !== undefined && ua !== -1) wrong++;
+                results.push({
+                    q: q.q,
+                    user: ua !== undefined && ua !== -1 ? q.opts[ua] : 'Bỏ qua',
+                    correct: q.opts[q.ans],
+                    ok: ok
+                });
+            });
+            const total = qs.length;
+            const score = Math.round((correct / total) * 100);
+            const passed = score >= 60;
+            const historyKey = userKey('quizHistory');
+            const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
+            history.push({ userId: currentUser ? currentUser.id : null, day: currentDay, score, correct, wrong,
+                total, passed, answers: quizAnswers, time: new Date().toISOString() });
+            localStorage.setItem(historyKey, JSON.stringify(history));
+            updateSkillScores(currentDay, score);
+            let body = `
+            <div class="text-center" style="padding:10px 0;">
+              <div style="font-size:48px;">${passed ? '🎉' : '😅'}</div>
+              <h2>${passed ? 'Chúc mừng bạn đã vượt qua!' : 'Hãy ôn tập lại!'}</h2>
+              <p style="font-size:32px;font-weight:700;color:${passed ? 'var(--success)' : 'var(--danger)'};">${score}%</p>
+              <p>Đúng: ${correct} | Sai: ${wrong} | Tổng: ${total}</p>
+              <div style="margin-top:16px;text-align:left;">
+          `;
+            results.forEach((r, i) => {
+                const qShort = escapeHtml(r.q.substring(0, 50)) + (r.q.length > 50 ? '...' : '');
+                body += `
+              <div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
+                ${r.ok ? '✅' : '❌'} <strong>Câu ${i+1}:</strong> ${qShort}
+                <br><span class="text-secondary" style="font-size:12px;">Bạn: ${escapeHtml(r.user)} | Đúng: ${escapeHtml(r.correct)}</span>
+              </div>
+            `;
+            });
+            body += `</div>
+              <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;">
+                <button class="btn btn-primary btn-sm" onclick="openLesson(${currentDay})">📖 Học lại</button>
+                <button class="btn btn-outline btn-sm" onclick="openQuiz(${currentDay})">🔄 Làm lại</button>
+                <button class="btn btn-success btn-sm" onclick="showPage('dashboard')">📊 Dashboard</button>
+              </div>
+            </div>
+          `;
+            document.getElementById('quizContainer').innerHTML = body;
+            if (passed) setProgress(currentDay, true);
+            renderDashboard();
+            renderAssessment();
+            showToast(passed ? '🎉 Qua bài kiểm tra!' : '📚 Ôn tập lại bài!', passed ? 'success' : 'warning');
+        }
+
+        // ============================================================
+        // SKILL & ASSESSMENT
+        // ============================================================
+        function updateSkillScores(day, score) {
+            const key = userKey('skills');
+            const skills = JSON.parse(localStorage.getItem(key) || '{}');
+            const map = {
+                1: 'html_structure',
+                2: 'html_text',
+                3: 'html_image',
+                4: 'html_form',
+                5: 'html_semantic',
+                6: 'html_advanced',
+                7: 'html_total',
+                8: 'css_basic',
+                9: 'css_layout',
+                10: 'css_total'
+            };
+            const k = map[day] || 'html_general';
+            if (!skills[k]) skills[k] = [];
+            skills[k].push(score);
+            if (skills[k].length > 5) skills[k].shift();
+            localStorage.setItem(key, JSON.stringify(skills));
+        }
+
+        function getSkillAvg(key, uid) {
+            const skills = JSON.parse(localStorage.getItem(userKey('skills', uid)) || '{}');
+            const arr = skills[key] || [];
+            if (!arr.length) return 0;
+            return Math.round(arr.reduce((a, b) => a + b, 0) / arr.length);
+        }
+
+        function renderAssessment() {
+            const c = document.getElementById('assessmentContainer');
+            if (!isLoggedIn()) { c.innerHTML = '<p class="text-secondary">Đăng nhập để xem đánh giá.</p>'; return; }
+            const history = JSON.parse(localStorage.getItem(userKey('quizHistory')) || '[]');
+            if (!history.length) {
+                c.innerHTML =
+                    '<p class="text-secondary">Bạn chưa làm bài kiểm tra nào. Hãy bắt đầu học!</p>';
+                return;
+            }
+            const htmlKeys = ['html_structure', 'html_text', 'html_image', 'html_form', 'html_semantic', 'html_advanced'];
+            const cssKeys = ['css_basic', 'css_layout'];
+            const htmlAvg = htmlKeys.length ? Math.round(htmlKeys.reduce((s, k) => s + getSkillAvg(k), 0) / htmlKeys.length) :
+            0;
+            const cssAvg = cssKeys.length ? Math.round(cssKeys.reduce((s, k) => s + getSkillAvg(k), 0) / cssKeys.length) : 0;
+            const overall = Math.round((htmlAvg + cssAvg) / 2);
+
+            const strengths = [],
+                weaknesses = [];
+            const allSkills = [
+                { key: 'html_structure', label: 'Cấu trúc HTML' },
+                { key: 'html_text', label: 'Text & Link' },
+                { key: 'html_form', label: 'Form & Table' },
+                { key: 'html_semantic', label: 'Semantic HTML' },
+                { key: 'css_basic', label: 'CSS cơ bản' },
+                { key: 'css_layout', label: 'Flexbox & Layout' }
+            ];
+            allSkills.forEach(s => {
+                const v = getSkillAvg(s.key);
+                if (v >= 70) strengths.push({ ...s, score: v });
+                else if (v > 0 && v < 60) weaknesses.push({ ...s, score: v });
+            });
+
+            const recs = [];
+            if (getSkillAvg('html_form') < 60) recs.push({ priority: 'high', action: 'Ôn tập Form và Table',
+                reason: 'Quan trọng trong thi' });
+            if (getSkillAvg('html_semantic') < 60) recs.push({ priority: 'high', action: 'Ôn tập Semantic HTML',
+                reason: 'Giúp cấu trúc trang rõ ràng' });
+            if (getSkillAvg('css_layout') < 50) recs.push({ priority: 'high', action: 'Học lại Flexbox và Box Model',
+                reason: 'Nền tảng CSS' });
+            if (getSkillAvg('css_basic') < 60) recs.push({ priority: 'medium', action: 'Luyện CSS selector và style',
+                reason: 'Kỹ năng cần thiết' });
+            if (strengths.length >= 4) recs.push({ priority: 'low', action: 'Thử dự án nâng cao',
+                reason: 'Bạn đã nắm chắc kiến thức' });
+
+            let overallText = overall >= 80 ? '✅ Bạn đã nắm vững kiến thức!' :
+                overall >= 60 ? '📚 Bạn có nền tảng tốt, hãy tập trung vào điểm yếu.' :
+                '📖 Bạn cần ôn tập lại kiến thức cơ bản.';
+
+            c.innerHTML = `
+            <div class="card-section"><h3>📊 Đánh giá tổng quan</h3>
+              <div style="font-size:40px;font-weight:700;color:${overall>=70?'var(--success)':'var(--warning)'};">${overall}%</div>
+              <p>${overallText}</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="card-section"><h4 style="color:var(--success);">✅ Điểm mạnh</h4>
+                ${strengths.length ? strengths.map(s => `
+                  <div class="skill-row"><span class="name">${s.label}</span><div class="bar"><div class="fill" style="width:${s.score}%;background:var(--success);"></div></div><span class="score">${s.score}%</span></div>
+                `).join('') : '<p class="text-secondary">Chưa có dữ liệu</p>'}
+              </div>
+              <div class="card-section"><h4 style="color:var(--danger);">⚠️ Điểm yếu</h4>
+                ${weaknesses.length ? weaknesses.map(w => `
+                  <div class="skill-row"><span class="name">${w.label}</span><div class="bar"><div class="fill" style="width:${w.score}%;background:var(--danger);"></div></div><span class="score">${w.score}%</span></div>
+                `).join('') : '<p class="text-secondary">🎉 Không có điểm yếu!</p>'}
+              </div>
+            </div>
+            <div class="card-section"><h4>📌 Đề xuất lộ trình</h4>
+              ${recs.length ? recs.map(r => `
+                <div class="rec-item"><span class="prio prio-${r.priority}">${r.priority}</span><div><strong>${r.action}</strong><div class="text-secondary" style="font-size:13px;">${r.reason}</div></div></div>
+              `).join('') : '<p>🎉 Bạn đã hoàn thành xuất sắc!</p>'}
+            </div>
+            <div class="card-section"><h4>📈 Tiến bộ</h4>
+              ${history.map(h => `
+                <div class="skill-row"><span class="name">Ngày ${h.day}</span><div class="bar"><div class="fill" style="width:${h.score}%;background:${h.score>=60?'var(--success)':'var(--danger)'};"></div></div><span class="score">${h.score}%</span></div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        // ============================================================
+        // DASHBOARD
+        // ============================================================
+        function renderDashboard() {
+            if (!isLoggedIn()) return;
+            const history = JSON.parse(localStorage.getItem(userKey('quizHistory')) || '[]');
+            const progress = JSON.parse(localStorage.getItem(userKey('progress')) || '{}');
+            const done = Object.keys(progress).filter(k => progress[k]).length;
+            const pct = Math.round((done / 10) * 100);
+            let total = 0;
+            history.forEach(h => total += h.score);
+            const avg = history.length ? Math.round(total / history.length) : 0;
+            const htmlH = history.filter(h => h.day <= 7);
+            const cssH = history.filter(h => h.day > 7);
+            const htmlAvg = htmlH.length ? Math.round(htmlH.reduce((s, h) => s + h.score, 0) / htmlH.length) : 0;
+            const cssAvg = cssH.length ? Math.round(cssH.reduce((s, h) => s + h.score, 0) / cssH.length) : 0;
+
+            document.getElementById('dashProgress').textContent = pct + '%';
+            document.getElementById('dashAvgScore').textContent = avg;
+            document.getElementById('dashHtmlScore').textContent = htmlAvg + '%';
+            document.getElementById('dashCssScore').textContent = cssAvg + '%';
+
+            const detail = document.getElementById('dashDetailedProgress');
+            detail.innerHTML = LESSONS.map(l => {
+                const d = progress[l.day] || false;
+                return `
+              <div class="skill-row"><span class="name">Ngày ${l.day}</span><div class="bar"><div class="fill" style="width:${d?100:0}%;background:${d?'var(--success)':'var(--border)'};"></div></div><span style="font-size:13px;">${d?'✅ Hoàn thành':'⏳ Chưa học'}</span></div>
+            `;
+            }).join('');
+
+            const strengths = document.getElementById('dashStrengths');
+            const htmlKeys = ['html_structure', 'html_text', 'html_image', 'html_form', 'html_semantic', 'html_advanced'];
+            const cssKeys = ['css_basic', 'css_layout'];
+            const all = [...htmlKeys, ...cssKeys];
+            const strong = all.filter(k => getSkillAvg(k) >= 70);
+            const weak = all.filter(k => getSkillAvg(k) > 0 && getSkillAvg(k) < 60);
+            if (strong.length || weak.length) {
+                let s = '';
+                if (strong.length) s += `<p><strong>✅ Điểm mạnh:</strong> ${strong.map(k => k.replace('_',' ')).join(', ')}</p>`;
+                if (weak.length) s +=
+                    `<p><strong>⚠️ Cần cải thiện:</strong> ${weak.map(k => k.replace('_',' ')).join(', ')}</p>`;
+                if (!weak.length && strong.length) s += `<p>🎉 Bạn đang làm rất tốt!</p>`;
+                strengths.innerHTML = s;
+            } else {
+                strengths.innerHTML = `<p class="text-secondary">Hoàn thành bài kiểm tra để xem đánh giá.</p>`;
+            }
+        }
+
+        // ============================================================
+        // ADMIN
+        // ============================================================
+        function renderAdminUsers() {
+            if (!isLoggedIn() || currentUser.role !== 'admin') return;
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const students = users.filter(u => u.role === 'student' || !u.role);
+            const search = document.getElementById('adminSearchInput').value.toLowerCase();
+            const filtered = students.filter(u => u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(
+            search));
+            const body = document.getElementById('adminUsersBody');
+            if (!filtered.length) {
+                body.innerHTML =
+                    `<tr><td colspan="4" class="text-center text-secondary">Không tìm thấy học viên</td></tr>`;
+                return;
+            }
+            let allAttemptScores = [];
+            body.innerHTML = filtered.map(u => {
+                const uHistory = JSON.parse(localStorage.getItem(userKey('quizHistory', u.id)) || '[]');
+                const uProgress = JSON.parse(localStorage.getItem(userKey('progress', u.id)) || '{}');
+                const avg = uHistory.length ? Math.round(uHistory.reduce((s, h) => s + h.score, 0) / uHistory
+                .length) : 0;
+                const done = Object.keys(uProgress).filter(k => uProgress[k]).length;
+                allAttemptScores = allAttemptScores.concat(uHistory.map(h => h.score));
+                return `<tr><td><strong>${escapeHtml(u.name)}</strong></td><td>${escapeHtml(u.email)}</td><td>${done}/10</td><td>${uHistory.length ? avg + '%' : 'Chưa có'}</td></tr>`;
+            }).join('');
+            document.getElementById('adminTotalStudents').textContent = students.length;
+            const avgAll = allAttemptScores.length ? Math.round(allAttemptScores.reduce((a, b) => a + b, 0) /
+                allAttemptScores.length) : 0;
+            document.getElementById('adminAvgScore').textContent = avgAll + '%';
+        }
+
+        // ============================================================
+        // BACK TO TOP
+        // ============================================================
+        document.addEventListener('scroll', () => {
+            const btn = document.getElementById('backTop');
+            if (window.scrollY > 400) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        loadState();
+
+        // Restore theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.dataset.theme = 'dark';
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+
+        updateUI();
+        if (isLoggedIn()) showPage('dashboard');
+        else showPage('home');
+
+        // Auto-run practice with Ctrl+Enter
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const active = document.activeElement;
+                if (active && (active.id === 'htmlEditor' || active.id === 'cssEditor')) {
+                    e.preventDefault();
+                    runCode();
+                    showToast('Đã chạy code!', 'success');
+                }
+            }
+        });
+
+        document.getElementById('htmlEditor').addEventListener('input', debounce(runCode, 400));
+        document.getElementById('cssEditor').addEventListener('input', debounce(runCode, 400));
+
+        function debounce(fn, delay) {
+            let t;
+            return function(...args) { clearTimeout(t);
+                t = setTimeout(() => fn.apply(this, args), delay); };
+        }
+
+        document.addEventListener('click', e => {
+            const sidebar = document.getElementById('sidebar');
+            const btn = document.querySelector('.menu-btn');
+            if (window.innerWidth <= 1024) {
+                if (!sidebar.contains(e.target) && !btn.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+
+        // Print support
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                // Allow native print dialog
+            }
+        });
+
+        console.log('🚀 Học HTML + CSS - Sẵn sàng!');
+        console.log('📚', LESSONS.length, 'bài học');
+        console.log('👤', isLoggedIn() ? currentUser.email : 'Chưa đăng nhập');
+        console.log('💡 Ctrl+Enter để chạy code trong Practice');
+        console.log('🖨️ Ctrl+P để in bài học');
+    </script>
 </body>
 </html>
