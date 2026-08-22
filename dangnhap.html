@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập - Học HTML & CSS Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52D5;
+            --bg: #F0F2F5;
+            --bg-card: #FFFFFF;
+            --text: #1A1A2E;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+            --shadow-hover: 0 8px 40px rgba(108, 99, 255, 0.18);
+            --radius: 14px;
+            --radius-sm: 8px;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .auth-box {
+            background: var(--bg-card);
+            padding: 40px 44px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-hover);
+            max-width: 420px;
+            width: 100%;
+        }
+        .auth-box .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        .auth-box .logo i {
+            font-size: 32px;
+        }
+        .auth-box h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 8px;
+        }
+        .auth-box .sub {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        .auth-box .field {
+            margin-bottom: 16px;
+        }
+        .auth-box .field label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        .auth-box .field input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .auth-box .field input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(108, 99, 255, 0.35);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .social-btn:hover {
+            background: var(--border);
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        .divider span {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        .footer-text {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .footer-text a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 360px;
+            width: 100%;
+        }
+        .toast {
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-card);
+            color: var(--text);
+            box-shadow: var(--shadow-hover);
+            border-left: 4px solid var(--primary);
+            animation: slideIn 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+        .toast-success { border-left-color: #00D2A0; }
+        .toast-error { border-left-color: #FF6B6B; }
+        .toast-warning { border-left-color: #FFB347; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @media (max-width: 480px) {
+            .auth-box { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="auth-box" id="authBox">
+        <div class="logo"><i class="fas fa-code"></i> HTML+CSS Pro</div>
+        
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h1>Đăng nhập</h1>
+            <p class="sub">Chào mừng bạn quay trở lại!</p>
+            <form onsubmit="handleLogin(event)">
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="example@email.com" required maxlength="120" autocomplete="email">
+                </div>
+                <div class="field">
+                    <label>Mật khẩu</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required minlength="6" maxlength="100" autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary" id="loginSubmitBtn">Đăng nhập</button>
+                <div class="divider"><span>hoặc</span></div>
+                <button type="button" class="social-btn" onclick="handleGoogleLogin()">
+                    <i class="fab fa-google" style="color:#EA4335;"></i> Đăng nhập với Google
+                </button>
+                <div class="footer-text">Chưa có tài khoản? <a href="#" onclick="toggleForm()">Đăng ký ngay</a></div>
+                <div class="footer-text" style="margin-top:4px;"><a href="#" onclick="showToast('Vui lòng liên hệ admin để đặt lại mật khẩu','warning')">Quên mật khẩu?</a></div>
+            </form>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerForm" style="display:none;">
+            <h1>Đăng ký</h1>
+            <p class="sub">Tạo tài khoản để bắt đầu học</p>
+            <form onsubmit="handleRegister(event)">
+                <div class="field">
+                    <label>Họ tên</label>
+                    <input type="text" id="registerName" placeholder="Nguyễn Văn A" required maxlength="60" autocomplete="name">
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="example@email.com" required maxlength="120" autocomplete="email">
+                </div>
+                <div class="field">
+                    <label>Mật khẩu (tối thiểu 6 ký tự)</label>
+                    <input type="password" id="registerPassword" placeholder="••••••••" required minlength="6" maxlength="100" autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn btn-primary" id="registerSubmitBtn">Đăng ký</button>
+                <div class="footer-text">Đã có tài khoản? <a href="#" onclick="toggleForm()">Đăng nhập</a></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Toast
+        function showToast(msg, type = 'info') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+            t.className = `toast toast-${type}`;
+            t.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${msg}`;
+            c.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(60px)'; setTimeout(() => t.remove(), 400); }, 3000);
+        }
+
+        function toggleForm() {
+            const login = document.getElementById('loginForm');
+            const register = document.getElementById('registerForm');
+            if (login.style.display === 'none') {
+                login.style.display = 'block';
+                register.style.display = 'none';
+            } else {
+                login.style.display = 'none';
+                register.style.display = 'block';
+            }
+        }
+
+        async function hashPassword(pw) {
+            const enc = new TextEncoder().encode(pw);
+            const buf = await crypto.subtle.digest('SHA-256', enc);
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        const RESERVED_ADMIN_EMAIL = 'admin@example.com';
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('loginSubmitBtn');
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPassword').value;
+            if (!email || !pass) return;
+            submitBtn.disabled = true;
+            try {
+                const passHash = await hashPassword(pass);
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === email && u.passwordHash === passHash);
+                if (user) {
+                    const currentUser = { ...user };
+                    delete currentUser.passwordHash;
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    showToast('Đăng nhập thành công!', 'success');
+                    setTimeout(() => window.location.href = 'learning.html', 500);
+                    return;
+                }
+                if (email === RESERVED_ADMIN_EMAIL && pass === 'admin123') {
+                    const adminUser = { id: 'admin_001', name: 'Quản trị viên', email: RESERVED_ADMIN_EMAIL, role: 'admin', avatar: 'A' };
+                    localStorage.setItem('user', JSON.stringify(adminUser));
+                    showToast('Đăng nhập Admin!', 'success');
+                    setTimeout(() => window.location.href = 'learning.html', 500);
+                    return;
+                }
+                showToast('Email hoặc mật khẩu không đúng!', 'error');
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('registerSubmitBtn');
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('registerPassword').value;
+            if (!name) { showToast('Vui lòng nhập họ tên!', 'error'); return; }
+            if (!email) { showToast('Vui lòng nhập email!', 'error'); return; }
+            if (pass.length < 6) { showToast('Mật khẩu tối thiểu 6 ký tự!', 'error'); return; }
+            if (email === RESERVED_ADMIN_EMAIL) {
+                showToast('Email này đã được hệ thống sử dụng!', 'error');
+                return;
+            }
+            submitBtn.disabled = true;
+            try {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.find(u => u.email === email)) { showToast('Email đã được đăng ký!', 'error'); return; }
+                const passwordHash = await hashPassword(pass);
+                const newUser = {
+                    id: 'user_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+                    name, email, passwordHash, role: 'student',
+                    avatar: name.charAt(0).toUpperCase(), createdAt: new Date().toISOString()
+                };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                const currentUser = { ...newUser };
+                delete currentUser.passwordHash;
+                localStorage.setItem('user', JSON.stringify(currentUser));
+                showToast('Đăng ký thành công!', 'success');
+                setTimeout(() => window.location.href = 'learning.html', 500);
+            } finally {
+                submitBtn.disabled = false;
+            }
+        }
+
+        function handleGoogleLogin() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            let gu = users.find(u => u.email === 'google_user@example.com');
+            if (!gu) {
+                gu = { id: 'google_' + Date.now(), name: 'Google User', email: 'google_user@example.com', role: 'student', avatar: 'G', createdAt: new Date().toISOString() };
+                users.push(gu);
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            const currentUser = { ...gu };
+            delete currentUser.passwordHash;
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            showToast('Đăng nhập Google thành công!', 'success');
+            setTimeout(() => window.location.href = 'learning.html', 500);
+        }
+
+        // Check if already logged in
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            try {
+                const user = JSON.parse(savedUser);
+                if (user && user.id) {
+                    window.location.href = 'learning.html';
+                }
+            } catch(e) {}
+        }
+    </script>
+</body>
+</html>
